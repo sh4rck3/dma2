@@ -14,16 +14,11 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//pages not requiring authentication
+Route::get('/', [App\Http\Controllers\Web\LandingpageController::class, 'index'])->name('home');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
 
+//pages requiring authentication
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
