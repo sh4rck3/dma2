@@ -8,10 +8,12 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import Icon from '@/Icons/Icon.vue';
 import Darkmode from './Darkmode.vue';
-
+import Linkblank from '@/Components/Linkblank.vue';
+ 
 
 import { onMounted } from 'vue';
 import { initFlowbite } from 'flowbite';
+
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -21,7 +23,14 @@ onMounted(() => {
 
 defineProps({
     title: String,
+    glpiLink: String,
+    nameLink: String,
 });
+
+const glpiLink = ref('https://glpi.dunice.com.br')
+const nameLink = ref('Chamados')
+
+
 
 const showingNavigationDropdown = ref(false);
 
@@ -51,6 +60,21 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('home')" :active="route().current('home')">
                                     Home
                                 </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('extensions')" :active="route().current('extensions')">
+                                    Ramais
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('smssend')" :active="route().current('smssend')">
+                                    SMS
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <Linkblank :href="glpiLink">
+                                    {{ nameLink }}
+                                </Linkblank>
                             </div>
                             
                         </div>

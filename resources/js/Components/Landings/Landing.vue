@@ -1,6 +1,8 @@
 <script setup>
 import Icon from '@/Icons/Icon.vue';
 import Carousel from '@/Components/Landings/Carousel.vue';
+import Footer from '@/Components/Landings/Partials/Footer.vue';
+
 </script>
 
 <template>
@@ -36,7 +38,6 @@ import Carousel from '@/Components/Landings/Carousel.vue';
                 -> Link's de acesso a sistemas, centralizando acessos <br>
             </p>
         </div>
-
-        
+        <Footer />
     </div>
 </template>

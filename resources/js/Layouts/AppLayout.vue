@@ -7,6 +7,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import Icon from '@/Icons/Icon.vue';
 
 defineProps({
     title: String,
@@ -42,14 +43,14 @@ const logout = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
+                                    <Icon name="laravel" class="block h-9 w-9" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    Painel
                                 </NavLink>
                             </div>
                         </div>
@@ -192,7 +193,7 @@ const logout = () => {
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            Painel
                         </ResponsiveNavLink>
                     </div>
 

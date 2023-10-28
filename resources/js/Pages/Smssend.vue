@@ -1,13 +1,14 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import Welcome from '@/Components/Welcome.vue';
+import AppLayout from '@/Layouts/AppLayoutLanding.vue';
+import Welcome from '@/Components/Landings/Landing.vue';
+
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Home">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Painel
+                Envio de SMS
             </h2>
         </template>
 

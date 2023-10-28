@@ -100,5 +100,6 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
                 </p>
             </div>
         </div>
+        
     </div>
 </template>
