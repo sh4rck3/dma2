@@ -8,8 +8,29 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
             <ApplicationLogo class="block h-12 w-auto" />
 
             <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                Welcome to your Jetstream application!
+                Welcome to your Jetstream application!!
             </h1>
+
+            <div>
+
+                <div v-if="$page.props.user.permissions.includes('read articles')">
+                    <button type="button">Read article</button>
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('write articles')">
+                    <button type="button">Write article</button>
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('edit articles')">
+                    <button type="button">Edit article</button>
+
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('delete articles')">
+                    <button type="button">Delete article</button>
+                </div>
+
+            </div>
 
             <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                 Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
