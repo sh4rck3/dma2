@@ -113,6 +113,17 @@ const logout = () => {
                                     </template>
                                 </Dropdown>
                             </div>
+                            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                                <div class="flex justify-center p-4">
+                                    <a href="/">
+                                        <button  
+                                            type="button" 
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                            Home Page
+                                        </button> 
+                                    </a>                    
+                                </div>
+                            </div>
 
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">

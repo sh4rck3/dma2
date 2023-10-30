@@ -23,6 +23,8 @@ Route::get('/', [LandingpageController::class, 'index'])->name('home');
 Route::get('/extensions', [LandingpageController::class, 'extensions'])->name('extensions');
 //Sms sender page
 Route::get('/smssend', [LandingpageController::class, 'smssend'])->name('smssend');
+//birthday  page
+Route::get('/birthday', [LandingpageController::class, 'birthday'])->name('birthday');
 
 
 //pages requiring authentication

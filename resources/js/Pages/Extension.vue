@@ -5,7 +5,7 @@ import Welcome from '@/Components/Landings/Landing.vue';
 </script>
 
 <template>
-    <AppLayout title="Home">
+    <AppLayout title="Ramais">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 Ramais

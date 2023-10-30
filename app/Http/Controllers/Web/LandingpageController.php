@@ -27,4 +27,9 @@ class LandingpageController extends Controller
     {
         return Inertia::render('Smssend');
     }
+
+    public function birthday()
+    {
+        return Inertia::render('Birthday');
+    }
 }
