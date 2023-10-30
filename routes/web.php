@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Web\LandingpageController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\UserwebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/birthday', [LandingpageController::class, 'birthday'])->name('birth
 Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
     //firt route autehticated
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
+    //users page
+    Route::get('/users', [UserwebController::class, 'index'])->name('users');
+    //inactive users page
+    Route::get('/inactiveusers', [UserwebController::class, 'inactiveusers'])->name('inactiveusers');
 });
 
 
