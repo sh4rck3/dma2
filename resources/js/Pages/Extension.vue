@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayoutLanding.vue';
-import Welcome from '@/Components/Landings/Landing.vue';
+import Welcome from '@/Components/Landings/Extension.vue';
 
 </script>
 

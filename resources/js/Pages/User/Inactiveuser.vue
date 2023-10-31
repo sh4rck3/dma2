@@ -52,19 +52,12 @@ const updatingList = async () =>{
                 
                 <div>
                     <a
-                    href="/userlocal">
+                    href="/users">
                         <button class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded align-middle">
-                            Listar inativos
+                            Listar Ativos
                         </button>
                     </a>
-                    <a 
-                    v-if="pageRole.includes('admin')"
-                    @click="updatingList"
-                    href="#">
-                        <button class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded align-middle">
-                            Atualizar usuarios
-                        </button>
-                    </a>
+                    
                 </div>
 
             </div>

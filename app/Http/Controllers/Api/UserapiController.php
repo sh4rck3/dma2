@@ -54,6 +54,74 @@ class UserapiController extends Controller
              return UserResource::collection($users);
     }
 
+    public function userslanding()
+    {
+        //Log::info('UserapiController.index');
+         //return UserResource::collection(User::all());
+         $orderColumn = request('order_column', 'created_at');
+         if (!in_array($orderColumn, ['id', 'name', 'created_at'])) {
+             $orderColumn = 'created_at';
+         }
+         $orderDirection = request('order_direction', 'desc');
+         if (!in_array($orderDirection, ['asc', 'desc'])) {
+             $orderDirection = 'desc';
+         }
+         $users = User::
+         when(request('search_id'), function ($query) {
+             $query->where('id', request('search_id'));
+         })
+             //->where('status', '!=', '0')
+             ->when(request('search_title'), function ($query) {
+                 $query->where('name', 'like', '%'.request('search_title').'%');
+                 
+             })
+             ->when(request('search_global'), function ($query) {
+                 $query->where(function($q) {
+                     $q->where('name', 'like', '%'.request('search_global').'%')
+                         ->orWhere('jobtitle', 'like', '%'.request('search_global').'%');
+ 
+                 });
+             })
+             ->where('status', '!=', '0')
+             ->orderBy($orderColumn, $orderDirection)
+             ->paginate(10);
+ 
+             return UserResource::collection($users);
+    }
+
+    public function birthdaylanding()
+    {
+     
+         //return UserResource::collection(User::all());
+         $orderColumn = request('order_column', 'created_at');
+         if (!in_array($orderColumn, ['id', 'name', 'created_at'])) {
+             $orderColumn = 'created_at';
+         }
+         $orderDirection = request('order_direction', 'desc');
+         if (!in_array($orderDirection, ['asc', 'desc'])) {
+             $orderDirection = 'desc';
+         }
+         $users = User::
+         when(request('search_id'), function ($query) {
+             $query->where('id', request('search_id'));
+         })
+             ->whereMonth('birthday', '=', date('m'))
+             ->when(request('search_title'), function ($query) {
+                 $query->where('name', 'like', '%'.request('search_title').'%');
+             })
+             ->when(request('search_global'), function ($query) {
+                 $query->where(function($q) {
+                     $q->where('name', 'like', '%'.request('search_global').'%')
+                     ->orWhere('jobtitle', 'like', '%'.request('search_global').'%');
+ 
+                 });
+             })
+             ->orderBy($orderColumn, $orderDirection)
+             ->paginate(10);
+ 
+            return UserResource::collection($users);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

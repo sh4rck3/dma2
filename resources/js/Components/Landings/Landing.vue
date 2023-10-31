@@ -1,6 +1,6 @@
 <script setup>
 import Icon from '@/Icons/Icon.vue';
-import Carousel from '@/Components/Landings/Carousel.vue';
+import Carousel from '@/Components/Landings/Partials/Carousel.vue';
 import Footer from '@/Components/Landings/Partials/Footer.vue';
 
 </script>

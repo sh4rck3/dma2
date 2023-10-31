@@ -23,6 +23,8 @@
         "@heroicons/vue": "^2.0.18",
         "flowbite": "^2.0.0",
         "laravel-vue-pagination": "^4.1.1",
+        "lodash": "^4.17.21",
+        "vue-moment": "^4.1.0",
         "vue-sweetalert2": "^5.0.5",
         "vue-toast-notification": "^3.1.2",
         "vuex": "^4.0.2"

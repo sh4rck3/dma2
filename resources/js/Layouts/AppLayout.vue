@@ -8,6 +8,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import Icon from '@/Icons/Icon.vue';
+import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
 defineProps({
     title: String,
@@ -26,6 +28,9 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+const page = usePage()
+const pageRole = computed(() => page.props.user.roles)
 </script>
 
 <template>
@@ -53,9 +58,18 @@ const logout = () => {
                                     Painel
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <div 
+                                v-if="pageRole.includes('admin')"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('users')" :active="route().current('users') || route().current('inactiveusers')">
                                     Usuarios
+                                </NavLink>
+                            </div>
+                            <div 
+                                v-if="pageRole.includes('admin')"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('payments')" :active="route().current('payments') || route().current('paymentsimport')">
+                                    Pagamanetos
                                 </NavLink>
                             </div>
                         </div>

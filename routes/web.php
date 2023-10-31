@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Web\LandingpageController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\UserwebController;
+use App\Http\Controllers\Web\PaymentwebController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,12 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/users', [UserwebController::class, 'index'])->name('users');
     //inactive users page
     Route::get('/inactiveusers', [UserwebController::class, 'inactiveusers'])->name('inactiveusers');
+
+    //payments
+    Route::get('/payments', [PaymentwebController::class, 'index'])->name('payments');
+    Route::get('/paymentsimport', [PaymentwebController::class, 'create'])->name('paymentsimport');
+    Route::get('/paymentsresult', [PaymentwebController::class, 'show'])->name('paymentsresult');
+    Route::get('/paymentshow/{id}', [PaymentwebController::class, 'paymentshow'])->name('paymentshow');
 });
 
 
