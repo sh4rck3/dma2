@@ -70,26 +70,7 @@ class PaymentapiController extends Controller
              $new = simplexml_load_string($xmlfile);
              $newArr = json_decode(json_encode($new), TRUE);
 
-            //  if(!empty($newArr))
-            // {
-            //         //foi retirado daki o recorte
-            //         if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]) == True)
-            //         {
-            //             Log::debug("acessou o array");
-            //             Log::info(print_r($newArr, true));
-            //         }else{
-            //             Log::debug("nao existe essa chave de array");
-            //             Log::info(print_r($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"][0]["FormattedAreaPair"], true));
-            //         }
-            // }else{
-            //     Log::debug("nao tem dados no newarray");
-            // }        
-            //if('xb13' == 'xb12')    
-            //if($this->firstphaseXML($newArr) == True)
-            $verifica = is_array($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]);
-            Log::info("verifica ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \r\n".$verifica);
-            //if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True)
-            if('xb13' == 'xb12')
+            if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True)
             {
                 
                 $newArr = $this->firstphaseXML($newArr);
