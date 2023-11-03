@@ -52,11 +52,7 @@ class PaymentapiController extends Controller
     //public function store(Request $request)
     public function store(Request $request)
     {
-        //Log::debug("aki->>>>>>> \r\n".$_FILES['file']['tmp_name']);
-        //return dd($request->headers->get('Content-Type'));
-        // $uploaded_files = $request->file->store('public/uploads');
-        // return ["result" => $uploaded_files];
-
+        //Log::info("esta aqui no store");
         $xml_file = new Shipping_payments();
         $xml_file->title = $request->title;
         $xml_file->description = $request->description;
@@ -64,374 +60,557 @@ class PaymentapiController extends Controller
         $xml_file->original_name = $request->file->getClientOriginalName();
         $xml_file->save();
         $payment_shipping_id = $xml_file->id;
-        if(is_numeric($xml_file->id))
-        {
-             $xmlfile = file_get_contents($_FILES['file']['tmp_name']);
-             $new = simplexml_load_string($xmlfile);
-             $newArr = json_decode(json_encode($new), TRUE);
+        // if(is_numeric($xml_file->id))
+        // {
+        //      $xmlfile = file_get_contents($_FILES['file']['tmp_name']);
+        //      $new = simplexml_load_string($xmlfile);
+        //      $newArr = json_decode(json_encode($new), TRUE);
 
-            if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True)
-            {
-                
-                $newArr = $this->firstphaseXML($newArr);
-                foreach ($newArr as $sessoes) 
-                {
-                    $dataSessoes = $this->secondphaseXML($sessoes);
-                    foreach ($dataSessoes as $dados) {                    
-                        $companydata = $this->companydataXML($dados);
-                        //company and employee data
-                       // Log::info(print_r($companydata, true));
-                        foreach ($companydata as $company) {                            
-                            switch ($company["ObjectName"]) {
-                                case 'Text1':
-                                        $recibo = $company["TextValue"];
-                                    break;
-                                case 'EMPRESA1':
-                                    $codigoNomeEmpresa = $this->verificarsearray($company["FormattedValue"]);
-                                    break;
-                                case 'Text2':
-                                        $recibo1 = $company["TextValue"];
-                                    break;
-                                case 'SETOR1':
-                                        $setor = $this->verificarsearray($company["FormattedValue"]);
-                                    break;
-                                case 'ENDEREÇO1':
-                                        $endereco = $company["FormattedValue"];
-                                    break;
-                                case 'CNPJ1':
-                                        $cnpj = $company["FormattedValue"];
-                                    break;
-                                case 'TÍTULO11':
-                                        $funcionario = $company["FormattedValue"];
-                                    break;
-                                case 'TÍTULO21':
-                                        $dataadm = $company["FormattedValue"];
-                                    break;
-                                case 'TÍTULO31':
-                                        $ferias = $company["FormattedValue"];
-                                        Log::info("ferias ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \r\n".$ferias);
-                                        $cpfTemp = explode(" - ", $ferias);
-                                        foreach ($cpfTemp as $dadosTemp){
-                                            if (substr($dadosTemp, 0, 4) == "CPF:"){
-                                                $cpf = str_replace("CPF:", "", $dadosTemp);
-                                                $cpf = str_replace(" ", "", $cpf);
-                                            }
-                                        }
-                                    break;
-                                default:
-                                $cpf = ''; $recibo = ''; $recibo1 = ''; $empresa = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
-                                $funcionario = ''; $dataadm = ''; $ferias = ''; 
-                                $codigoNomeEmpresa = '';
-                                    break;
-                            }
-                        }//finish foreach companydata and employee data
-                       
-                        //values payments of employee
-                        $valuespayments = $this->valuespaymentsXML($dados);
-                        foreach ($valuespayments as $dvalores) {
-                            switch ($dvalores["ObjectName"]) {
-                                case 'Vtotalc1':
-                                    $valorTC = $dvalores["FormattedValue"];
-                                    break;
-                                case 'Vtotald1':
-                                    $valorTD = $dvalores["FormattedValue"];
-                                    break;
-                                case 'Vliquido1':
-                                    $valorTL = $dvalores["FormattedValue"];
-                                    break;
-                                case 'Faixair1':
-                                    $valorFa = $dvalores["FormattedValue"];
-                                    break;
-                                case 'Mensagemcc1':
-                                    $Mensagemcc1 = $this->verificarsearray($dvalores["FormattedValue"]);
-                                    break;
-                                case 'ValFgts1':
-                                    $valorFGTS = $dvalores["FormattedValue"];
-                                    break;
-                                case 'MovimentoMêsdereferência2':
-                                    $mesRef = $dvalores["FormattedValue"];
-                                    break;
-                                case 'BaseIRRF1':
-                                    $valorBaseIRRF = $dvalores["FormattedValue"];
-                                    break;
-                                case 'SalárioBase1':
-                                    $valorSalarioBase = $dvalores["FormattedValue"];
-                                    break;
-                                case 'BaseFGTS1':
-                                    $valorBaseFGTS = $dvalores["FormattedValue"];
-                                    break;
-                                default:
-                                    $valorTC = ''; $valorTD = ''; $valorTL= ''; $valorFa = ''; $mensagemc1 = ''; $valorFGTS = '';
-                                    $mesRef = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; $valorSalarioBase = ''; $valorBaseFGTS = '';
-                                    break;
-                            }
-                        }//finish foreach valuespayments
-                       
-                        //transforming in to array
-                        if(!empty($cpf))
-                        {
-                            $datainsertXML = [
-                                'cpf' => $cpf, 
-                                'mesRef' => $mesRef, 
-                                'recibo' => $recibo, 
-                                'empresa' => $empresa, 
-                                'setor' => $setor, 
-                                'endereco' => $endereco, 
-                                'cnpj' => $cnpj, 
-                                'funcionario' => $funcionario, 
-                                'dataadm' => $dataadm, 
-                                'ferias' => $ferias, 
-                                'valorTC' => $valorTC, 
-                                'valorTD' => $valorTD, 
-                                'valorTL' => $valorTL, 
-                                'valorFa' => $valorFa, 
-                                'mensagemc1' => $mensagemc1,
-                                'valorFGTS' => $valorFGTS, 
-                                'valorBaseIRRF' => $valorBaseIRRF, 
-                                'valorBaseINNS' => $valorBaseINNS, 
-                                'valorSalarioBase' => $valorSalarioBase, 
-                                'valorBaseFGTS' => $valorBaseFGTS, 
-                                'payment_shipping_id' => $payment_shipping_id
-                            ];
-                        //insert in database and return id and document for insert in table paymentxmladditional
-                        //$returnIdCpf = $this->insertdados($datainsertXML);
-                        }
-                   
-                   //Log::info("segunda fase MES REF\r\n" . $mesRef);
-                    //insert in table paymentxmladditional description and values
-                    if(array_key_exists(0, $dados["FormattedAreaPair"]) == True)
-                    {
-                        Log::info("dado complementares XML\r\n");
-                        foreach ($dados["FormattedAreaPair"] as $ddescaux) 
-                        {
-                            if(array_key_exists(0, $ddescaux["FormattedAreaPair"]) == True)
-                            {
-                                foreach ($ddescaux["FormattedAreaPair"] as $ddescaux1) 
-                                {
-                                    if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True)
-                                    {
-                                        foreach($ddescaux1["FormattedAreaPair"] as $ddescaux3)
-                                        {
-                                            $valueddescaux3 = $this->complementarydataXML($ddescaux3);
-                                            foreach ($valueddescaux3 as $ddescaux2) {
-                                                
-                                                switch ($ddescaux2["ObjectName"]) 
-                                                {
-                                                    case 'DESCRIÇÃODAVERBA1':
-                                                        $descricaoverba1 = $ddescaux2["FormattedValue"];
-                                                        break;
-                                                    case 'Valor1':
-                                                        $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        break;
-                                                    case 'Valor2':
-                                                        $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        break;
-                                                    case 'Percentual1':
-                                                        $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        break;
-                                                    case 'Basecálculo1':
-                                                        $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        break;
-                                                    default:
-                                                        $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
-                                                        break;
-                                                }
-                                                //insert in table paymentxmladditional description and values
-                                               // $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
-                                               //Log::info("inserindo dados complementares complementarydataXML");
-                                            }//finish foreach ddescaux2
-                                        }//finish foreach ddescaux3
-
-                                    }else{//finish if array_key_exists ddescaux1
-
-                                        $valueddescaux1 = $this->complementarydata1XML($ddescaux1);
-                                        foreach ($valueddescaux1 as $ddescaux2) 
-                                        {
-                                                
-                                            switch ($ddescaux2["ObjectName"]) 
-                                            {
-                                                case 'DESCRIÇÃODAVERBA1':
-                                                    $descricaoverba1 = $ddescaux2["FormattedValue"];
-                                                    break;
-                                                case 'Valor1':
-                                                    $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    break;
-                                                case 'Valor2':
-                                                    $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    break;
-                                                case 'Percentual1':
-                                                    $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    break;
-                                                case 'Basecálculo1':
-                                                    $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    break;
-                                                default:
-                                                    $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
-                                                    break;
-                                            }
-                                            //insert in table paymentxmladditional description and values
-                                           // $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
-                                           //Log::info("inserindo dados complementares complementarydata1XML");
-                                        }//finish foreach ddescaux2
-
-                                    }//finish else array_key_exists ddescaux1
-                                }//finish foreach ddescaux1
-
-                            }else{//finish if array_key_exists ddescaux
-
-                                $valueddescaux = $this->complementarydata2XML($ddescaux);
-                                foreach ($valueddescaux as $ddescaux2) 
-                                {
-                                                
-                                    switch ($ddescaux2["ObjectName"]) 
-                                    {
-                                        case 'DESCRIÇÃODAVERBA1':
-                                            $descricaoverba1 = $ddescaux2["FormattedValue"];
-                                            break;
-                                        case 'Valor1':
-                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Valor2':
-                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Percentual1':
-                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Basecálculo1':
-                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        default:
-                                            $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
-                                            break;
-                                    }
-                                    //insert in table paymentxmladditional description and values
-                                    //$this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
-                                    //Log::info("inserindo dados complementares complementarydata2XML");
-                                }//finish foreach ddescaux2
-                            }//finish else array_key_exists ddescaux
-                        }// finish foreach ddescaux
-
-                    }else{//finish if array_key_exists dados
-
-                        if(array_key_exists(0, $dados["FormattedAreaPair"]["FormattedAreaPair"]) == True)
-                        {
-                            foreach($dados["FormattedAreaPair"]["FormattedAreaPair"] as $ddescaux)
-                            {
-                                $valueddescaux1 = $this->complementarydata1XML($ddescaux);
-                                foreach ($valueddescaux1 as $ddescaux2) 
-                                {
-                                        
-                                    switch ($ddescaux2["ObjectName"]) {
-                                        case 'DESCRIÇÃODAVERBA1':
-                                            $descricaoverba1 = $ddescaux2["FormattedValue"];
-                                            break;
-                                        case 'Valor1':
-                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Valor2':
-                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Percentual1':
-                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        case 'Basecálculo1':
-                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            break;
-                                        default:
-                                            $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
-                                            break;
-                                    }
-                                    //insert in table paymentxmladditional description and values
-                                    //$this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
-                                    //Log::info("inserindo dados complementares complementarydata1XML fase 2");
-                                }//finish foreach ddescaux2 second phase
-                            }//finish foreach ddescaux second phase
-
-                        }else{ //finish array_existe dados second array
-                            //Log::info("Erro SEGUNDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n");
-                            //Log::info(print_r($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"], true));
-                            // $dados = $this->complementarydata2XML($dados);
-                            foreach ($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2) 
-                            {
-                                        
-                                switch ($ddescaux2["ObjectName"]) 
-                                {
-                                    case 'DESCRIÇÃODAVERBA1':
-                                        $descricaoverba1 = $ddescaux2["FormattedValue"];
-                                        break;
-                                    case 'Valor1':
-                                        $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        break;
-                                    case 'Valor2':
-                                        $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        break;
-                                    case 'Percentual1':
-                                        $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        break;
-                                    case 'Basecálculo1':
-                                        $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        break;
-                                    default:
-                                        $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
-                                        break;
-                                }
-                                //insert in table paymentxmladditional description and values
-                                //$this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
-
-                                //Log::info("passou............. SEGUNDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n");
-                            }//finish foreach ddescaux2 second phase
-
-                        }//finish else array_key_exists dados second array
-
-                    }//finish else array_key_exists dados
+        //      if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True)
+        //      {
+        //         foreach ($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $sessoes)
+        //         {
+        //             foreach ($sessoes["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"] as $dados) 
+        //             {
+        //                 // ----- emplyes and company data ----- //
+        //                 foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][2]["FormattedReportObjects"]["FormattedReportObject"] as $dempresa){
+        //                     switch ($dempresa["ObjectName"]) {
+        //                         case 'Text1':
+        //                                 $recibo = $dempresa["TextValue"];
+        //                             break;
+        //                         case 'EMPRESA1':
+        //                             $codigoNomeEmpresa = $this->verificarsearray($dempresa["FormattedValue"]);
+        //                             break;
+        //                         case 'Text2':
+        //                                 $recibo1 = $dempresa["TextValue"];
+        //                             break;
+        //                         case 'SETOR1':
+        //                                 $setor = $this->verificarsearray($dempresa["FormattedValue"]);
+        //                             break;
+        //                         case 'ENDEREÇO1':
+        //                                 $endereco = $dempresa["FormattedValue"];
+        //                             break;
+        //                         case 'CNPJ1':
+        //                                 $cnpj = $dempresa["FormattedValue"];
+        //                             break;
+        //                         case 'TÍTULO11':
+        //                                 $funcionario = $dempresa["FormattedValue"];
+        //                             break;
+        //                         case 'TÍTULO21':
+        //                                 $dataadm = $dempresa["FormattedValue"];
+        //                             break;
+        //                         case 'TÍTULO31':
+        //                                 $ferias = $dempresa["FormattedValue"];
+        //                                 $cpfTemp = explode(" - ", $ferias);
+        //                                 foreach ($cpfTemp as $dadosTemp){
+        //                                     if (substr($dadosTemp, 0, 4) == "CPF:"){
+        //                                         $cpf = str_replace("CPF:", "", $dadosTemp);
+        //                                         $cpf = str_replace(" ", "", $cpf);
+        //                                     }
+        //                                 }
+        //                             break;
+        //                         default:
+        //                         $cpf = ''; $recibo = ''; $recibo1 = ''; $empresa = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
+        //                         $funcionario = ''; $dataadm = ''; $ferias = ''; 
+        //                         $codigoNomeEmpresa = '';
+        //                             break;
+        //                     }
+        //                 }
+        
+        //                 // ----- employee company values data ----- //
+        //                 foreach ($dados["FormattedArea"][1]["FormattedSections"]["FormattedSection"][1]["FormattedReportObjects"]["FormattedReportObject"] as $dvalores)
+        //                 {
+        //                     switch ($dvalores["ObjectName"]) 
+        //                     {
+        //                         case 'Vtotalc1':
+        //                             $valorTC = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'Vtotald1':
+        //                             $valorTD = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'Vliquido1':
+        //                             $valorTL = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'Faixair1':
+        //                             $valorFa = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'Mensagemcc1':
+        //                             $Mensagemcc1 = $this->verificarsearray($dvalores["FormattedValue"]);
+        //                             break;
+        //                         case 'ValFgts1':
+        //                             $valorFGTS = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'MovimentoMêsdereferência2':
+        //                             $mesRef = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'BaseIRRF1':
+        //                             $valorBaseIRRF = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'SalárioBase1':
+        //                             $valorSalarioBase = $dvalores["FormattedValue"];
+        //                             break;
+        //                         case 'BaseFGTS1':
+        //                             $valorBaseFGTS = $dvalores["FormattedValue"];
+        //                             break;
+        //                         default:
+        //                             $valorTC = ''; $valorTD = ''; $valorTL= ''; $valorFa = ''; $mensagemc1 = ''; $valorFGTS = '';
+        //                             $mesRef = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; $valorSalarioBase = ''; $valorBaseFGTS = '';
+        //                             break;
+        //                     }
+        //                 }
+                        
+        //                  //transforming in to array values
+        //                  if(!empty($cpf))
+        //                  {
+        //                      $datainsertXML = [
+        //                          'cpf' => $cpf, 
+        //                          'mesRef' => $mesRef, 
+        //                          'recibo' => $recibo, 
+        //                          'empresa' => $empresa, 
+        //                          'setor' => $setor, 
+        //                          'endereco' => $endereco, 
+        //                          'cnpj' => $cnpj, 
+        //                          'funcionario' => $funcionario, 
+        //                          'dataadm' => $dataadm, 
+        //                          'ferias' => $ferias, 
+        //                          'valorTC' => $valorTC, 
+        //                          'valorTD' => $valorTD, 
+        //                          'valorTL' => $valorTL, 
+        //                          'valorFa' => $valorFa, 
+        //                          'mensagemc1' => $mensagemc1,
+        //                          'valorFGTS' => $valorFGTS, 
+        //                          'valorBaseIRRF' => $valorBaseIRRF, 
+        //                          'valorBaseINNS' => $valorBaseINNS, 
+        //                          'valorSalarioBase' => $valorSalarioBase, 
+        //                          'valorBaseFGTS' => $valorBaseFGTS, 
+        //                          'payment_shipping_id' => $payment_shipping_id
+        //                      ];
+        //                  //insert in database and return id and document for insert in table paymentxmladditional
+        //                  $returnIdCpf = $this->insertdados($datainsertXML);
+        //                  }
+        //                 // ----- Descritivos ----- //
+        
+        //                 if(array_key_exists(0, $dados["FormattedAreaPair"]) == True)
+        //                 {
+        //                     foreach($dados["FormattedAreaPair"] as $ddescaux)
+        //                     {
+        //                         if(array_key_exists(0, $ddescaux["FormattedAreaPair"]) == True)
+        //                         {
+        //                             foreach($ddescaux["FormattedAreaPair"] as $ddescaux1)
+        //                             {
+        //                                 if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True)
+        //                                 {
+        //                                     foreach($ddescaux1["FormattedAreaPair"] as $ddescaux3)
+        //                                     {
+        //                                         foreach($ddescaux3["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2)
+        //                                         {
+        //                                             switch ($ddescaux2["ObjectName"]) 
+        //                                             {
+        //                                                 case 'DESCRIÇÃODAVERBA1':
+        //                                                     $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                                     break;
+        //                                                 case 'Valor1':
+        //                                                     $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                     break;
+        //                                                 case 'Valor2':
+        //                                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                     break;
+        //                                                 case 'Percentual1':
+        //                                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                     break;
+        //                                                 case 'Basecálculo1':
+        //                                                     $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                     break;
+        //                                                 default:
+        //                                                     $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                                     break;
+        //                                             }
+        //                                         }//final do foreach decaux2
+        //                                         $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                                     }//final do foreach decaux1
+        //                                 }else{            
+        //                                     foreach($ddescaux1["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                                         switch ($ddescaux2["ObjectName"]) 
+        //                                         {
+        //                                             case 'DESCRIÇÃODAVERBA1':
+        //                                                 $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                                 break;
+        //                                             case 'Valor1':
+        //                                                 $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Valor2':
+        //                                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Percentual1':
+        //                                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Basecálculo1':
+        //                                                 $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             default:
+        //                                                 $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                                 break;
+        //                                         }
+        //                                     }//final do foreach ddescaux1
+        //                                     $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                                 }//final do else do: if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True)
+        //                             }//final do foreach ddescaux : foreach($ddescaux["FormattedAreaPair"] as $ddescaux1)
+        //                         }else{
+        //                             foreach($ddescaux["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                                 switch ($ddescaux2["ObjectName"]) 
+        //                                 {
+        //                                     case 'DESCRIÇÃODAVERBA1':
+        //                                         $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                         break;
+        //                                     case 'Valor1':
+        //                                         $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Valor2':
+        //                                         $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Percentual1':
+        //                                         $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Basecálculo1':
+        //                                         $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     default:
+        //                                         $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                         break;
+        //                                 }
+        //                             }
+        //                             $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                         }
+        //                     }
+        //                 }else{
+        //                     if(array_key_exists(0, $dados["FormattedAreaPair"]["FormattedAreaPair"]) == True){
+        //                         foreach($dados["FormattedAreaPair"]["FormattedAreaPair"] as $ddescaux){
+        //                             foreach($ddescaux["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                                 switch ($ddescaux2["ObjectName"]) 
+        //                                 {
+        //                                     case 'DESCRIÇÃODAVERBA1':
+        //                                         $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                         break;
+        //                                     case 'Valor1':
+        //                                         $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Valor2':
+        //                                         $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Percentual1':
+        //                                         $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     case 'Basecálculo1':
+        //                                         $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                         break;
+        //                                     default:
+        //                                         $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                         break;
+        //                                 }
+        //                             }
+        //                             $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                         }
+        //                     }else{
+        //                         foreach($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                             switch ($ddescaux2["ObjectName"]) 
+        //                             {
+        //                                 case 'DESCRIÇÃODAVERBA1':
+        //                                     $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                     break;
+        //                                 case 'Valor1':
+        //                                     $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Valor2':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Percentual1':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Basecálculo1':
+        //                                     $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 default:
+        //                                     $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                     break;
+        //                             }
+        //                         }
+        //                         $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                     }
+        //                 }
+        //             }
+        //         }//fim do primeiro foreach
+        //         //echo "<script>location.href='page_import_xml.php';</script>";
+        //         Log::info("inseridos pela primeira fase ->>>>>>>>>>>>>>>>");
+        //     }else{  //fim do primeiro if que determina se tem  a chave 0 dentro do array
+        //         foreach ($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"] as $dados) 
+        //         {
+        //             // ----- emplyes and company data ----- //
+        //             foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][2]["FormattedReportObjects"]["FormattedReportObject"] as $dempresa)
+        //             {
+        //                 switch ($dempresa["ObjectName"]) 
+        //                 {
+        //                     case 'Text1':
+        //                             $recibo = $dempresa["TextValue"];
+        //                         break;
+        //                     case 'EMPRESA1':
+        //                         $codigoNomeEmpresa = $this->verificarsearray($dempresa["FormattedValue"]);
+        //                         break;
+        //                     case 'Text2':
+        //                             $recibo1 = $dempresa["TextValue"];
+        //                         break;
+        //                     case 'SETOR1':
+        //                             $setor = $this->verificarsearray($dempresa["FormattedValue"]);
+        //                         break;
+        //                     case 'ENDEREÇO1':
+        //                             $endereco = $dempresa["FormattedValue"];
+        //                         break;
+        //                     case 'CNPJ1':
+        //                             $cnpj = $dempresa["FormattedValue"];
+        //                         break;
+        //                     case 'TÍTULO11':
+        //                             $funcionario = $dempresa["FormattedValue"];
+        //                         break;
+        //                     case 'TÍTULO21':
+        //                             $dataadm = $dempresa["FormattedValue"];
+        //                         break;
+        //                     case 'TÍTULO31':
+        //                             $ferias = $dempresa["FormattedValue"];
+        //                             $cpfTemp = explode(" - ", $ferias);
+        //                             foreach ($cpfTemp as $dadosTemp){
+        //                                 if (substr($dadosTemp, 0, 4) == "CPF:"){
+        //                                     $cpf = str_replace("CPF:", "", $dadosTemp);
+        //                                     $cpf = str_replace(" ", "", $cpf);
+        //                                 }
+        //                             }
+        //                         break;
+        //                     default:
+        //                     $cpf = ''; $recibo = ''; $recibo1 = ''; $empresa = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
+        //                     $funcionario = ''; $dataadm = ''; $ferias = ''; 
+        //                     $codigoNomeEmpresa = '';
+        //                         break;
+        //                 }
+        //             }
+    
+        //             // ----- employee company values data ----- //
+        //             foreach ($dados["FormattedArea"][1]["FormattedSections"]["FormattedSection"][1]["FormattedReportObjects"]["FormattedReportObject"] as $dvalores)
+        //             {
+        //                 switch ($dvalores["ObjectName"]) 
+        //                 {
+        //                     case 'Vtotalc1':
+        //                         $valorTC = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'Vtotald1':
+        //                         $valorTD = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'Vliquido1':
+        //                         $valorTL = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'Faixair1':
+        //                         $valorFa = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'Mensagemcc1':
+        //                         $Mensagemcc1 = $this->verificarsearray($dvalores["FormattedValue"]);
+        //                         break;
+        //                     case 'ValFgts1':
+        //                         $valorFGTS = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'MovimentoMêsdereferência2':
+        //                         $mesRef = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'BaseIRRF1':
+        //                         $valorBaseIRRF = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'SalárioBase1':
+        //                         $valorSalarioBase = $dvalores["FormattedValue"];
+        //                         break;
+        //                     case 'BaseFGTS1':
+        //                         $valorBaseFGTS = $dvalores["FormattedValue"];
+        //                         break;
+        //                     default:
+        //                         $valorTC = ''; $valorTD = ''; $valorTL= ''; $valorFa = ''; $mensagemc1 = ''; $valorFGTS = '';
+        //                         $mesRef = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; $valorSalarioBase = ''; $valorBaseFGTS = '';
+        //                         break;
+        //                 }
+        //             }
                     
-                   }//finish foreach dados 
-                    
-                }//finish foreach sessoes
-                
-            }//else{
-            // //array = $newArr
-            // $dataSessoes = $this->secondphase2XML($newArr);
-            //Log::info("segunda fase SEGUNDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n");
-            // Log::info(print_r($dataSessoes, true));
-            // }//finish else of if firstphaseXML
-        }    
-    }
+        //              //transforming in to array values
+        //             if(!empty($cpf))
+        //             {
+        //                  $datainsertXML = [
+        //                      'cpf' => $cpf, 
+        //                      'mesRef' => $mesRef, 
+        //                      'recibo' => $recibo, 
+        //                      'empresa' => $empresa, 
+        //                      'setor' => $setor, 
+        //                      'endereco' => $endereco, 
+        //                      'cnpj' => $cnpj, 
+        //                      'funcionario' => $funcionario, 
+        //                      'dataadm' => $dataadm, 
+        //                      'ferias' => $ferias, 
+        //                      'valorTC' => $valorTC, 
+        //                      'valorTD' => $valorTD, 
+        //                      'valorTL' => $valorTL, 
+        //                      'valorFa' => $valorFa, 
+        //                      'mensagemc1' => $mensagemc1,
+        //                      'valorFGTS' => $valorFGTS, 
+        //                      'valorBaseIRRF' => $valorBaseIRRF, 
+        //                      'valorBaseINNS' => $valorBaseINNS, 
+        //                      'valorSalarioBase' => $valorSalarioBase, 
+        //                      'valorBaseFGTS' => $valorBaseFGTS, 
+        //                      'payment_shipping_id' => $payment_shipping_id
+        //                  ];
+        //              //insert in database and return id and document for insert in table paymentxmladditional
+        //              $returnIdCpf = $this->insertdados($datainsertXML);
+        //             }
+        //             // ----- Descritivos ----- //
+        //             if(array_key_exists(0, $dados["FormattedAreaPair"]) == True){
+        //                 foreach($dados["FormattedAreaPair"] as $ddescaux){
+        //                     if(array_key_exists(0, $ddescaux["FormattedAreaPair"]) == True){
+        //                         foreach($ddescaux["FormattedAreaPair"] as $ddescaux1){
+        //                             if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True){
+        //                                 foreach($ddescaux1["FormattedAreaPair"] as $ddescaux3){
+        //                                     foreach($ddescaux3["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                                         switch ($ddescaux2["ObjectName"]) 
+        //                                         {
+        //                                             case 'DESCRIÇÃODAVERBA1':
+        //                                                 $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                                 break;
+        //                                             case 'Valor2':
+        //                                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Valor1':
+        //                                                 $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Percentual1':
+        //                                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             case 'Basecálculo1':
+        //                                                 $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                                 break;
+        //                                             default:
+        //                                                 $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                                 break;
+        //                                         }
+        //                                     }
+        //                                     $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                                 }
+        //                             }else{
+        //                                 foreach($ddescaux1["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                                     switch ($ddescaux2["ObjectName"]) 
+        //                                     {
+        //                                         case 'DESCRIÇÃODAVERBA1':
+        //                                             $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                             break;
+        //                                         case 'Valor2':
+        //                                             $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                             break;
+        //                                         case 'Valor1':
+        //                                             $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                             break;
+        //                                         case 'Percentual1':
+        //                                             $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                             break;
+        //                                         case 'Basecálculo1':
+        //                                             $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                             break;
+        //                                         default:
+        //                                             $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                             break;
+        //                                     }
+        //                                 }
+        //                                 $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                             }
+        //                         }
+        //                     }else{
+        //                         foreach($ddescaux["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                             switch ($ddescaux2["ObjectName"]) 
+        //                             {
+        //                                 case 'DESCRIÇÃODAVERBA1':
+        //                                     $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                     break;
+        //                                 case 'Valor2':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Valor1':
+        //                                     $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Percentual1':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Basecálculo1':
+        //                                     $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 default:
+        //                                     $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                     break;
+        //                             }
+        //                         }
+        //                         $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                     }
+        //                 }
+        //             }else{
+        //                 if(array_key_exists(0, $dados["FormattedAreaPair"]["FormattedAreaPair"]) == True){
+        //                     foreach($dados["FormattedAreaPair"]["FormattedAreaPair"] as $ddescaux){
+        //                         foreach($ddescaux["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                             switch ($ddescaux2["ObjectName"]) 
+        //                             {
+        //                                 case 'DESCRIÇÃODAVERBA1':
+        //                                     $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                     break;
+        //                                 case 'Valor2':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Valor1':
+        //                                     $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Percentual1':
+        //                                     $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 case 'Basecálculo1':
+        //                                     $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                     break;
+        //                                 default:
+        //                                     $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                     break;
+        //                             }
+        //                         }
+        //                         $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                     }
+        //                 }else{
+        //                     foreach($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
+        //                         switch ($ddescaux2["ObjectName"]) 
+        //                         {
+        //                             case 'DESCRIÇÃODAVERBA1':
+        //                                 $descricaoverba1 = $ddescaux2["FormattedValue"];
+        //                                 break;
+        //                             case 'Valor2':
+        //                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                 break;
+        //                             case 'Valor1':
+        //                                 $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                 break;
+        //                             case 'Percentual1':
+        //                                 $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                 break;
+        //                             case 'Basecálculo1':
+        //                                 $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
+        //                                 break;
+        //                             default:
+        //                                 $descricaoverba1 = ''; $valor1 = ''; $percentual1 = ''; $basecalculo1 = '';
+        //                                 break;
+        //                         }
+        //                     }
+        //                     $this->insertdadoscomp($returnIdCpf, $descricaoverba1, $valor1, $percentual1, $basecalculo1);
+        //                 }
+        //             }
+        //         }
+        //         //echo "<script>location.href='page_import_xml.php';</script>";
+        //         Log::info("inseridos pela segunda fase");
+        
+        //     } 
 
-    public function firstphaseXML($dataArray){
-        if(array_key_exists(0, $dataArray["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True){
-            return $datafirstphaseXML = $dataArray["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"];
-        }
-    }
-
-    public function secondphaseXML($dataArray){
-       return $datasecondphaseXML = $dataArray["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"];
-    }
-
-    public function secondphase2XML($dataArray){
-        return $datasecondphaseXML = $dataArray["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"];
-     }
-
-    public function companydataXML($dataArray){
-        return $datacompanydataXML = $dataArray["FormattedArea"][0]["FormattedSections"]["FormattedSection"][2]["FormattedReportObjects"]["FormattedReportObject"];
-    }
-
-    public function valuespaymentsXML($dataArray){
-        return $valuespaymentsXML = $dataArray["FormattedArea"][1]["FormattedSections"]["FormattedSection"][1]["FormattedReportObjects"]["FormattedReportObject"];
-    }
-
-    public function complementarydataXML($dataArray){
-        return $complementarydataXML = $dataArray["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"];
-    }
-
-    public function complementarydata1XML($dataArray){
-        return $complementarydataXML = $dataArray["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"];
-                                       
-    }
-
-    public function complementarydata2XML($dataArray){
-        return $complementarydataXML = $dataArray["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"];
-                                       
+            
+        // }    
     }
 
     public function storeOLD(Request $request)
@@ -477,7 +656,7 @@ class PaymentapiController extends Controller
 
     function insertdados($datainsertXML)
     {
-        Log::info(print_r($datainsertXML['cpf'], true));
+        
         $linha = Paymentxml::where('cpf', $datainsertXML['cpf'])->where('mesRef', $datainsertXML['mesRef'])->first();
         if(!empty($linha)){
             
