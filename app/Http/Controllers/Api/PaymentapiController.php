@@ -64,399 +64,92 @@ class PaymentapiController extends Controller
         $xml_file->original_name = $request->file->getClientOriginalName();
         $xml_file->save();
         $payment_shipping_id = $xml_file->id;
+        $i = 0;
         if(is_numeric($xml_file->id))
         {
-            $xmlfile = file_get_contents($_FILES['file']['tmp_name']);
-            $new = simplexml_load_string($xmlfile);
-            $newArr = json_decode(json_encode($new), TRUE);
+            $xml = simplexml_load_file(base_path(). "/storage/app/" .$xml_file->xml_file);
+            foreach ($xml->FormattedAreaPair->FormattedAreaPair->FormattedArea
+            ->FormattedSections
+                ->FormattedSection
+                    ->FormattedReportObjects
+                        ->FormattedReportObject
+                            ->FormattedAreaPair
+                                ->FormattedAreaPair
+                                    ->FormattedAreaPair
+                                        ->FormattedAreaPair
+                                            ->FormattedAreaPair
+                                                ->FormattedAreaPair as $phaseOne) {
+                //Log::debug("PaymentapiController.storage - foreach phaseOne " . print_r($phaseOne, true));
+                // ----- Dados da empresa ----- //
+                $recibo = ''; $empresa = ''; $recibo1 = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
+                $funcionario = ''; $dataadm = ''; $ferias = ''; $valorTC = ''; $valorTD = ''; $valorTL = ''; 
+                $valorFa = ''; $mensagemc1 = ''; $valorFGTS = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; 
+                $valorSalarioBase = ''; $valorBaseFGTS = ''; $cpf = '';
+               
+                foreach ($phaseOne->FormattedArea->FormattedSections->FormattedSection[2]->FormattedReportObjects->FormattedReportObject as $key => $dataOfCompany) 
+                {
+                    switch ($dataOfCompany->ObjectName) {
+                        case 'Text1':
+                            $recibo = $this->verificarsearray($dataOfCompany->TextValue);
+                            break;
+                        case 'EMPRESA1':
+                            $empresa = $this->verificarsearray($dataOfCompany->FormattedValue);
+                            break;
+                        case 'Text2':
+                            $recibo1 = $this->verificarsearray($dataOfCompany->TextValue);
+                            break;
+                        case 'SETOR1':
+                            $setor = $this->verificarsearray($dataOfCompany->FormattedValue);
+                            break;
+                        case 'ENDEREÇO1':
+                            $endereco = $this->verificarsearray($dataOfCompany->FormattedValue);
+                            break;
+                        case 'CNPJ1':
+                            $cnpj = $this->verificarsearray($dataOfCompany->FormattedValue);
+                            break;
+                                
+                    }
+                }
 
-            $descricaoverba1 = '';
-            $valor1 = '';
-            $percentual1 = '';
-            $basecalculo1 = '';
-
-            if(!empty($newArr))
-            {
-                    //foi retirado daki o recorte
-                    if(array_key_exists(0, $newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]) == True)
-                    {
-                        foreach ($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $sessoes){
-                            foreach ($sessoes["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"] as $dados) {
-                                $cpf = ''; $recibo = ''; $recibo1 = ''; $empresa = ''; $setor = ''; $endereco = ''; $cnpj = ''; $funcionario = ''; $dataadm = ''; $ferias = ''; $valorTC = '';
-                                $valorTD = ''; $valorTL= ''; $valorFa = ''; $mensagemc1 = ''; $valorFGTS = ''; $mesRef = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; $valorSalarioBase = '';
-                                $valorBaseFGTS = '';
-
-                                // ----- Dados da empresa ----- //
-                                foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][2]["FormattedReportObjects"]["FormattedReportObject"] as $dempresa){
-                                    if ($dempresa["ObjectName"] == "Text1"){
-                                        //$recibo = $this->verificarsearray($dempresa["FormattedValue"]);
-                                        $recibo = 'Recibo de Pagamento';
-                                    }
-                                    elseif ($dempresa["ObjectName"] == "EMPRESA1"){$empresa = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                    elseif ($dempresa["ObjectName"] == "Text2"){
-                                        //$recibo1 = $this->verificarsearray($dempresa["FormattedValue"]);
-                                        $recibo1 = 'de Salário';
-                                    }
-                                    elseif ($dempresa["ObjectName"] == "SETOR1"){$setor = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                    elseif ($dempresa["ObjectName"] == "ENDEREÇO1"){$endereco = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                    elseif ($dempresa["ObjectName"] == "CNPJ1"){$cnpj = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                }
+                // ----- Dados do funcionario ----- //
+                foreach ($phaseOne->FormattedArea->FormattedSections->FormattedSection[3]->FormattedReportObjects->FormattedReportObject as $key => $dataOfEmployee) 
+                {
                     
-                                // ----- Dados do Funcionario ----- //
-                                foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][3]["FormattedReportObjects"]["FormattedReportObject"] as $dfunc){
-                                    if ($dfunc["ObjectName"] == "TÍTULO11"){$funcionario =  $this->verificarsearray($dfunc["FormattedValue"]);}
-                                    elseif ($dfunc["ObjectName"] == "TÍTULO21"){$dataadm = $this->verificarsearray($dfunc["FormattedValue"]);}
-                                    elseif ($dfunc["ObjectName"] == "TÍTULO31"){$ferias = $this->verificarsearray($dfunc["FormattedValue"]);}
-                                    //if ($dfunc["ObjectName"] == "TÍTULO41"){$ferias = $dfunc["FormattedValue"];}
-                                }
-
-                                // ----- Valores ----- //
-                                foreach ($dados["FormattedArea"][1]["FormattedSections"]["FormattedSection"][1]["FormattedReportObjects"]["FormattedReportObject"] as $dvalores){
-                                if ($dvalores["ObjectName"] == "Vtotalc1"){$valorTC = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Vtotald1"){$valorTD = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Vliquido1"){$valorTL = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Faixair1"){$valorFa = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Mensagemcc1"){$mensagemc1 = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "ValFgts1"){$valorFGTS =$this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "MovimentoMêsdereferência2"){$mesRef = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseIRRF1"){$valorBaseIRRF = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseINSS1"){$valorBaseINNS = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "SalárioBase1"){$valorSalarioBase = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseFGTS1"){$valorBaseFGTS = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                }
-                    
-                                    $cpfTemp = explode(" - ", $ferias);
-                                    foreach ($cpfTemp as $dadosTemp){
-                                        if (substr($dadosTemp, 0, 4) == "CPF:"){
-                                            $cpf = str_replace("CPF:", "", $dadosTemp);
-                                            $cpf = str_replace(" ", "", $cpf);
-                                        }
-                                    }
-                                    $returnID = $this->insertdados($cpf, $mesRef, $recibo, $empresa, $setor, $endereco, $cnpj, $funcionario, $dataadm, $ferias, $valorTC, $valorTD, $valorTL, $valorFa, $mensagemc1,$valorFGTS, $valorBaseIRRF, $valorBaseINNS, $valorSalarioBase, $valorBaseFGTS, $payment_shipping_id);
-                                    $datainsertXML = [
-                                        'cpf' => $cpf, 
-                                        'mesRef' => $mesRef, 
-                                        'recibo' => $recibo, 
-                                        'empresa' => $empresa, 
-                                        'setor' => $setor, 
-                                        'endereco' => $endereco, 
-                                        'cnpj' => $cnpj, 
-                                        'funcionario' => $funcionario, 
-                                        'dataadm' => $dataadm, 
-                                        'ferias' => $ferias, 
-                                        'valorTC' => $valorTC, 
-                                        'valorTD' => $valorTD, 
-                                        'valorTL' => $valorTL, 
-                                        'valorFa' => $valorFa, 
-                                        'mensagemc1' => $mensagemc1,
-                                        'valorFGTS' => $valorFGTS, 
-                                        'valorBaseIRRF' => $valorBaseIRRF, 
-                                        'valorBaseINNS' => $valorBaseINNS, 
-                                        'valorSalarioBase' => $valorSalarioBase, 
-                                        'valorBaseFGTS' => $valorBaseFGTS, 
-                                        'payment_shipping_id' => $payment_shipping_id
-                                    ];
-                                    Log::info("PaymentapiController.store - xmlinsert" . print_r($datainsertXML, true));
-
-                                    // ----- Descritivos ----- //
-                
-                                if(array_key_exists(0, $dados["FormattedAreaPair"]) == True)
-                                {
-                                    foreach($dados["FormattedAreaPair"] as $ddescaux){
-                                        if(array_key_exists(0, $ddescaux["FormattedAreaPair"]) == True){
-                                            foreach($ddescaux["FormattedAreaPair"] as $ddescaux1){
-                                                if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True){
-                                                    foreach($ddescaux1["FormattedAreaPair"] as $ddescaux3){
-                                                        $descricaoverba1 = '';
-                                                        $valor1 = '';
-                                                        $percentual1 = '';
-                                                        $basecalculo1 = '';
-                    
-                                                        foreach($ddescaux3["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                                            if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                                $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                            }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                            }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                            }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                                $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                            }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                                $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                            }
-                                                        }
-                                                        $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                                    }
-                                                }else{        
-                                                    $descricaoverba1 = '';
-                                                    $valor1 = '';
-                                                    $percentual1 = '';
-                                                    $basecalculo1 = '';
-                    
-                                                    foreach($ddescaux1["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                                        if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                            $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }
-                                                    }
-                                                    $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                                }
-                                            }
-                                        }else{
-                                            foreach($ddescaux["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                                if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                    $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                    $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                    $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                    $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                    $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                }
-                                            }
-                                            $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                        }
-                                    }
-                                }else{
-                                    if(array_key_exists(0, $dados["FormattedAreaPair"]["FormattedAreaPair"]) == True){
-                                        foreach($dados["FormattedAreaPair"]["FormattedAreaPair"] as $key => $ddescaux)
-                                        {
-                                            
-                                            if(array_key_exists('FormattedAreaPair', $ddescaux)){
-                                                //Log::info("PaymentapiController.store - Chave:    " . print_r($key, true));
-                                                foreach ($ddescaux["FormattedAreaPair"] as $key2 => $value) {
-                                                    if(array_key_exists('FormattedArea', $value)){
-                                                        foreach ($value["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2) {
-                                                         if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                        $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }
-                                                        }
-                                                    }                                                   
-                                                }
-                                            }
-                                            // foreach($ddescaux["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                            //     if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                            //     $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            //     }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                            //         $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            //     }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                            //         $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            //     }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                            //         $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            //     }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                            //         $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            //     }
-                                            // }
-                                            $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                        }
-                                    }else{
-                                        foreach($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                            if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }
-                                        }
-                                        $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
+                    switch ($dataOfEmployee->ObjectName) {
+                        case 'TÍTULO11':
+                            $funcionario = $this->verificarsearray($dataOfEmployee->FormattedValue);
+                            break;
+                        case 'TÍTULO21':
+                            $dataadm = $this->verificarsearray($dataOfEmployee->FormattedValue);
+                            break;
+                        case 'TÍTULO31':
+                            $ferias = $this->verificarsearray($dataOfEmployee->FormattedValue);
+                            if($this->verificarsearray($dataOfEmployee->FormattedValue) != ""){
+                                $cpfTemp = explode(" - ", $ferias);
+                                foreach ($cpfTemp as $dadosTemp){
+                                    if (substr($dadosTemp, 0, 4) == "CPF:"){
+                                        $cpf = str_replace("CPF:", "", $dadosTemp);
+                                        $cpf = str_replace(" ", "", $cpf);
                                     }
                                 }
                             }
-                        }
-                    }else{
-                        foreach ($newArr["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"] as $dados) {
-                            // ----- Dados da empresa ----- //
-                            $cpf = ''; $recibo = ''; $recibo1 = ''; $empresa = ''; $setor = ''; $endereco = ''; $cnpj = ''; $funcionario = ''; $dataadm = ''; $ferias = ''; $valorTC = '';
-                                $valorTD = ''; $valorTL= ''; $valorFa = ''; $mensagemc1 = ''; $valorFGTS = ''; $mesRef = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; $valorSalarioBase = '';
-                                $valorBaseFGTS = '';
-
-                            foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][2]["FormattedReportObjects"]["FormattedReportObject"] as $dempresa){
-                                if ($dempresa["ObjectName"] == "Text1"){
-                                    //$recibo = $this->verificarsearray($dempresa["FormattedValue"]);
-                                    $recibo = 'Recibo de Pagamento';
-                                }
-                                elseif ($dempresa["ObjectName"] == "EMPRESA1"){$empresa = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                elseif ($dempresa["ObjectName"] == "Text2"){
-                                    //$recibo1 = $this->verificarsearray($dempresa["FormattedValue"]);
-                                    $recibo1 = 'de Salário';
-                                }
-                                elseif ($dempresa["ObjectName"] == "SETOR1"){$setor = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                elseif ($dempresa["ObjectName"] == "ENDEREÇO1"){$endereco = $this->verificarsearray($dempresa["FormattedValue"]);}
-                                elseif ($dempresa["ObjectName"] == "CNPJ1"){$cnpj = $this->verificarsearray($dempresa["FormattedValue"]);}
-                            }
-                
-                            // ----- Dados do Funcionario ----- //
-                            foreach ($dados["FormattedArea"][0]["FormattedSections"]["FormattedSection"][3]["FormattedReportObjects"]["FormattedReportObject"] as $dfunc){
-                                if ($dfunc["ObjectName"] == "TÍTULO11"){$funcionario =  $this->verificarsearray($dfunc["FormattedValue"]);}
-                                elseif ($dfunc["ObjectName"] == "TÍTULO21"){$dataadm = $this->verificarsearray($dfunc["FormattedValue"]);}
-                                elseif ($dfunc["ObjectName"] == "TÍTULO31"){$ferias = $this->verificarsearray($dfunc["FormattedValue"]);}
-                                //if ($dfunc["ObjectName"] == "TÍTULO41"){$ferias = $dfunc["FormattedValue"];}
-                            }
-                
-                            // ----- Valores ----- //
-                            foreach ($dados["FormattedArea"][1]["FormattedSections"]["FormattedSection"][1]["FormattedReportObjects"]["FormattedReportObject"] as $dvalores){
-                                if ($dvalores["ObjectName"] == "Vtotalc1"){$valorTC = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Vtotald1"){$valorTD = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Vliquido1"){$valorTL = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Faixair1"){$valorFa = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "Mensagemcc1"){$mensagemc1 = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "ValFgts1"){$valorFGTS = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "MovimentoMêsdereferência2"){$mesRef = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseIRRF1"){$valorBaseIRRF = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseINSS1"){$valorBaseINNS = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "SalárioBase1"){$valorSalarioBase = $this->verificarsearray($dvalores["FormattedValue"]);}
-                                elseif ($dvalores["ObjectName"] == "BaseFGTS1"){$valorBaseFGTS = $this->verificarsearray($dvalores["FormattedValue"]);}
-                            }
-                
-                            $cpfTemp = explode(" - ", $ferias);
-                            foreach ($cpfTemp as $dadosTemp){
-                                if (substr($dadosTemp, 0, 4) == "CPF:"){
-                                    $cpf = str_replace("CPF:", "", $dadosTemp);
-                                    $cpf = str_replace(" ", "", $cpf);
-                                }
-                            }
-                            
-                            $returnID = $this->insertdados($cpf, $mesRef, $recibo, $empresa, $setor, $endereco, $cnpj, $funcionario, $dataadm, $ferias, $valorTC, $valorTD, $valorTL, $valorFa, $mensagemc1,$valorFGTS, $valorBaseIRRF, $valorBaseINNS, $valorSalarioBase, $valorBaseFGTS, $payment_shipping_id);
-                            
-                            // ----- Descritivos ----- //
-                            if(array_key_exists(0, $dados["FormattedAreaPair"]) == True){
-                                foreach($dados["FormattedAreaPair"] as $ddescaux){
-                                    if(array_key_exists(0, $ddescaux["FormattedAreaPair"]) == True){
-                                        foreach($ddescaux["FormattedAreaPair"] as $ddescaux1){
-                                            if(array_key_exists(0, $ddescaux1["FormattedAreaPair"]) == True){
-                                                foreach($ddescaux1["FormattedAreaPair"] as $ddescaux3){
-                                                    $descricaoverba1 = '';
-                                                    $valor1 = '';
-                                                    $percentual1 = '';
-                                                    $basecalculo1 = '';
-                
-                                                    foreach($ddescaux3["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                                        if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                            $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                        }
-                                                    }
-                                                    $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                                }
-                                            }else{        
-                                                $descricaoverba1 = '';
-                                                $valor1 = '';
-                                                $percentual1 = '';
-                                                $basecalculo1 = '';
-                
-                                                foreach($ddescaux1["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                                    if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                        $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                        $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                        $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                        $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                        $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                                    }
-                                                }
-                                                $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                            }
-                                        }
-                                    }else{
-                                        foreach($ddescaux["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                            if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                                $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }
-                                        }
-                                        $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                    }
-                                }
-                            }else{
-                                if(array_key_exists(0, $dados["FormattedAreaPair"]["FormattedAreaPair"]) == True){
-                                    foreach($dados["FormattedAreaPair"]["FormattedAreaPair"] as $ddescaux){
-                                        foreach($ddescaux["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                            if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                            $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                                $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                                $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                                $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                            }
-                                        }
-                                        $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                    }
-                                }else{
-                                    foreach($dados["FormattedAreaPair"]["FormattedAreaPair"]["FormattedAreaPair"]["FormattedArea"]["FormattedSections"]["FormattedSection"]["FormattedReportObjects"]["FormattedReportObject"] as $ddescaux2){
-                                        if ($ddescaux2["ObjectName"] == "DESCRIÇÃODAVERBA1"){
-                                            $descricaoverba1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        }elseif ($ddescaux2["ObjectName"] == "Valor1"){
-                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        }elseif ($ddescaux2["ObjectName"] == "Valor2"){
-                                            $valor1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        }elseif ($ddescaux2["ObjectName"] == "Percentual1"){
-                                            $percentual1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        }elseif ($ddescaux2["ObjectName"] == "Basedecálculo1"){
-                                            $basecalculo1 = $this->verificarsearray($ddescaux2["FormattedValue"]);
-                                        }
-                                    }
-                                    $this->insertdadoscomp($returnID, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
-                                }
-                            }
-                        }
-                        
-                    } 
-                  
-                  return response()->json([
-                            'status' => true,
-                            'title' => 'Eiii!',
-                            'message' => 'Salvo com sucesso!',
-                        ], Response::HTTP_OK);
-                
-            }else{
-                return ["result" => "Operation Failed"];
+                            break;
+                    }
+                }
+                Log::debug("PaymentapiController.storage - foreach dataOfEmployee " . $cpf);
+                // ----- Dados do pagamento ----- //
+                $i++;
             }
-         }else{
-            return ["result" => "Operation Failed"];
-         }   
+           
+        
+        Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
+        }else{
+        return response()->json([
+            'status' => true,
+            'title' => 'Falha!',
+            'message' => 'Error!',
+        ], Response::HTTP_OK);
+        }   
     }
 
      //funcoes do olerite inicio
