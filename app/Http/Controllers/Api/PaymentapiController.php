@@ -84,9 +84,14 @@ class PaymentapiController extends Controller
                 $recibo = ''; $empresa = ''; $recibo1 = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
                 $funcionario = ''; $dataadm = ''; $ferias = ''; $valorTC = ''; $valorTD = ''; $valorTL = ''; 
                 $valorFa = ''; $mensagemc1 = ''; $valorFGTS = ''; $valorBaseIRRF = ''; $valorBaseINNS = ''; 
-                $valorSalarioBase = ''; $valorBaseFGTS = ''; $cpf = '';
+                $valorSalarioBase = ''; $valorBaseFGTS = ''; $cpf = ''; $idCpf_dados_XML = ''; $mesRef = '';
                
-                foreach ($phaseOne->FormattedArea->FormattedSections->FormattedSection[2]->FormattedReportObjects->FormattedReportObject as $key => $dataOfCompany) 
+                foreach ($phaseOne
+                            ->FormattedArea
+                                ->FormattedSections
+                                    ->FormattedSection[2]
+                                        ->FormattedReportObjects
+                                            ->FormattedReportObject as $key => $dataOfCompany) 
                 {
                     switch ($dataOfCompany->ObjectName) {
                         case 'Text1':
@@ -112,8 +117,12 @@ class PaymentapiController extends Controller
                 }
 
                 // ----- Dados do funcionario ----- //
-                foreach ($phaseOne->FormattedArea->FormattedSections->FormattedSection[3]->FormattedReportObjects->FormattedReportObject as $key => $dataOfEmployee) 
-                {
+                foreach ($phaseOne
+                            ->FormattedArea
+                                ->FormattedSections
+                                    ->FormattedSection[3]
+                                        ->FormattedReportObjects
+                                            ->FormattedReportObject as $key => $dataOfEmployee){
                     
                     switch ($dataOfEmployee->ObjectName) {
                         case 'TÍTULO11':
@@ -136,13 +145,92 @@ class PaymentapiController extends Controller
                             break;
                     }
                 }
-                Log::debug("PaymentapiController.storage - foreach dataOfEmployee " . $cpf);
+               
                 // ----- Dados do pagamento ----- //
+                foreach($phaseOne
+                            ->FormattedArea[1]
+                                ->FormattedSections
+                                    ->FormattedSection[1]
+                                        ->FormattedReportObjects
+                                            ->FormattedReportObject as $key => $dataOfPayment){
+                    switch ($dataOfPayment->ObjectName) {
+                        case 'Vtotalc1':
+                            $valorTC = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'Vtotald1':
+                            $valorTD = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'Vliquido1':
+                            $valorTL = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'Faixair1':
+                            $valorFa = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'Mensagemcc1':
+                            $mensagemc1 = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'ValFgts1':
+                            $valorFGTS = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'MovimentoMêsdereferência2':
+                            $mesRef = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'BaseIRRF1':
+                            $valorBaseIRRF = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'BaseIRRF1':
+                            $valorBaseINNS = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'BaseINSS1':
+                            $valorSalarioBase = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'SalárioBase1':
+                            $valorBaseFGTS = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                        case 'BaseFGTS1':
+                            $valorBaseFGTS = $this->verificarsearray($dataOfPayment->FormattedValue);
+                            break;
+                    }
+
+                }
+                // ----- inserindo dados ----- //
+               
+                $data_XML = [
+                    'recibo' => $recibo,
+                    'empresa' => $empresa,
+                    'recibo1' => $recibo1,
+                    'setor' => $setor,
+                    'endereco' => $endereco,
+                    'cnpj' => $cnpj,
+                    'funcionario' => $funcionario,
+                    'dataadm' => $dataadm,
+                    'ferias' => $ferias,
+                    'valorTC' => $valorTC,
+                    'valorTD' => $valorTD,
+                    'valorTL' => $valorTL,
+                    'valorFa' => $valorFa,
+                    'mensagemc1' => $mensagemc1,
+                    'valorFGTS' => $valorFGTS,
+                    'valorBaseIRRF' => $valorBaseIRRF,
+                    'valorBaseINNS' => $valorBaseINNS,
+                    'valorSalarioBase' => $valorSalarioBase,
+                    'valorBaseFGTS' => $valorBaseFGTS,
+                    'cpf' => $cpf,
+                    'mesRef' => $mesRef,
+                    'payment_shipping' => $payment_shipping_id,
+                ];
+                $idCpf_dados_XML = $this->insertdados($data_XML);
+
+                //quantidade de funcionários importados
                 $i++;
             }
-           
-        
-        Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
+        //Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
+        return response()->json([
+            'status' => true,
+            'title' => 'Sucesso!',
+            'message' => 'Arquivo importado com sucesso! <br> Quantidade de funcionários importados:' . $i,
+            'quantidade' => $i,
+        ], Response::HTTP_OK);
         }else{
         return response()->json([
             'status' => true,
@@ -163,68 +251,76 @@ class PaymentapiController extends Controller
         }
     }
 
-    function insertdados($cpf, $mesRef, $recibo, $empresa, $setor, $endereco, $cnpj, $funcionario, $dataadm, $ferias, $valorTC, $valorTD, $valorTL, $valorFa, $mensagemc1,$valorFGTS, $valorBaseIRRF, $valorBaseINNS, $valorSalarioBase, $valorBaseFGTS, $payment_shipping_id)
+    function insertdados($data_XML)
     {
-        $linha = Paymentxml::where('cpf', $cpf)->where('mesRef', $mesRef)->first();
+        $linha = Paymentxml::where('cpf', $data_XML['cpf'])
+                            ->where('mesRef', $data_XML['mesRef'])->first();
         if(!empty($linha)){
             
                 $userLogged = Auth::user();
                 $insert_xmldb = Paymentxml::find($linha->id);
                 $insert_xmldb->update([
                     'user_id' => $userLogged->id,
-                    'payment_shipping' => $payment_shipping_id,
-                    'cpf' => $cpf,
-                    'mes_ref' => $mesRef,
-                    'recibo' => $recibo,
-                    'empresa' => $empresa,
-                    'setor' => $setor,
-                    'endereco' => $endereco,
-                    'cnpj' => $cnpj,
-                    'funcionario' => $funcionario,
-                    'dataadm' => $dataadm,
-                    'ferias' => $ferias,
-                    'valorTC' => $valorTC,
-                    'valorTD' => $valorTD,
-                    'valorTL' => $valorTL,
-                    'valorFa' => $valorFa,
-                    'mensagemc1' => $mensagemc1,
-                    'valorFGTS' => $valorFGTS,
-                    'valorBaseIRRF' => $valorBaseIRRF,
-                    'valorBaseINNS' => $valorBaseINNS,
-                    'valorSalarioBase' => $valorSalarioBase,
-                    'valorBaseFGTS' => $valorBaseFGTS,
+                    'payment_shipping' =>  $data_XML['payment_shipping'],
+                    'cpf' => $data_XML['cpf'],
+                    'mesRef' => $data_XML['mesRef'],
+                    'recibo' => $data_XML['recibo'],
+                    'empresa' => $data_XML['empresa'],
+                    'setor' => $data_XML['setor'],
+                    'endereco' => $data_XML['endereco'],
+                    'cnpj' => $data_XML['cnpj'],
+                    'funcionario' => $data_XML['funcionario'],
+                    'dataadm' => $data_XML['dataadm'],
+                    'ferias' => $data_XML['ferias'],
+                    'valorTC' => $data_XML['valorTC'],
+                    'valorTD' => $data_XML['valorTD'],
+                    'valorTL' => $data_XML['valorTL'],
+                    'valorFa' => $data_XML['valorFa'],
+                    'mensagemc1' => $data_XML['mensagemc1'],
+                    'valorFGTS' => $data_XML['valorFGTS'],
+                    'valorBaseIRRF' => $data_XML['valorBaseIRRF'],
+                    'valorBaseINNS' => $data_XML['valorBaseINNS'],
+                    'valorSalarioBase' => $data_XML['valorSalarioBase'],
+                    'valorBaseFGTS' => $data_XML['valorBaseFGTS'],
+                    'payment_shipping' => $data_XML['payment_shipping'],
                 ]);
 
                 Paymentxmladditional::where('id_paymentxmls', $linha->id)->delete();
-                return $linha->id;
+                return $dataReturn = [
+                    'id' => $linha->id,
+                    'cpf' => $linha->cpf
+                ];
         }else{
                 $userLogged = Auth::user();
                 $insert_xmldb = new Paymentxml();
                 $insert_xmldb->user_id = $userLogged->id;
-                $insert_xmldb->payment_shipping = $payment_shipping_id;
-                $insert_xmldb->cpf = $cpf;
-                $insert_xmldb->mesRef = $mesRef;
-                $insert_xmldb->recibo = $recibo;
-                $insert_xmldb->empresa = $empresa;
-                $insert_xmldb->setor = $setor;
-                $insert_xmldb->endereco = $endereco;
-                $insert_xmldb->cnpj = $cnpj;
-                $insert_xmldb->funcionario = $funcionario;
-                $insert_xmldb->dataadm = $dataadm;
-                $insert_xmldb->ferias = $ferias;
-                $insert_xmldb->valorTC = $valorTC;
-                $insert_xmldb->valorTD = $valorTD;
-                $insert_xmldb->valorTL = $valorTL;
-                $insert_xmldb->valorFa = $valorFa;
-                $insert_xmldb->mensagemc1 = $mensagemc1;
-                $insert_xmldb->valorFGTS = $valorFGTS;
-                $insert_xmldb->valorBaseIRRF = $valorBaseIRRF;
-                $insert_xmldb->valorBaseINNS = $valorBaseINNS;
-                $insert_xmldb->valorSalarioBase = $valorSalarioBase;
-                $insert_xmldb->valorBaseFGTS = $valorBaseFGTS;
+                $insert_xmldb->payment_shipping = $data_XML['payment_shipping'];
+                $insert_xmldb->cpf = $data_XML['cpf'];
+                $insert_xmldb->mesRef = $data_XML['mesRef'];
+                $insert_xmldb->recibo = $data_XML['recibo'];
+                $insert_xmldb->empresa = $data_XML['empresa'];
+                $insert_xmldb->setor = $data_XML['setor'];
+                $insert_xmldb->endereco = $data_XML['endereco'];
+                $insert_xmldb->cnpj = $data_XML['cnpj'];
+                $insert_xmldb->funcionario = $data_XML['funcionario'];
+                $insert_xmldb->dataadm = $data_XML['dataadm'];
+                $insert_xmldb->ferias = $data_XML['ferias'];
+                $insert_xmldb->valorTC = $data_XML['valorTC'];
+                $insert_xmldb->valorTD = $data_XML['valorTD'];
+                $insert_xmldb->valorTL = $data_XML['valorTL'];
+                $insert_xmldb->valorFa = $data_XML['valorFa'];
+                $insert_xmldb->mensagemc1 = $data_XML['mensagemc1'];
+                $insert_xmldb->valorFGTS = $data_XML['valorFGTS'];
+                $insert_xmldb->valorBaseIRRF = $data_XML['valorBaseIRRF'];
+                $insert_xmldb->valorBaseINNS = $data_XML['valorBaseINNS'];
+                $insert_xmldb->valorSalarioBase = $data_XML['valorSalarioBase'];
+                $insert_xmldb->valorBaseFGTS = $data_XML['valorBaseFGTS'];
                 $insert_xmldb->save();
 
-                return $insert_xmldb->id;
+                return $dataReturn = [
+                    'id' => $insert_xmldb->id,
+                    'cpf' => $insert_xmldb->cpf
+                ];
         }
     }
 
