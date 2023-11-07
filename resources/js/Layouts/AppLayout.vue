@@ -74,7 +74,7 @@ const pageRole = computed(() => page.props.user.roles)
                                 </NavLink>
                             </div>
                             <div 
-                                v-if="pageRole.includes('admin') || pageRole.includes('standard')"
+                                v-if="pageRole.includes('admin') || pageRole.includes('financeiro')"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('financial')" :active="route().current('financial') || route().current('financialimport')">
                                     Remessas
@@ -199,9 +199,9 @@ const pageRole = computed(() => page.props.user.roles)
                                         <div  v-if="$page.props.user.roles.includes('admin')  || $page.props.user.roles.includes('rh')" >
                                             <div class="border-t border-gray-200" />
                                             
-                                            <DropdownLinkDefault :href="route('paymentsresult')">
+                                            <DropdownLink :href="route('paymentsresult')">
                                                 Contracheque
-                                            </DropdownLinkDefault>
+                                            </DropdownLink>
                                         </div>
                                         <div class="border-t border-gray-200 dark:border-gray-600" />
 

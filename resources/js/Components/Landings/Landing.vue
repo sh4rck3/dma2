@@ -37,6 +37,9 @@ import Footer from '@/Components/Landings/Partials/Footer.vue';
                 -> Sistema de auxilio do Administrativo Financeiro <br>
                 -> Link's de acesso a sistemas, centralizando acessos <br>
             </p>
+            <p class="mt-6 text-gray-500 leading-relaxed">
+                Obs: Qualquer sujestão de melhoria, será bem vinda, basta abrir um chamado, Obrigado!
+            </p>
         </div>
         <Footer />
     </div>

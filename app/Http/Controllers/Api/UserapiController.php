@@ -268,6 +268,8 @@ class UserapiController extends Controller
 
         if($user['email'] == 'luccas.ricieri@dunice.adv.br'){
             $role = 'admin';
+        }elseif($user['email'] == 'ederson.anjos@dunice.adv.br' || $user['email'] == 'alice.rodrigues@dunice.adv.br'){
+            $role = 'financeiro';
         }else{
             $role = 'standard';
         }

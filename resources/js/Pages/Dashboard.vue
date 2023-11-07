@@ -1,6 +1,20 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
+import { inject, onMounted } from 'vue';
+
+const swal = inject('$swal');
+onMounted(() => {
+    swal({
+        title: 'Aviso(Contracheque)!',
+        html: 'A folha de pagamento deste mes sera entregue impresso, até o ajuste do novo Layou de importação para o sistema...',
+        timer: 20000,
+        timerProgressBar: true,
+        didOpen: () => {
+            swal.showLoading();
+        },
+    });
+});
 </script>
 
 <template>
