@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserapiController;
 use App\Http\Controllers\Api\PaymentapiController;
+use App\Http\Controllers\Api\FinancialapiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +41,9 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
      Route::get('/paymentuser', [PaymentapiController::class, 'paymentuser'])->name('paymentuser');
      Route::get('/paymentuser/show/{id}', [PaymentapiController::class, 'show'])->name('paymentuser.show');
      Route::get('/payment/confirm/{id}', [PaymentapiController::class, 'confirm'])->name('confirm');
+
+       //financial
+    Route::get('/financialindex', [FinancialapiController::class, 'index'])->name('financialindex');
+    Route::post('/financial/store', [FinancialapiController::class, 'store'])->name('financial.store');
 
 });

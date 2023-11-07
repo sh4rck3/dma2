@@ -34,7 +34,7 @@ const submit = () => {
         </template>
 
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            This is a secure area of the application. Please confirm your password before continuing.
+           Esdta e uma área segura do sistema. Por favor confirme sua senha.
         </div>
 
         <form @submit.prevent="submit">
@@ -55,7 +55,7 @@ const submit = () => {
 
             <div class="flex justify-end mt-4">
                 <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
+                    Confirmar
                 </PrimaryButton>
             </div>
         </form>

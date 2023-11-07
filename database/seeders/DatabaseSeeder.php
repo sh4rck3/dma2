@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\RolesSeeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\NewrolesSeeder;
+use Database\Seeders\NewrolefinanSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UserSeeder::class, 
-            NewrolesSeeder::class
+            NewrolesSeeder::class,
+            NewrolefinanSeeder::class
         ]);
     }
 }

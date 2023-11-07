@@ -1,4 +1,5 @@
 <script setup>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Icon from '@/Icons/Icon.vue';
 </script>
 
@@ -15,15 +16,36 @@ import Icon from '@/Icons/Icon.vue';
                 </smal>
             </div>
 
+            <div>
+
+                <div v-if="$page.props.user.permissions.includes('read articles')">
+                    <button type="button">Read article</button>
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('write articles')">
+                    <button type="button">Write article</button>
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('edit articles')">
+                    <button type="button">Edit article</button>
+
+                </div>
+
+                <div v-if="$page.props.user.permissions.includes('delete articles')">
+                    <button type="button">Delete article</button>
+                </div>
+
+            </div>
+
             <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
-                Este sistema tem o intuito de auxiliar e agilizar o fluxo de trabalho de alguns setores.<br>
-                A página de chamados foi desvinculada desta plataforma com a finalidade de centralizar os sistemas da TI, auxiliando no fluxo de trabalho da TI.<br>
-                <br>
-                Esta pagina centraliza informações da empresa tais como contracheque e regimento interno.
+                Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
+                to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
+                you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
+                ecosystem to be a breath of fresh air. We hope you love it.
             </p>
         </div>
 
-        <!-- <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+        <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
             <div>
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 stroke-gray-400">
@@ -103,7 +125,7 @@ import Icon from '@/Icons/Icon.vue';
                     Authentication and registration views are included with Laravel Jetstream, as well as support for user email verification and resetting forgotten passwords. So, you're free to get started with what matters most: building your application.
                 </p>
             </div>
-        </div> -->
+        </div>
         
     </div>
 </template>

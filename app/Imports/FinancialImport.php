@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use App\Models\Financial;
 
-class FinancialImport implements ToCollection
+class FinancialImport implements ToModel
 {
     /**
     * @param Collection $collection

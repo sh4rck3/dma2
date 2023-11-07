@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\LandingpageController;
 use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\UserwebController;
 use App\Http\Controllers\Web\PaymentwebController;
+use App\Http\Controllers\Web\FinancialwebController;
 
 
 /*
@@ -44,6 +45,10 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/paymentsimport', [PaymentwebController::class, 'create'])->name('paymentsimport');
     Route::get('/paymentsresult', [PaymentwebController::class, 'show'])->name('paymentsresult');
     Route::get('/paymentshow/{id}', [PaymentwebController::class, 'paymentshow'])->name('paymentshow');
+
+     //financial
+     Route::get('/financial', [FinancialwebController::class, 'index'])->name('financial');
+     Route::get('/financialimport', [FinancialwebController::class, 'create'])->name('financialimport');
 });
 
 
