@@ -223,22 +223,53 @@ class PaymentapiController extends Controller
                 $idCpf_dados_XML = $this->insertdados($data_XML);
 
                 // ------Descritivos -----//
-                //if(is_array($phaseOne)){
-                    foreach ($phaseOne as $value) {
-                        Log::debug("foreach phaseTwo->FormattedAreaPair " . print_r($phaseOne[1], true));
-                    }
-                //}
+               
+                foreach ($phaseOne->FormattedAreaPair as $phaseTwo) {
+                    //Log::debug("foreach phaseTwo " . print_r($phaseOne, true));
+                    
+                        foreach($phaseTwo->FormattedAreaPair->FormattedAreaPair as $phaseTree){
+                            //Log ::debug("foreach phaseTree " . print_r($phaseTree->FormattedArea, true));
+                                $descricaoverba1 = '';
+                                $valor1 = '';
+                                $percentual1 = '';
+                                $basecalculo1 = '';
+                                foreach($phaseTree->FormattedArea->FormattedSections->FormattedSection->FormattedReportObjects->FormattedReportObject as $ddescaux2){
+                                    //Log::debug("message ddescaux3 " . print_r($ddescaux2, true));
+                                        switch ($ddescaux2->ObjectName) {
+                                            case 'DESCRIÇÃODAVERBA1':
+                                                $descricaoverba1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
+                                            case 'Valor2':
+                                                $valor1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
+                                            case 'Valor1':
+                                                $valor1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
+                                            case 'Percentual1':
+                                                $percentual1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
+                                            case 'Basedecálculo1':
+                                                $basecalculo1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
+                                        }                                    
+                                }
+                                $this->insertdadoscomp($idCpf_dados_XML['id'], $idCpf_dados_XML['cpf'], $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
+                        }
+                    
+                }
+                
 
                 //quantidade de funcionários importados
                 $i++;
             }
         //Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
-        return response()->json([
-            'status' => true,
-            'title' => 'Sucesso!',
-            'message' => 'Arquivo importado com sucesso! <br> Quantidade de funcionários importados:' . $i,
-            'quantidade' => $i,
-        ], Response::HTTP_OK);
+        return Response::HTTP_NOT_FOUND;
+        // return response()->json([
+        //     'status' => true,
+        //     'title' => 'Sucesso!',
+        //     'message' => 'Arquivo importado com sucesso! <br> Quantidade de funcionários importados:' . $i,
+        //     'quantidade' => $i,
+        // ], Response::HTTP_OK);
         }else{
         return response()->json([
             'status' => true,
@@ -332,11 +363,11 @@ class PaymentapiController extends Controller
         }
     }
 
-    function insertdadoscomp($id_dados_XML, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id)
+    function insertdadoscomp($id_dados_XML, $cpf_dados_XML, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id)
     {
         $insert_xmldbaditional = new Paymentxmladditional();
         $insert_xmldbaditional->id_paymentxmls = $id_dados_XML;
-        $insert_xmldbaditional->aditional_cpf = $payment_shipping_id;
+        $insert_xmldbaditional->aditional_cpf = $cpf_dados_XML;
         $insert_xmldbaditional->descricaoverba1 = $descricaoverba1;
         $insert_xmldbaditional->valor1 = $valor1;
         $insert_xmldbaditional->percentual1 = $percentual1;
