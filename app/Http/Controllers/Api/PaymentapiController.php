@@ -79,7 +79,7 @@ class PaymentapiController extends Controller
                                         ->FormattedAreaPair
                                             ->FormattedAreaPair
                                                 ->FormattedAreaPair as $phaseOne) 
-            {
+            { 
                 //Log::debug("PaymentapiController.storage - foreach phaseOne " . print_r($phaseOne, true));
                 // ----- Dados da empresa ----- //
                 $recibo = ''; $empresa = ''; $recibo1 = ''; $setor = ''; $endereco = ''; $cnpj = ''; 
@@ -233,6 +233,7 @@ class PaymentapiController extends Controller
                                 $valor1 = '';
                                 $percentual1 = '';
                                 $basecalculo1 = '';
+                                $mesRef1 = '';
                                 foreach($phaseTree->FormattedArea->FormattedSections->FormattedSection->FormattedReportObjects->FormattedReportObject as $ddescaux2){
                                     //Log::debug("message ddescaux3 " . print_r($ddescaux2, true));
                                         switch ($ddescaux2->ObjectName) {
@@ -251,18 +252,38 @@ class PaymentapiController extends Controller
                                             case 'Basedecálculo1':
                                                 $basecalculo1 = $this->verificarsearray($ddescaux2->FormattedValue);
                                                 break;
+                                            case 'MovimentoMêsdereferência1':
+                                                $mesRef1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                                break;
                                         }                                    
                                 }
-                                $this->insertdadoscomp($idCpf_dados_XML['id'], $idCpf_dados_XML['cpf'], $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id);
+                                $data_compXML = [
+                                    'id' => $idCpf_dados_XML['id'],
+                                    'cpf' => $idCpf_dados_XML['cpf'],
+                                    'descricaoverba1' => $descricaoverba1,
+                                    'valor1' => $valor1,
+                                    'percentual1' => $percentual1,
+                                    'basecalculo1' => $basecalculo1,
+                                    'payment_shipping' => $payment_shipping_id,
+                                    'mesRef1' => $idCpf_dados_XML['mesRef'],
+                                ];
+
+                                $this->insertdadoscomp($data_compXML);
                         }
-                    
+                }
+                foreach ($phaseOne->FormattedAreaPair->FormattedAreaPair as $key => $phaseFour) {
+                    //Log::debug("PaymentapiController.storage - foreach phaseOne " . print_r($value, true));
+                    foreach ($phaseFour as $key => $value) {
+                        Log::debug("PaymentapiController.storage - foreach phaseFour " . print_r($phaseFour->FormattedAreaPair->FormattedArea, true));
+                    }
+
                 }
                 
 
                 //quantidade de funcionários importados
                 $i++;
             }
-        //Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
+        Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
         return Response::HTTP_NOT_FOUND;
         // return response()->json([
         //     'status' => true,
@@ -327,7 +348,8 @@ class PaymentapiController extends Controller
                 Paymentxmladditional::where('id_paymentxmls', $linha->id)->delete();
                 return $dataReturn = [
                     'id' => $linha->id,
-                    'cpf' => $linha->cpf
+                    'cpf' => $linha->cpf,
+                    'mesRef' => $linha->mesRef,
                 ];
         }else{
                 $userLogged = Auth::user();
@@ -358,22 +380,27 @@ class PaymentapiController extends Controller
 
                 return $dataReturn = [
                     'id' => $insert_xmldb->id,
-                    'cpf' => $insert_xmldb->cpf
+                    'cpf' => $insert_xmldb->cpf,
+                    'mesRef' => $insert_xmldb->mesRef,
                 ];
         }
     }
 
-    function insertdadoscomp($id_dados_XML, $cpf_dados_XML, $descricaoverba1, $valor1, $percentual1, $basecalculo1, $payment_shipping_id)
+    function insertdadoscomp($data_compXML)
     {
+        
+
         $insert_xmldbaditional = new Paymentxmladditional();
-        $insert_xmldbaditional->id_paymentxmls = $id_dados_XML;
-        $insert_xmldbaditional->aditional_cpf = $cpf_dados_XML;
-        $insert_xmldbaditional->descricaoverba1 = $descricaoverba1;
-        $insert_xmldbaditional->valor1 = $valor1;
-        $insert_xmldbaditional->percentual1 = $percentual1;
-        $insert_xmldbaditional->basecalculo1 = $basecalculo1;
-        $result = $insert_xmldbaditional->save();
+        $insert_xmldbaditional->id_paymentxmls = $data_compXML['id'];
+        $insert_xmldbaditional->aditional_cpf = $data_compXML['cpf'];
+        $insert_xmldbaditional->mesRef1 = $data_compXML['mesRef1'];
+        $insert_xmldbaditional->descricaoverba1 = $data_compXML['descricaoverba1'];
+        $insert_xmldbaditional->valor1 = $data_compXML['valor1'];
+        $insert_xmldbaditional->percentual1 = $data_compXML['percentual1'];
+        $insert_xmldbaditional->basecalculo1 = $data_compXML['basecalculo1'];
+        $insert_xmldbaditional->save();
     }
+    
 
     /**
      * Display the specified resource.
