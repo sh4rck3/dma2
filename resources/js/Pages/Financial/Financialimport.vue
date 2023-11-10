@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 
+
 </script>
 <script>
 import FormSection from '@/Components/FormSection.vue';
@@ -9,6 +10,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Footer from '@/Components/Landings/Partials/Footer.vue';
 
 
 
@@ -61,13 +63,11 @@ export default {
                 //console.log(err.data)
                 );
         },
-        
+        deleteRemessa(){
+            console.log(this.form.idRemessa)
+        }        
     },   
 };
-
-
-
-
 </script>
 
 <template>
@@ -97,7 +97,7 @@ export default {
                             Detalhes da importação
                         </template>
 
-                        <template #description>
+                        <template #description class="ms-8">
                             Para importar o arquivo  é preciso seguir os seguintes requisitos:<br>
                             
                             -> Layout padrão de importacao e na mesma ordem de sempre<br>
@@ -152,6 +152,28 @@ export default {
                             </PrimaryButton>
                         </template>
                     </FormSection>
+                    <FormSection  @submitted="deleteRemessa">
+                        <template #form>
+                            <div class="col-span-4 sm:col-span-2">
+                                <InputLabel for="idRemessa" value="Deletar" />
+                                <TextInput
+                                    id="idRemessa"
+                                    v-model="form.idRemessa"
+                                    type="text"
+                                    class="block w-full mt-1"
+                                />
+                                <InputError :message="form.errors.idRemessa" class="mt-2" />
+                            </div>
+                        </template>
+                        <template #actions>
+                            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                Deletar
+                            </PrimaryButton>
+                        </template>
+                    </FormSection>
+
+                    <slot />
+                    <Footer />
                 </div>
             </div>
         </div>

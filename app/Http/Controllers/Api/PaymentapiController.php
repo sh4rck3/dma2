@@ -270,7 +270,7 @@ class PaymentapiController extends Controller
                                 ];
 
                                 $this->insertdadoscomp($data_compXML);
-                                Log::debug("PaymentapiController.data_compXML " . print_r($data_compXML, true));
+                                //Log::debug("PaymentapiController.data_compXML " . print_r($data_compXML, true));
                             }
                            
                         }

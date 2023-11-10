@@ -81,7 +81,7 @@ const pageRole = computed(() => page.props.user.roles)
                                 </NavLink>
                             </div>
                             <div 
-                                v-if="pageRole.includes('admin')"
+                                v-if="pageRole.includes('standard') || pageRole.includes('financeiro')"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('paymentsresult')" :active="route().current('paymentsresult')">
                                     Contracheque

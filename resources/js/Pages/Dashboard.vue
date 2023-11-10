@@ -6,9 +6,9 @@ import { inject, onMounted } from 'vue';
 const swal = inject('$swal');
 onMounted(() => {
     swal({
-        title: 'Aviso(Contracheque)!',
-        html: 'A folha de pagamento deste mes sera entregue impresso, até o ajuste do novo Layou de importação para o sistema...',
-        timer: 20000,
+        title: 'Bem Vindo!',
+        html: 'Teremos quadro de avisos aqui no sistema, fique por dentro de tudo que acontece na empresa.',
+        timer: 5000,
         timerProgressBar: true,
         didOpen: () => {
             swal.showLoading();
