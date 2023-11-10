@@ -227,10 +227,52 @@ class PaymentapiController extends Controller
                 foreach ($phaseOne
                             ->FormattedAreaPair as $phaseTwo) {
                     //Log::debug("foreach phaseTwo " . print_r($phaseOne, true));
-                    
-                        foreach($phaseTwo as $key => $phaseTree){
-                            //Log ::debug("foreach phaseTree " . print_r($phaseTwo, true));
-                            array_walk_recursive($phaseTwo, $this->test_print);
+                        foreach($phaseTwo->FormattedAreaPair as $phaseTree){
+                            //Log ::debug("foreach phaseTree " . print_r($phaseTree, true));
+                            foreach($phaseTree as $phaseFour){
+                                //Log::debug("foreach phaseFour " . print_r($phaseFour, true));
+                                $descricaoverba1 = '';
+                                $valor1 = '';
+                                $percentual1 = '';
+                                $basecalculo1 = '';
+                                foreach($phaseFour->FormattedArea->FormattedSections->FormattedSection->FormattedReportObjects->FormattedReportObject as $ddescaux2){
+                                    //Log::debug("foreach ddescaux2 " . print_r($ddescaux2, true));
+                                    switch ($ddescaux2->ObjectName) {
+                                        case 'DESCRIÇÃODAVERBA1':
+                                            $descricaoverba1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                        case 'Valor2':
+                                            $valor1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                        case 'Valor1':
+                                            $valor1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                        case 'Percentual1':
+                                            $percentual1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                        case 'Basedecálculo1':
+                                            $basecalculo1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                        case 'MovimentoMêsdereferência1':
+                                            $mesRef1 = $this->verificarsearray($ddescaux2->FormattedValue);
+                                            break;
+                                    }                                    
+                                }
+                                $data_compXML = [
+                                    'id' => $idCpf_dados_XML['id'],
+                                    'cpf' => $idCpf_dados_XML['cpf'],
+                                    'descricaoverba1' => $descricaoverba1,
+                                    'valor1' => $valor1,
+                                    'percentual1' => $percentual1,
+                                    'basecalculo1' => $basecalculo1,
+                                    'payment_shipping' => $payment_shipping_id,
+                                    'mesRef1' => $idCpf_dados_XML['mesRef'],
+                                ];
+
+                                $this->insertdadoscomp($data_compXML);
+                                Log::debug("PaymentapiController.data_compXML " . print_r($data_compXML, true));
+                            }
+                           
                         }
             }
                 
@@ -253,12 +295,6 @@ class PaymentapiController extends Controller
             'message' => 'Error!',
         ], Response::HTTP_OK);
         }   
-    }
-
-    function test_print($item, $key)
-    {
-        //echo "$key holds $item\n";
-        Log::warning("chave: " . $key . " item: " . $item);
     }
 
      //funcoes do olerite inicio
