@@ -101,13 +101,24 @@ class FinancialapiController extends Controller
      */
     public function destroy(string $id)
     {
-        //Log::debug("Financial destroy \r\n" . $id);
-        $financial = Financial::where('num_remessa', $id);
-        $financial->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Removido com sucesso!',
-        ], Response::HTTP_OK);
+        $financial = Financial::where('num_remessa', $id)->get();
+        if($financial->count() == 0) {
+            return response()->json([
+                'status' => false,
+                'title' => 'Erro',
+                'message' => 'Não existe remessa!',
+                //'returnData' => $data
+            ], Response::HTTP_OK);
+        }else{
+            $financial = Financial::where('num_remessa', $id);
+            $financial->delete();
+            return response()->json([
+                'status' => true,
+                'title' => 'Apagado',
+                'message' => 'Removido com sucesso!',
+            ], Response::HTTP_OK);
+        }
+       
+       
     }
 }

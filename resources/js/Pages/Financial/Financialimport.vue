@@ -50,9 +50,9 @@ export default {
                 alert("Este processo demora em torno de 45 segundo... favor aguardar")
                 )
             .then(response => {
-                console.log(response.status);
+               
                 if(response.data.status == true){
-                    console.log(response.data.returnData);
+                    
                     this.$swal(response.data.title, response.data.message, "success");
                         setTimeout(() => {
                             this.$inertia.visit("/financial");
@@ -67,14 +67,17 @@ export default {
             //console.log(this.form.idRemessa)
         axios.delete(`/api/financial/destroy/${this.form.idRemessa}`)
             .then(response => {
-                console.log(response.status);
+                console.log(response.data)
                 if(response.data.status == true){
-                    console.log(response.data.returnData);
+                   
                     this.$swal(response.data.title, response.data.message, "success");
                         setTimeout(() => {
                             this.$inertia.visit("/financial");
                         }, 200);
-                }               
+                }else{
+                    this.$swal(response.data.title, response.data.message, "error");
+                }
+
             })
         }        
     },   
