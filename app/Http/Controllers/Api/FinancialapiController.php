@@ -101,6 +101,13 @@ class FinancialapiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //Log::debug("Financial destroy \r\n" . $id);
+        $financial = Financial::where('num_remessa', $id);
+        $financial->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Removido com sucesso!',
+        ], Response::HTTP_OK);
     }
 }

@@ -64,7 +64,18 @@ export default {
                 );
         },
         deleteRemessa(){
-            console.log(this.form.idRemessa)
+            //console.log(this.form.idRemessa)
+        axios.delete(`/api/financial/destroy/${this.form.idRemessa}`)
+            .then(response => {
+                console.log(response.status);
+                if(response.data.status == true){
+                    console.log(response.data.returnData);
+                    this.$swal(response.data.title, response.data.message, "success");
+                        setTimeout(() => {
+                            this.$inertia.visit("/financial");
+                        }, 200);
+                }               
+            })
         }        
     },   
 };
@@ -155,7 +166,7 @@ export default {
                     <FormSection  @submitted="deleteRemessa">
                         <template #form>
                             <div class="col-span-4 sm:col-span-2">
-                                <InputLabel for="idRemessa" value="Deletar" />
+                                <InputLabel for="idRemessa" value="Deletar Remessa" />
                                 <TextInput
                                     id="idRemessa"
                                     v-model="form.idRemessa"
@@ -167,7 +178,7 @@ export default {
                         </template>
                         <template #actions>
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                Deletar
+                                Deletar Remessa
                             </PrimaryButton>
                         </template>
                     </FormSection>

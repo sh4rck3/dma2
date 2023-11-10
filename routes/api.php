@@ -45,5 +45,6 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
        //financial
     Route::get('/financialindex', [FinancialapiController::class, 'index'])->name('financialindex');
     Route::post('/financial/store', [FinancialapiController::class, 'store'])->name('financial.store');
+    Route::delete('/financial/destroy/{id}', [FinancialapiController::class, 'destroy'])->name('financial.destroy');
 
 });
