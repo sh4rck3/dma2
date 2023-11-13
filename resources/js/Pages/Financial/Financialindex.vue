@@ -1,5 +1,9 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import Icon from '@/Icons/Icon.vue';
+import { ref } from 'vue';
+
+const openModal = ref(false);
 
 </script>
 <script>
@@ -251,13 +255,11 @@ export default {
                                 </td>
                                 
                                 <td class="border-t">
-                                    
-                                        <div class="flex">
-                                            <a href="#"><icon name="edit" class="mr-2 w-4 h-4" /></a>
-                                            <a href="#"><icon name="trash" class="mr-2 w-4 h-4" /></a>
-                                            
+                                    <a class="flex items-center px-0.5 py-2  focus:text-indigo-500" >
+                                        <div>
+                                           <button  @click="open = true" data-modal-target="default-modal" data-modal-toggle="default-modal"><Icon name="eye" class="w-5 h-5" /></button>
                                         </div>
-                                    
+                                    </a>
                                 </td>
                             </tr>
                             <tr v-if="financials.length === 0">
@@ -276,5 +278,11 @@ export default {
                 </div>
             </div>
         </div>
+        <Teleport to="body">
+            <div v-if="open" class="modal">
+                <p>Hello from the modal!</p>
+                <button @click="open = false">Close</button>
+            </div>
+        </Teleport>
     </AppLayout>
 </template>

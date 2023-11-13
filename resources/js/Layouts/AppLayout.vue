@@ -336,7 +336,7 @@ const pageRole = computed(() => page.props.user.roles)
                     <slot name="header" />
                 </div>
             </header>
-
+           
             <!-- Page Content -->
             <main>
                 <slot />
