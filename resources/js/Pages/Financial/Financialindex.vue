@@ -1,17 +1,10 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Icon from '@/Icons/Icon.vue';
-import { ref } from 'vue';
-
-const openModal = ref(false);
-
+import Modalflowbite from '@/Components/Modalflowbite.vue';
 </script>
 <script>
 import { TailwindPagination } from 'laravel-vue-pagination';
 import throttle from 'lodash/throttle';
-
-
-
 
 export default {
     components: {
@@ -257,7 +250,12 @@ export default {
                                 <td class="border-t">
                                     <a class="flex items-center px-0.5 py-2  focus:text-indigo-500" >
                                         <div>
-                                           <button  @click="open = true" data-modal-target="default-modal" data-modal-toggle="default-modal"><Icon name="eye" class="w-5 h-5" /></button>
+                                           <Modalflowbite
+                                           :numGcpj="financial.num_gcpj"
+                                           :codEscritorio="financial.cod_escritorio"
+                                           :carteira="financial.carteira"
+                                           :justDuplicidade="financial.justifi_duplicidade"
+                                           />
                                         </div>
                                     </a>
                                 </td>
@@ -278,11 +276,5 @@ export default {
                 </div>
             </div>
         </div>
-        <Teleport to="body">
-            <div v-if="open" class="modal">
-                <p>Hello from the modal!</p>
-                <button @click="open = false">Close</button>
-            </div>
-        </Teleport>
     </AppLayout>
 </template>

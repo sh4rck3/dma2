@@ -12,6 +12,7 @@ import { usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import Darkmode from '@/Components/Darkmode.vue';
 
+
 defineProps({
     title: String,
 });
@@ -336,10 +337,12 @@ const pageRole = computed(() => page.props.user.roles)
                     <slot name="header" />
                 </div>
             </header>
-           
+
             <!-- Page Content -->
             <main>
                 <slot />
+
+                <Modalflowbite />
             </main>
         </div>
     </div>
