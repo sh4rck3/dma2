@@ -1,6 +1,11 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Modalflowbite from '@/Components/Modalflowbite.vue';
+
+
+ function openModal(id) {
+    console.log(id)
+ }
 </script>
 <script>
 import { TailwindPagination } from 'laravel-vue-pagination';
@@ -251,10 +256,7 @@ export default {
                                     <a class="flex items-center px-0.5 py-2  focus:text-indigo-500" >
                                         <div>
                                            <Modalflowbite
-                                           :numGcpj="financial.num_gcpj"
-                                           :codEscritorio="financial.cod_escritorio"
-                                           :carteira="financial.carteira"
-                                           :justDuplicidade="financial.justifi_duplicidade"
+                                           @click.prevent="openModal(financial.id)"
                                            />
                                         </div>
                                     </a>
