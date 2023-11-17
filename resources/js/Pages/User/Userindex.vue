@@ -25,9 +25,11 @@ const updatingList = async () =>{
         })
     axios.get('/api/usersupdate')
     .then(response => {
+        console.log(response.data),
         swal({
-                    icon: 'success',
-                    title: 'Atualizado com sucesso!'
+            title: response.data.title,
+            text: response.data.message,
+            icon: response.data.icon
                 })
     })
     .catch(error => {

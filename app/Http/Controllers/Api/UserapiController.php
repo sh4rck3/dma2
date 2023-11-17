@@ -231,31 +231,53 @@ class UserapiController extends Controller
         curl_close($curl);
         $response = json_decode($response, true);
         $users = $response;
-
+        $a = 0;
+        $u = 0;
         foreach ($users as $key => $user) {
             if($this->usercheck($user) == false){
                 $this->useradd($user);
-                Log::info('UserapiController.usersupdate - useradd' . $user['email']);
+                Log::info('UserapiController.usersadd - ' . $user['email']);
+                $a++;
             }else{
-                $this->userupdate($user);
+                if($this->userupdate($user) == false){
+                    Log::info('Não atualizado nao entra no criterio - ' . $user['email']);
+                }else{
+
+                    $u++;
+                }
             }
+           
         }
-
-        return response()->json([
-            'status' => true,
-            'title' => 'Update',
-            'message' => 'Employees updating success!'
-        ], Response::HTTP_OK);
-        
-
-        
+        Log::info('Add - ' . $a . ' - Update - ' . $u);
+        if($a > 0){
+            return response()->json([
+                'status' => true,
+                'title' => 'Adicionados',
+                'message' => 'Quantidade de usuários adicionados!' . $a,
+                'icon' => 'success'
+            ], Response::HTTP_OK);
+        }elseif($u > 0){
+            return response()->json([
+                'status' => true,
+                'title' => 'Atualizados',
+                'message' => 'Lista de usuários atualizados!' . $u,
+                'icon' => 'success'
+            ], Response::HTTP_OK);
+        }elseif($a == 0 && $u == 0){
+            return response()->json([
+                'status' => true,
+                'title' => 'SEM ALTERAÇÕES',
+                'message' => 'Comparado os ados e não houve alterações!',
+                'icon' => 'info'
+            ], Response::HTTP_OK);
+        }  
     }
     //firts step: check if user exists in local database
     public function usercheck($user)
     {
         $employee = User::where('email', $user['email'])->first();
         if($employee){
-            return true;
+           return true; 
         }else{
             return false;
         }
@@ -302,23 +324,28 @@ class UserapiController extends Controller
     //if user exists in local database, update user
     public function userupdate($user)
     {
-        $userupdate = User::where('email', $user['email'])
-                //->where('status', '=', '1')
-                ->first();
-        if($user['foxdatadenascimentofield'] != null){
-            $valstring = strlen($user['foxdatadenascimentofield']);
-            if($valstring == 10){
-                $birthday = explode('/', $user['foxdatadenascimentofield']);
-                $birthdayusa = $birthday[2] . '-' . $birthday[1] . '-' . $birthday[0];
-                
+       
+        
+        $userupdate = User::where('email', '=', $user['email'])
+                    ->where('updateGlpi', '<', $user['updated_at'])
+                    ->first();
+
+        if($userupdate){
+            if(is_numeric($userupdate->id) && $userupdate->id != '4'){
+            if($user['foxdatadenascimentofield'] != null){
+                $valstring = strlen($user['foxdatadenascimentofield']);
+                if($valstring == 10){
+                    $birthday = explode('/', $user['foxdatadenascimentofield']);
+                    $birthdayusa = $birthday[2] . '-' . $birthday[1] . '-' . $birthday[0];
+                    
+                }else{
+                    $birthdayusa = '1990-01-01';
+                }
             }else{
                 $birthdayusa = '1990-01-01';
             }
-        }else{
-            $birthdayusa = '1990-01-01';
-        }
 
-        if($userupdate){
+
             $userupdate->email = $user['email'];
             $userupdate->status = $user['is_active'];
             $userupdate->extension = $user['phone'];
@@ -327,7 +354,15 @@ class UserapiController extends Controller
             $userupdate->sector = $user['completename'];
             $userupdate->document = $user['foxcpffield'];
             $userupdate->birthday = $birthdayusa;
+            $userupdate->updateGlpi = $user['updated_at'];
             $userupdate->save();
+            Log::info('atualizado - ' . print_r($user, true));
+            return $userupdate->id;
+            
+            }else{
+                return false;
+            }
+            
         }
     }
 
