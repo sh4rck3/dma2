@@ -332,8 +332,8 @@ class UserapiController extends Controller
     public function userupdate($user)
     {
         $dateTime = explode(' ', $user['updated_at']);
-        $dateApi = $data[0] ;
-        $timeApi = $data[1];
+        $dateApi = $dateTime[0] ;
+        $timeApi = $dateTime[1];
         Log::debug('dateTime - ' . print_r($dateTime, true));
         $userupdate = User::where('email', '=', $user['email'])
                     ->where(
