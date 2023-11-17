@@ -1,11 +1,25 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Modalflowbite from '@/Components/Modalflowbite.vue';
+import { ref } from 'vue'
+import { FwbButton, FwbModal } from 'flowbite-vue'
+
+const isShowModal = ref(false)
+const detalhes = ref({})
+
+function closeModal () {
+  isShowModal.value = false
+}
+function showModal (financial) {
+  isShowModal.value = true
+  console.log(financial.justifi_duplicidade)
+  if(financial.justifi_duplicidade === null){
+    financial.justifi_duplicidade = 'Sem Justificativa'
+  }
+  detalhes.value = financial
+  
+}
 
 
- function openModal(id) {
-    console.log(id)
- }
 </script>
 <script>
 import { TailwindPagination } from 'laravel-vue-pagination';
@@ -255,9 +269,10 @@ export default {
                                 <td class="border-t">
                                     <a class="flex items-center px-0.5 py-2  focus:text-indigo-500" >
                                         <div>
-                                           <Modalflowbite
-                                           @click.prevent="openModal(financial.id)"
-                                           />
+                                            
+                                            <fwb-button @click="showModal(financial)">
+                                                Open modal
+                                            </fwb-button>
                                         </div>
                                     </a>
                                 </td>
@@ -266,6 +281,30 @@ export default {
                                 <td class="px-6 py-2 border-t" colspan="18">Nenhum registro encontrado.</td>
                             </tr>
                         </table>
+                         <!-- Modal para mostrar detalhes -->
+                        <fwb-modal v-if="isShowModal" @close="closeModal">
+                            <template #header>
+                            <div class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
+                                {{ detalhes.nome_cliente }}
+                            </div>
+                            </template>
+                            <template #body>
+                            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                Número de GCPJ: {{ detalhes.num_gcpj }}
+                            </p>
+                            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                Justificativa: {{ detalhes.justifi_duplicidade }}
+                            </p>
+                            </template>
+                            <template #footer>
+                            <div class="flex justify-between">
+                                
+                                <fwb-button @click="closeModal" color="red">
+                                Fechar
+                                </fwb-button>
+                            </div>
+                            </template>
+                        </fwb-modal>
                     </div>
                 </div>
                 <div class="w-auto px-4 py-5 flex justify-center">
