@@ -174,9 +174,8 @@ class UserapiController extends Controller
     //functionality to get all users from GLPI
     public function usersupdate()
     {
-        Log::info('UserapiController.usersupdate');
+       
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://glpi.dunice.com.br/apirest.php/initSession',
         CURLOPT_RETURNTRANSFER => true,
@@ -194,19 +193,27 @@ class UserapiController extends Controller
         ));
 
         $response = curl_exec($curl);
+        Log::debug('response - ' . print_r($response, true));
         curl_close($curl);
         $response = json_decode($response, true);
 
-        if($response['session_token']){
-            $token = $response['session_token'];
-        }else{
-            //return response()->json(['status' => 405, 'success' => false]);  
+        if($response == null){
+             
             return response()->json([
                 'status' => true,
-                'title' => 'Token',
-                'message' => 'Token não encontrado!'
+                'title' => 'API GLPI',
+                'message' => 'Api não retornou token de sessão!',
+                'icon' => 'warning'
             ], Response::HTTP_OK);
+        }else{
+            if($response['session_token']){
+                $token = $response['session_token'];
+            }else{
+                $token = '';
+            }
         }
+
+        
 
         $curl = curl_init();
 
@@ -324,10 +331,17 @@ class UserapiController extends Controller
     //if user exists in local database, update user
     public function userupdate($user)
     {
-       
-        
+        $dateTime = explode(' ', $user['updated_at']);
+        $dateApi = $data[0] ;
+        $timeApi = $data[1];
+        Log::debug('dateTime - ' . print_r($dateTime, true));
         $userupdate = User::where('email', '=', $user['email'])
-                    ->where('updateGlpi', '<', $user['updated_at'])
+                    ->where(
+                        function($query) use ($dateApi, $timeApi) {
+                        $query->whereDate('updateGlpi', '<=', $dateApi)
+                        ->whereTime('updateGlpi', '<', $timeApi);
+                      }
+                      )//('updateGlpi', '<', $user['updated_at'])
                     ->first();
 
         if($userupdate){
