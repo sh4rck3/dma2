@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref } from 'vue'
 import { FwbButton, FwbModal } from 'flowbite-vue'
+import Icon from '@/Icons/Icon.vue'
 
 const isShowModal = ref(false)
 const detalhes = ref({})
@@ -271,7 +272,7 @@ export default {
                                         <div>
                                             
                                             <fwb-button @click="showModal(financial)">
-                                                Open modal
+                                                <Icon name="information" class="w-5 h-5" />
                                             </fwb-button>
                                         </div>
                                     </a>
