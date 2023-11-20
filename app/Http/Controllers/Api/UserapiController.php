@@ -176,6 +176,7 @@ class UserapiController extends Controller
     {
        
         $curl = curl_init();
+        
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://glpi.dunice.com.br/apirest.php/initSession',
         CURLOPT_RETURNTRANSFER => true,
@@ -338,7 +339,7 @@ class UserapiController extends Controller
         $userupdate = User::where('email', '=', $user['email'])
                     ->where(
                         function($query) use ($dateApi, $timeApi) {
-                        $query->whereDate('updateGlpi', '<=', $dateApi)
+                        $query->whereDate('updateGlpi', '<', $dateApi)
                         ->whereTime('updateGlpi', '<', $timeApi);
                       }
                       )//('updateGlpi', '<', $user['updated_at'])
