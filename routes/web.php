@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\PageController;
 use App\Http\Controllers\Web\UserwebController;
 use App\Http\Controllers\Web\PaymentwebController;
 use App\Http\Controllers\Web\FinancialwebController;
+use App\Http\Controllers\Web\UseradmwebController;
 
 
 /*
@@ -49,6 +50,10 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
      //financial
      Route::get('/financial', [FinancialwebController::class, 'index'])->name('financial');
      Route::get('/financialimport', [FinancialwebController::class, 'create'])->name('financialimport');
+
+     //user admin manager
+     Route::get('/useradm', [UseradmwebController::class, 'index'])->name('useradm');
+     Route::put('/useradm', [UseradmwebController::class, 'edit'])->name('useradm.edit');
 });
 
 

@@ -95,11 +95,11 @@ export default function useUsers() {
 
     const deleteUser = async (id) => {
         swal({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this action!',
+            title: 'Tem certeza?',
+            text: 'Você não poderá reverter isso!',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Sim, deletar!',
             confirmButtonColor: '#ef4444',
             timer: 20000,
             timerProgressBar: true,
@@ -107,19 +107,19 @@ export default function useUsers() {
         })
             .then(result => {
                 if (result.isConfirmed) {
-                    axios.delete('/api/users/' + id)
+                    axios.delete('/api/users/destroy/' + id)
                         .then(response => {
                             getUsers()
                             //router.push({name: 'users.index'})
                             swal({
                                 icon: 'success',
-                                title: 'User deleted successfully'
+                                title: 'Usuario deletado com sucesso'
                             })
                         })
                         .catch(error => {
                             swal({
                                 icon: 'error',
-                                title: 'Something went wrong'
+                                title: 'Erro ao deletar usuario'
                             })
                         })
                 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserapiController;
 use App\Http\Controllers\Api\PaymentapiController;
 use App\Http\Controllers\Api\FinancialapiController;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +48,8 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     Route::post('/financial/store', [FinancialapiController::class, 'store'])->name('financial.store');
     Route::delete('/financial/destroy/{id}', [FinancialapiController::class, 'destroy'])->name('financial.destroy');
 
+    //user admin manager
+    Route::put('/users', [UserapiController::class, 'update']);
+    Route::delete('/users/destroy/{id}', [UserapiController::class, 'destroy'])->name('users.destroy');
+    //Route::put('/user-edit/{id}', [UserapiController::class, 'edit'])->name('users.restore');
 });

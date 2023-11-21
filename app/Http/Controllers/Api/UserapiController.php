@@ -167,7 +167,11 @@ class UserapiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        //return response()->noContent();
     }
 
 
@@ -176,7 +180,7 @@ class UserapiController extends Controller
     {
        
         $curl = curl_init();
-        
+
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://glpi.dunice.com.br/apirest.php/initSession',
         CURLOPT_RETURNTRANSFER => true,
