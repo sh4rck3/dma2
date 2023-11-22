@@ -10,7 +10,7 @@ import useUsers from '../../../../composables/users'
 
 const editUser = (id) => {
     console.log(id)
-    router.put(route('useradm.edit'), {
+    router.put(route('useradm.edit'),{
         id: id,
     });
 };
