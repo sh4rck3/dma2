@@ -118,7 +118,11 @@ const pageRole = computed(() => page.props.user.roles)
                                             </DropdownLink>
 
                                             <DropdownLink>
-                                                Create New Team
+                                                Regras
+                                            </DropdownLink>
+
+                                            <DropdownLink>
+                                                Permissões
                                             </DropdownLink>
                                         </div>
                                     </template>

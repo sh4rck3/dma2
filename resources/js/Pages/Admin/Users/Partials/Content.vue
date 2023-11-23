@@ -7,14 +7,6 @@ import { usePage, router } from '@inertiajs/vue3'
 import useUsers from '../../../../composables/users'
 
 
-
-const editUser = (id) => {
-    console.log(id)
-    router.put(route('useradm.edit'),{
-        id: id,
-    });
-};
-
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
 const swal = inject('$swal')
@@ -212,8 +204,8 @@ watch(search_global, (current, previous) => {
                                         {{ post.jobtitle }}
                                     </td>
                                     <td class="px-6 py-4 text-sm">
-                                    <a href="#"
-                                                @click.prevent="editUser(post.id)"
+                                    <a :href="`/useradmedit/${post.id}`"
+                                                
                                                  class="badge bg-primary">Editar
                                     </a>
                                     <a href="#"  @click.prevent="deleteUser(post.id)"

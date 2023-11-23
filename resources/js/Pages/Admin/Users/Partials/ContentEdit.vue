@@ -1,5 +1,29 @@
 <script setup>
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+import { FwbInput } from 'flowbite-vue';
 
+const name = ref('');
+
+const props = defineProps({
+    userId: {
+        type: Object,
+        required: true,
+    },
+});
+
+onMounted( async () => {
+    
+    await axios.put(`/api/useradmedit/${props.userId}`)
+        .then(response => {
+            name.value = response.data.data.name;
+            email.value = response.data.data.email;
+            
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
 
 </script>
 
@@ -12,15 +36,17 @@
                 
                 
                     <h1 class="ml-3 text-2xl font-medium text-gray-900 dark:text-white mx-1">
-                       Usuarios 
+                       {{ name }} 
                     </h1>
                    
                
             </div>
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                 <div class="card-body shadow-sm">
-                    Usuario a ser editado
-                </div>    
+                    <FwbInput v-model="name" label="Nome" size="sm" />
+                    <FwbInput v-model="email" label="Email" size="sm" />
+                </div>
+                
             </div>
             
         </div>

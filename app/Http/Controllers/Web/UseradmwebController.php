@@ -46,9 +46,11 @@ class UseradmwebController extends Controller
      */
     public function edit(string $id)
     {
-        Log::info("message - useradmwebcontroller edit");
-        //return Inertia::render('Admin/Users/Edit');
-        return 'ok';
+        Log::info("message - useradmwebcontroller edit - " . $id);
+        return Inertia::render('Admin/Users/Edit', [
+            'userId' => $id
+        ]);
+        //return 'ok';
     }
 
     /**

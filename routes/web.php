@@ -53,7 +53,7 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
 
      //user admin manager
      Route::get('/useradm', [UseradmwebController::class, 'index'])->name('useradm');
-     Route::put('/useradm', [UseradmwebController::class, 'edit'])->name('useradm.edit');
+     Route::get('/useradmedit/{id}', [UseradmwebController::class, 'edit'])->name('useradmedit');
 });
 
 

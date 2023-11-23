@@ -51,5 +51,5 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     //user admin manager
     Route::put('/users', [UserapiController::class, 'update']);
     Route::delete('/users/destroy/{id}', [UserapiController::class, 'destroy'])->name('users.destroy');
-    //Route::put('/user-edit/{id}', [UserapiController::class, 'edit'])->name('users.restore');
+    Route::put('/useradmedit/{id}', [UserapiController::class, 'edit'])->name('useradmedit');
 });
