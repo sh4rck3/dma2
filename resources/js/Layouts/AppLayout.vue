@@ -60,15 +60,9 @@ const pageRole = computed(() => page.props.user.roles)
                                     Painel
                                 </NavLink>
                             </div>
+                            
                             <div 
-                                v-if="pageRole.includes('admin')"
-                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('users')" :active="route().current('users') || route().current('inactiveusers')">
-                                    Usuarios
-                                </NavLink>
-                            </div>
-                            <div 
-                                v-if="pageRole.includes('admin')"
+                                v-if="pageRole.includes('rh') || pageRole.includes('admin')"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('payments')" :active="route().current('payments') || route().current('paymentsimport')">
                                     Pagamanetos
@@ -82,7 +76,7 @@ const pageRole = computed(() => page.props.user.roles)
                                 </NavLink>
                             </div>
                             <div 
-                                v-if="pageRole.includes('standard') || pageRole.includes('financeiro')"
+                                v-if="pageRole.includes('standard') || pageRole.includes('financeiro') || pageRole.includes('suporte')"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('paymentsresult')" :active="route().current('paymentsresult')">
                                     Contracheque
@@ -90,7 +84,7 @@ const pageRole = computed(() => page.props.user.roles)
                             </div>
                             <!-- user Dropdown -->
                             <div 
-                                v-if="pageRole.includes('admin')"
+                                v-if="pageRole.includes('admin') || pageRole.includes('suporte')"
                                 class="hidden space-x-8 sm:ml-10 sm:flex mt-4">
                                 <Dropdown align="right" width="60" :active="route().current('useradm')">
                                     <template #trigger>
@@ -127,6 +121,13 @@ const pageRole = computed(() => page.props.user.roles)
                                         </div>
                                     </template>
                                 </Dropdown>
+                            </div>
+                            <div 
+                                v-if="pageRole.includes('admin')"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('users')" :active="route().current('users') || route().current('inactiveusers')">
+                                    Usuarios(sera desativado)
+                                </NavLink>
                             </div>
                         </div>
 

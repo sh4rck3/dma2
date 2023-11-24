@@ -10,7 +10,7 @@ import useUsers from '../../../../composables/users'
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
 const swal = inject('$swal')
-const apiusers = ref([])
+const pageRole = computed(() => page.props.user.roles)
 
 
 function showAlert() {
@@ -83,8 +83,6 @@ watch(search_global, (current, previous) => {
                     <h1 class="ml-3 text-2xl font-medium text-gray-900 dark:text-white mx-1">
                        Usuarios
                     </h1>
-                   
-               
             </div>
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                 <div class="card-body shadow-sm">
@@ -216,13 +214,16 @@ watch(search_global, (current, previous) => {
                                         {{ post.roles[0].name }}
                                     </td>
                                     <td class="px-6 py-4 text-sm">
-                                    <a :href="`/useradmedit/${post.id}`"
-                                                
-                                                 class="badge bg-primary">Editar
-                                    </a>
-                                    <a href="#"  @click.prevent="deleteUser(post.id)"
-                                       class="ms-2 badge bg-danger">Deletar</a>
-                                </td>
+                                        <div class="flex">
+                                            <a :href="`/useradmedit/${post.id}`"
+                                                    
+                                                    class="badge bg-primary"><Icon name="edit" class="block h-5 w-5" />
+                                            </a>
+                                            <a href="#"  @click.prevent="deleteUser(post.id)"
+                                            class="ms-2 badge bg-danger"><Icon name="trash" class="block h-5 w-5" />
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                             
                                 <tr v-else>

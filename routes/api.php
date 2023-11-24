@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     Route::put('/users', [UserapiController::class, 'update']);
     Route::delete('/users/destroy/{id}', [UserapiController::class, 'destroy'])->name('users.destroy');
     Route::put('/useradmedit/{id}', [UserapiController::class, 'edit'])->name('useradmedit');
+    Route::put('/useradmupdate/{id}', [UserapiController::class, 'update'])->name('useradmupdate');
 
 
 

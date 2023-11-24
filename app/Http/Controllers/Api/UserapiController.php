@@ -162,7 +162,27 @@ class UserapiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $user = User::findOrFail($id);
+        $teste = $user->syncRoles($request->role);
+
+        Log::debug('teste - ' . print_r($teste, true));
+        
+        if($id){
+            return response()->json([
+                'status' => true,
+                'title' => 'Atualizado',
+                'message' => 'Permissão atualizado com sucesso',
+                'icon' => 'success'
+            ], Response::HTTP_OK);
+        }else{
+            return response()->json([
+                'status' => true,
+                'title' => 'Erro',
+                'message' => 'ID não encontrado',
+                'icon' => 'error'
+            ], Response::HTTP_OK);
+        }
     }
 
     /**
