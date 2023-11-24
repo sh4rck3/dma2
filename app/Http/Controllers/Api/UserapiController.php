@@ -152,9 +152,9 @@ class UserapiController extends Controller
     public function edit(string $id)
     {
          
-         $users = User::findOrFail($id);
+         $user = User::findOrFail($id);
  
-            return new UserResource($users);
+            return new UserResource($user);
     }
 
     /**

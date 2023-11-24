@@ -1,9 +1,16 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-import { FwbInput } from 'flowbite-vue';
+import { FwbInput, FwbSelect } from 'flowbite-vue';
+import useRoles from '../../../../composables/roles';
+
+const { roleList, getRoleList } = useRoles();
 
 const name = ref('');
+const email = ref('');
+const role = ref('');
+const selected = ref('');
+
 
 const props = defineProps({
     userId: {
@@ -12,17 +19,23 @@ const props = defineProps({
     },
 });
 
+
+
 onMounted( async () => {
     
     await axios.put(`/api/useradmedit/${props.userId}`)
         .then(response => {
             name.value = response.data.data.name;
             email.value = response.data.data.email;
-            
+            role.value = response.data.data.roles[0].name;
+            //selected.value = response.data.data.roles[0].name;
+            //console.log(response.data.data.roles[0].name);
+            //console.log(selected.value);
         })
         .catch(error => {
             console.log(error);
-        });
+        }),
+    getRoleList()
 });
 
 </script>
@@ -43,8 +56,14 @@ onMounted( async () => {
             </div>
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                 <div class="card-body shadow-sm">
-                    <FwbInput v-model="name" label="Nome" size="sm" />
-                    <FwbInput v-model="email" label="Email" size="sm" />
+                    <FwbInput v-model="name" label="Nome" size="sm" disabled />
+                    <FwbInput v-model="email" label="Email" size="sm" disabled />
+                    <FwbSelect
+                        v-model="selected"
+                        :options="roleList"
+                        label="Permissões"
+                        size="sm"
+                    />
                 </div>
                 
             </div>

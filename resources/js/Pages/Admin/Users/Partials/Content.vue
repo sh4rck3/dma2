@@ -27,6 +27,8 @@ const orderColumn = ref('created_at')
 const orderDirection = ref('desc')
 const { users, getUsers, deleteUser } = useUsers()
 
+console.log(users)
+
 onMounted(() => {
     getUsers()
 })
@@ -176,6 +178,13 @@ watch(search_global, (current, previous) => {
                                 <th class="px-6 py-3 text-left">
                                     <div class="flex flex-row">
                                         <div class="font-medium text-uppercase">
+                                            Permissões
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-3 text-left">
+                                    <div class="flex flex-row">
+                                        <div class="font-medium text-uppercase">
                                             Ações
                                         </div>
                                     </div>
@@ -202,6 +211,9 @@ watch(search_global, (current, previous) => {
                                     </td>
                                     <td class="px-6 py-4 text-sm">
                                         {{ post.jobtitle }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        {{ post.roles[0].name }}
                                     </td>
                                     <td class="px-6 py-4 text-sm">
                                     <a :href="`/useradmedit/${post.id}`"

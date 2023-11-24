@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserapiController;
 use App\Http\Controllers\Api\PaymentapiController;
 use App\Http\Controllers\Api\FinancialapiController;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,9 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     Route::put('/users', [UserapiController::class, 'update']);
     Route::delete('/users/destroy/{id}', [UserapiController::class, 'destroy'])->name('users.destroy');
     Route::put('/useradmedit/{id}', [UserapiController::class, 'edit'])->name('useradmedit');
+
+
+
+    //role list
+    Route::get('/role-list', [RoleController::class, 'getList'])->name('role-list');
 });

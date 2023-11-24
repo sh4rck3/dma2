@@ -1,5 +1,5 @@
 import {ref, inject} from 'vue'
-import {useRouter} from 'vue-router'
+
 
 export default function useRoles() {
     const roles = ref([])
@@ -8,7 +8,7 @@ export default function useRoles() {
     })
     const roleList = ref([])
     const rolePermissionList = ref([])
-    const router = useRouter()
+    
     const validationErrors = ref({})
     const isLoading = ref(false)
     const swal = inject('$swal')
@@ -53,7 +53,7 @@ export default function useRoles() {
 
         axios.post('/api/roles', role)
             .then(response => {
-                router.push({name: 'roles.index'})
+                //router.push({name: 'roles.index'})
                 swal({
                     icon: 'success',
                     title: 'Role saved successfully'
@@ -75,7 +75,7 @@ export default function useRoles() {
 
         axios.put('/api/roles/' + role.id, role)
             .then(response => {
-                router.push({name: 'roles.index'})
+                //router.push({name: 'roles.index'})
                 swal({
                     icon: 'success',
                     title: 'Role updated successfully'
@@ -131,7 +131,7 @@ export default function useRoles() {
                     axios.delete('/api/roles/' + id)
                         .then(response => {
                             getRoles()
-                            router.push({name: 'roles.index'})
+                            //router.push({name: 'roles.index'})
                             swal({
                                 icon: 'success',
                                 title: 'Role deleted successfully'
