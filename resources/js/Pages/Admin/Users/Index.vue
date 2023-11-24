@@ -47,6 +47,12 @@ const updatingList = async () =>{
                     </h2>
                 </div>
                 <div>
+                    <a
+                    href="/inactiveusers">
+                        <button class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded align-middle">
+                            Listar inativos
+                        </button>
+                    </a>
                     <a 
                     v-if="pageRole.includes('admin')"
                     @click="updatingList"

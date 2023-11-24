@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\UserwebController;
 use App\Http\Controllers\Web\PaymentwebController;
 use App\Http\Controllers\Web\FinancialwebController;
 use App\Http\Controllers\Web\UseradmwebController;
+use App\Http\Controllers\Web\MeetingwebController;
 
 
 /*
@@ -54,6 +55,9 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
      //user admin manager
      Route::get('/useradm', [UseradmwebController::class, 'index'])->name('useradm');
      Route::get('/useradmedit/{id}', [UseradmwebController::class, 'edit'])->name('useradmedit');
+
+     //meeting
+     Route::get('/meeting', [MeetingwebController::class, 'index'])->name('meeting');
 });
 
 
