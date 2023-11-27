@@ -1,10 +1,5 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-
-const page = usePage()
-const pageRole = computed(() => page.props.user.roles)
 
 
 </script>
@@ -14,13 +9,42 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
+import moment from 'moment'
+import { FwbButton, FwbModal, FwbInput, FwbTextarea, FwbSelect } from 'flowbite-vue'
+
+import { computed, inject, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
+const isShowModal = ref(false)
+const selected = ref('')
+const toast = inject('$toast')
+const swal = inject('$swal')
+
+const page = usePage()
+const pageRole = computed(() => page.props.user.roles)
+
+const countries = [
+  { value: 'us', name: 'United States' },
+  { value: 'ca', name: 'Canada' },
+  { value: 'fr', name: 'France' },
+]
+
+function closeModal () {
+    isShowModal.value = false
+    }
+    function showModal () {
+    isShowModal.value = true
+    }
 
 export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
+    
   },
   data() {
     return {
+        dateMeeting: String,
+        dateMeeting2: String,
       calendarOptions: {
         locale: 'pt-br',
         plugins: [ 
@@ -46,13 +70,20 @@ export default {
   },
   methods: {
     handleDateClick: function(arg) {
-      alert('date click! ' + arg.dateStr)
+      //alert('date click! ' + arg.dateStr),
+      //console.log(arg.dateStr)
+      const dateFormat = date => moment(date).format('DD/MM/YYYY')
+      console.log(dateFormat(arg.dateStr))
+      this.dateMeeting2 = dateFormat(arg.dateStr)
+      this.dateMeeting = arg.dateStr
+      showModal()    
     },
     handleEventClick(clickInfo) {
       if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
         clickInfo.event.remove()
       }
     },
+    
   }
 }
 </script>
@@ -78,6 +109,66 @@ export default {
                     <FullCalendar :options='calendarOptions'>
                        
                     </FullCalendar>
+                    
+                    <fwb-modal v-if="isShowModal" @close="closeModal">
+                        <template #header>
+                        <div class="flex items-center text-lg">
+                            Informações da reunião: {{ dateMeeting2 }}
+                        </div>
+                        </template>
+                        <template #body>
+                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            
+                            <fwb-input
+                                v-model="subject"
+                                placeholder="Ex: Reunião PJE - Cívil"
+                                label="Assunto da reunião"
+                            />
+                            <fwb-textarea
+                                v-model="linkMeeting"
+                                :rows="4"
+                                label="Link da reunião"
+                                placeholder="Links começam com https://teams...... ou https://meet.google.com/...."
+                            />
+                           <div class="flex">
+                                <fwb-input
+                                    v-model="dateMeeting"
+                                    type="date"
+                                    label="Data"
+                                    disabled
+                                />
+                                <fwb-input
+                                    v-model="timeMeeting"
+                                    type="time"
+                                    label="Hora"
+                                    
+                                />
+                                <fwb-select
+                                    v-model="selected"
+                                    :options="localeMeeting"
+                                    label="Selecione o local"
+                                />
+                           </div>
+                            <fwb-textarea
+                                v-model="observations"
+                                :rows="4"
+                                label="Observações"
+                                placeholder="Mais informações sobre a reunião"
+                            />
+                        </p>
+                       
+                        </template>
+                        <template #footer>
+                        <div class="flex justify-between">
+                            <fwb-button @click="closeModal" color="alternative">
+                            Cancelar
+                            </fwb-button>
+                            <fwb-button @click="closeModal" color="green">
+                            Agendar Renião
+                            </fwb-button>
+                        </div>
+                        </template>
+                    </fwb-modal> 
                 </div>
             </div>
         </div>
