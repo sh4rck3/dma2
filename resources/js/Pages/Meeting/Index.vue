@@ -23,10 +23,10 @@ const swal = inject('$swal')
 const page = usePage()
 const pageRole = computed(() => page.props.user.roles)
 
-const countries = [
-  { value: 'us', name: 'United States' },
-  { value: 'ca', name: 'Canada' },
-  { value: 'fr', name: 'France' },
+const localeMeeting = [
+  { value: 'us', name: 'Sala1' },
+  { value: 'ca', name: 'Sala2' },
+  { value: 'fr', name: 'Sala3' },
 ]
 
 function closeModal () {
@@ -35,7 +35,6 @@ function closeModal () {
     function showModal () {
     isShowModal.value = true
     }
-
 export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
@@ -45,6 +44,13 @@ export default {
     return {
         dateMeeting: String,
         dateMeeting2: String,
+        timeMeeting: '',
+        subject: '',
+        linkMeeting: '',
+        observation: '',
+        localeMeeting: '',
+        formData: Object,
+
       calendarOptions: {
         locale: 'pt-br',
         plugins: [ 
@@ -70,8 +76,7 @@ export default {
   },
   methods: {
     handleDateClick: function(arg) {
-      //alert('date click! ' + arg.dateStr),
-      //console.log(arg.dateStr)
+      //this.clearFormData()
       const dateFormat = date => moment(date).format('DD/MM/YYYY')
       console.log(dateFormat(arg.dateStr))
       this.dateMeeting2 = dateFormat(arg.dateStr)
@@ -83,6 +88,43 @@ export default {
         clickInfo.event.remove()
       }
     },
+    onSubmit() {
+        this.formData = {
+            dateMeeting: this.dateMeeting,
+            timeMeeting: this.timeMeeting,
+            subject: this.subject,
+            linkMeeting: this.linkMeeting,
+            localeMeeting: this.selected,
+            observation: this.observation
+        }
+        axios.post('/api/meeting/store', this.formData)
+        .then(response => {
+            this.$swal({
+                title: response.data.title,
+                text: response.data.message,
+                icon: response.data.icon
+                    })
+            
+
+        })
+        .catch(error => {
+            this.$swal({
+                        icon: 'error',
+                        title: 'Meeting nao foi salva!'
+                    })
+        })
+        closeModal()
+        this.$refs.modalFormData.reset()
+    },
+    clearFormData() {
+
+        this.dateMeeting = '',
+        this.timeMeeting = '',
+        this.subject = '',
+        this.linkMeeting = '',
+        this.selected = '',
+        this.observation = ''
+    }
     
   }
 }
@@ -110,62 +152,61 @@ export default {
                        
                     </FullCalendar>
                     
-                    <fwb-modal v-if="isShowModal" @close="closeModal">
+                    <fwb-modal v-if="isShowModal" @close="closeModal" ref="modalFormData">
                         <template #header>
                         <div class="flex items-center text-lg">
                             Informações da reunião: {{ dateMeeting2 }}
                         </div>
                         </template>
                         <template #body>
-                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            
-                            <fwb-input
-                                v-model="subject"
-                                placeholder="Ex: Reunião PJE - Cívil"
-                                label="Assunto da reunião"
-                            />
-                            <fwb-textarea
-                                v-model="linkMeeting"
-                                :rows="4"
-                                label="Link da reunião"
-                                placeholder="Links começam com https://teams...... ou https://meet.google.com/...."
-                            />
-                           <div class="flex">
+                          <form @submit.prevent="onSubmit" id="formData">
+                            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                
                                 <fwb-input
-                                    v-model="dateMeeting"
-                                    type="date"
-                                    label="Data"
-                                    disabled
+                                    v-model="subject"
+                                    placeholder="Ex: Reunião PJE - Cívil"
+                                    label="Assunto da reunião"
                                 />
-                                <fwb-input
-                                    v-model="timeMeeting"
-                                    type="time"
-                                    label="Hora"
-                                    
+                                <fwb-textarea
+                                    v-model="linkMeeting"
+                                    :rows="4"
+                                    label="Link da reunião"
+                                    placeholder="Links começam com https://teams...... ou https://meet.google.com/...."
                                 />
-                                <fwb-select
-                                    v-model="selected"
-                                    :options="localeMeeting"
-                                    label="Selecione o local"
+                            <div class="flex">
+                                    <fwb-input
+                                        v-model="dateMeeting"
+                                        type="date"
+                                        label="Data"
+                                        disabled
+                                    />
+                                    <fwb-input
+                                        v-model="timeMeeting"
+                                        type="time"
+                                        label="Hora"
+                                        
+                                    />
+                                    <fwb-select
+                                        v-model="selected"
+                                        :options="localeMeeting"
+                                        label="Selecione o local"
+                                    />
+                            </div>
+                                <fwb-textarea
+                                    v-model="observation"
+                                    :rows="4"
+                                    label="Observações"
+                                    placeholder="Mais informações sobre a reunião"
                                 />
-                           </div>
-                            <fwb-textarea
-                                v-model="observations"
-                                :rows="4"
-                                label="Observações"
-                                placeholder="Mais informações sobre a reunião"
-                            />
-                        </p>
-                       
+                            </p>
+                            <fwb-button type="submit" color="green">
+                            Agendar Renião
+                            </fwb-button>
+                          </form>
                         </template>
                         <template #footer>
                         <div class="flex justify-between">
-                            <fwb-button @click="closeModal" color="alternative">
-                            Cancelar
-                            </fwb-button>
-                            <fwb-button @click="closeModal" color="green">
-                            Agendar Renião
-                            </fwb-button>
+                           <p>Obs: As reuniões agendads, so serão acompanhadas se foram agendadas pelo sistema, serão descartados quaisquer outros meios.</p>                           
                         </div>
                         </template>
                     </fwb-modal> 

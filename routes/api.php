@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PaymentapiController;
 use App\Http\Controllers\Api\FinancialapiController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\MeetingapiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +56,9 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     Route::put('/useradmedit/{id}', [UserapiController::class, 'edit'])->name('useradmedit');
     Route::put('/useradmupdate/{id}', [UserapiController::class, 'update'])->name('useradmupdate');
 
-
+    //meeting
+    //Route::get('/meeting', [MeetingapiController::class, 'index'])->name('meeting');
+    Route::post('/meeting/store', [MeetingapiController::class, 'store'])->name('meeting.store');
 
     //role list
     Route::get('/role-list', [RoleController::class, 'getList'])->name('role-list');
