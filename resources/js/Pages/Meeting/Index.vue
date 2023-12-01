@@ -89,6 +89,7 @@ export default {
       }
     },
     onSubmit() {
+        console.log(this.selected)
         this.formData = {
             dateMeeting: this.dateMeeting,
             timeMeeting: this.timeMeeting,
@@ -114,7 +115,10 @@ export default {
                     })
         })
         closeModal()
-        //this.$refs.modalFormData.reset()
+        // setTimeout(() => {
+        //     location.reload()
+        // }, 2000)
+        
     },
     clearFormData() {
 
@@ -191,6 +195,7 @@ export default {
                                         :options="localeMeeting"
                                         label="Selecione o local"
                                     />
+                                    
                             </div>
                                 <fwb-textarea
                                     v-model="observation"

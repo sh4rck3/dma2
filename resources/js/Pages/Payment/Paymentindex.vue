@@ -3,6 +3,10 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import Icon from '@/Icons/Icon.vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import throttle from 'lodash/throttle';
+import { computed, inject, ref } from 'vue';
+
+const toast = inject('$toast')
+const swal = inject('$swal')
 
 
 
@@ -49,17 +53,25 @@ export default {
         },
     },
     mounted() {
-        axios.get('/api/payment').then(response => {
-            this.payments = response.data.payments;
-            let valor = JSON.stringify(this.payments);
-            this.proxypayments = JSON.parse(valor);            
-            this.proxypayments.filter((value) => {
-                this.results.push({
-                    mes: value,
-                });
-            });
-        });
-        console.log(this.proxypayments);
+        // axios.get('/api/payment').then(response => {
+        //     this.payments = response.data.payments;
+        //     let valor = JSON.stringify(this.payments);
+        //     this.proxypayments = JSON.parse(valor);            
+        //     this.proxypayments.filter((value) => {
+        //         this.results.push({
+        //             mes: value,
+        //         });
+        //     });
+        // });
+        // console.log(this.proxypayments);
+        this.$swal({
+                        icon: 'error',
+                        title: 'Desativado temporariamente para auditoria de acessos!'
+                    }),
+        setTimeout(() => {
+            window.location.href = "/dashboard";
+        }, 2000)
+
     },
 
    

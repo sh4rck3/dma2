@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\Meeting;
+use Illuminate\Support\Facades\Auth;
 
 class MeetingapiController extends Controller
 {
@@ -31,11 +33,23 @@ class MeetingapiController extends Controller
     public function store(Request $request)
     {
         Log::info('MeetingapiController.store' . print_r($request->all(), true));
+        $userLogado = Auth::user();
+        Log::info('MeetingapiController.store' . $userLogado->id);
+
+        // $meeting = new Meeting();
+        // $meeting->title = $request->subject;
+        // $meeting->description = $request->observation;
+        // $meeting->dateMeeting = $request->dateMeeting;
+        // $meeting->link = $request->linkMeeting;
+        // $meeting->timeMeeting = $request->timeMeeting;
+        // $meeting->userId = $userLogado->id;
+        // $meeting->localeMeeting = $request->selected;
+        // $meeting->save();
 
         return response()->json([
             'status' => true,
-            'title' => 'TESTE',
-            'message' => 'salvo a meeting',
+            'title' => 'Meeting!',
+            'message' => 'Reunião cadastrada com sucesso!',
             'icon' => 'success'
         ], Response::HTTP_OK);
     }
