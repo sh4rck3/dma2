@@ -114,7 +114,7 @@ export default {
                     })
         })
         closeModal()
-        this.$refs.modalFormData.reset()
+        //this.$refs.modalFormData.reset()
     },
     clearFormData() {
 
