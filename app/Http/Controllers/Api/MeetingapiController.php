@@ -60,7 +60,13 @@ class MeetingapiController extends Controller
     public function show(string $id)
     {
         //
-        
+
+        return response()->json([
+            'status' => true,
+            'title' => 'Meeting!',
+            'message' => 'Reunião cadastrada com sucesso!',
+            'icon' => 'success'
+        ], Response::HTTP_OK);
     }
 
     /**
