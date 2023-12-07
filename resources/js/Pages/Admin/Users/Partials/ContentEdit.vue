@@ -44,24 +44,26 @@ onMounted( async () => {
 });
 
 function submitForm() {
-    axios.put(`/api/useradmupdate/${userId.value}`, {
-        role: role.value,
-    })
-        .then(response => {
-            swal({
-            title: response.data.title,
-            text: response.data.message,
-            icon: response.data.icon
-                }),
-            router.get(route('useradm'))
-        })
-        .catch(error => {
-            swal({
-            title: response.data.title,
-            text: response.data.message,
-            icon: response.data.icon
-                })
-        })
+    console.log("retorno do ID")
+    console.log(userId.value)
+    // axios.put(`/api/useradmupdate/${userId.value}`, {
+    //     role: role.value,
+    // })
+    //     .then(response => {
+    //         swal({
+    //         title: response.data.title,
+    //         text: response.data.message,
+    //         icon: response.data.icon
+    //             }),
+    //         router.get(route('useradm'))
+    //     })
+    //     .catch(error => {
+    //         swal({
+    //         title: response.data.title,
+    //         text: response.data.message,
+    //         icon: response.data.icon
+    //             })
+    //     })
 }
 
 </script>
