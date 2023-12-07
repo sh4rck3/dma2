@@ -3,6 +3,7 @@ import Icon from '@/Icons/Icon.vue';
 import Carousel from '@/Components/Landings/Partials/Carousel.vue';
 import Footer from '@/Components/Landings/Partials/Footer.vue';
 
+
 </script>
 
 <template>
@@ -26,8 +27,9 @@ import Footer from '@/Components/Landings/Partials/Footer.vue';
             </div>
             
 
+            
             <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                Bem Vindo! aqui suas idéias são bem vindas...
+                Bem Vindo! aqui suas idéias são bem vindas...!!Salve
             </h1>
 
             <p class="mt-6 text-gray-500 leading-relaxed">
