@@ -18,4 +18,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+<<<<<<< HEAD
 /.user.ini
+=======
+/.user.ini
+>>>>>>> c4555fa (comite antes do pull de alteracoes)
