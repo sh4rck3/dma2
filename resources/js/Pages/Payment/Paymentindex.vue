@@ -53,24 +53,24 @@ export default {
         },
     },
     mounted() {
-        // axios.get('/api/payment').then(response => {
-        //     this.payments = response.data.payments;
-        //     let valor = JSON.stringify(this.payments);
-        //     this.proxypayments = JSON.parse(valor);            
-        //     this.proxypayments.filter((value) => {
-        //         this.results.push({
-        //             mes: value,
-        //         });
-        //     });
-        // });
+        axios.get('/api/payment').then(response => {
+            this.payments = response.data.payments;
+            let valor = JSON.stringify(this.payments);
+            this.proxypayments = JSON.parse(valor);            
+            this.proxypayments.filter((value) => {
+                this.results.push({
+                    mes: value,
+                });
+            });
+        });
         // console.log(this.proxypayments);
-        this.$swal({
-                        icon: 'error',
-                        title: 'Desativado temporariamente para auditoria de acessos!'
-                    }),
-        setTimeout(() => {
-            window.location.href = "/dashboard";
-        }, 2000)
+        // this.$swal({
+        //                 icon: 'error',
+        //                 title: 'Desativado temporariamente para auditoria de acessos!'
+        //             }),
+        // setTimeout(() => {
+        //     window.location.href = "/dashboard";
+        // }, 2000)
 
     },
 

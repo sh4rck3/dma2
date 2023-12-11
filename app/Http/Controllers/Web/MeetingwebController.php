@@ -30,6 +30,7 @@ class MeetingwebController extends Controller
     public function store(Request $request)
     {
         //
+
     }
 
     /**

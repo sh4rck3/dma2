@@ -221,7 +221,7 @@ class PaymentapiController extends Controller
                     'payment_shipping' => $payment_shipping_id,
                 ];
                 $idCpf_dados_XML = $this->insertdados($data_XML);
-
+                Log::debug("PaymentapiController.data_XML " . print_r($data_XML, true));
                 // ------Descritivos -----//
                
                 foreach ($phaseOne
@@ -281,13 +281,13 @@ class PaymentapiController extends Controller
                 $i++;
             }
         Log::debug("PaymentapiController.storage - quantidade de funcionarios " . $i);    
-        return Response::HTTP_NOT_FOUND;
-        // return response()->json([
-        //     'status' => true,
-        //     'title' => 'Sucesso!',
-        //     'message' => 'Arquivo importado com sucesso! <br> Quantidade de funcionários importados:' . $i,
-        //     'quantidade' => $i,
-        // ], Response::HTTP_OK);
+       // return Response::HTTP_NOT_FOUND;
+        return response()->json([
+            'status' => true,
+            'title' => 'Sucesso!',
+            'message' => 'Arquivo importado com sucesso! <br> Quantidade de funcionários importados:' . $i,
+            'quantidade' => $i,
+        ], Response::HTTP_OK);
         }else{
         return response()->json([
             'status' => true,
