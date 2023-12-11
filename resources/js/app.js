@@ -12,6 +12,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import { TailwindPagination } from 'laravel-vue-pagination';
+import VueMask from '@devindex/vue-mask';
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -25,6 +26,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(VueSweetalert2)
             .use(ToastPlugin)
+            .use(VueMask)
             .component('Pagination', TailwindPagination)
             .mount(el);
     },
