@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MeetingapiController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
