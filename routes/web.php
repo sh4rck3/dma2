@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\PaymentwebController;
 use App\Http\Controllers\Web\FinancialwebController;
 use App\Http\Controllers\Web\UseradmwebController;
 use App\Http\Controllers\Web\MeetingwebController;
+use App\Http\Controllers\Web\SmswebController;
 
 
 /*
@@ -58,6 +59,12 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
 
      //meeting
      Route::get('/meeting', [MeetingwebController::class, 'index'])->name('meeting');
+
+     //user sms
+     Route::get('/smsadm', [SmswebController::class, 'index'])->name('smsadm');
+     Route::get('/smsadmhistory', [SmswebController::class, 'smshistory'])->name('smsadmhistory');
+     Route::get('/smsadmremessa', [SmswebController::class, 'smsremessa'])->name('smsadmremessa');
+     Route::get('/smsadmimport', [SmswebController::class, 'smsimport'])->name('smsadmimport');
 });
 
 
