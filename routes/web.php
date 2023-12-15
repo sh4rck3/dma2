@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\PaymentwebController;
 use App\Http\Controllers\Web\FinancialwebController;
 use App\Http\Controllers\Web\UseradmwebController;
 use App\Http\Controllers\Web\MeetingwebController;
+use App\Http\Controllers\Web\SmsadmwebController;
 
 
 /*
@@ -58,6 +59,8 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
 
      //meeting
      Route::get('/meeting', [MeetingwebController::class, 'index'])->name('meeting');
+     //sms admin
+     Route::get('/smsadmin', [SmsadmwebController::class, 'index'])->name('smsadmin');
 });
 
 
