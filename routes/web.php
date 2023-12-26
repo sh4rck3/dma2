@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\FinancialwebController;
 use App\Http\Controllers\Web\UseradmwebController;
 use App\Http\Controllers\Web\MeetingwebController;
 use App\Http\Controllers\Web\SmsadmwebController;
+use App\Http\Controllers\Web\PaycheckadmwebController;
 
 
 /*
@@ -48,6 +49,7 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/paymentsimport', [PaymentwebController::class, 'create'])->name('paymentsimport');
     Route::get('/paymentsresult', [PaymentwebController::class, 'show'])->name('paymentsresult');
     Route::get('/paymentshow/{id}', [PaymentwebController::class, 'paymentshow'])->name('paymentshow');
+    Route::get('/paycheckview', [PaycheckadmwebController::class, 'index'])->name('paycheckview');
 
      //financial
      Route::get('/financial', [FinancialwebController::class, 'index'])->name('financial');
