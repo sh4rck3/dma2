@@ -29,20 +29,20 @@ import Footer from '@/Components/Landings/Partials/Footer.vue';
 
             
             <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                Bem Vindo! aqui suas idéias são bem vindas...!!Salve
+                Bem Vindos! Aqui suas ideias são muito bem vindas!!
             </h1>
 
             <p class="mt-6 text-gray-500 leading-relaxed">
-                Dentro do nosso sistema você consegue inumeras informmações como por exemplo:<br>
+                Dentro do nosso sistema você consegue inúmeras informações como por exemplo:<br>
                 -> Visualizar contracheque <br>
                 -> Enviar SMS em massa <br>
-                -> Sistema de auxilio do Administrativo Financeiro <br>
+                -> Sistema de auxílio do Administrativo Financeiro <br>
                 -> Link's de acesso a sistemas, centralizando acessos <br>
                 ->Teremos quadro de avisos.
                 -> E quadro de sugestões
             </p>
             <p class="mt-6 text-gray-500 leading-relaxed">
-                Obs: Qualquer sujestão de melhoria, será bem vinda, basta abrir um chamado, Obrigado!
+                Obs: Qualquer sugestão de melhoria, será bem vinda, basta abrir um chamado, Obrigado!
             </p>
         </div>
         <Footer />
