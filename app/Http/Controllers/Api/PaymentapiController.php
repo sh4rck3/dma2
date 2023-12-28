@@ -56,8 +56,10 @@ class PaymentapiController extends Controller
         //return dd($request->headers->get('Content-Type'));
         // $uploaded_files = $request->file->store('public/uploads');
         // return ["result" => $uploaded_files];
+        $userLogged = Auth::user();
 
         $xml_file = new Shipping_payments();
+        $xml_file->user_id = $userLogged->id;
         $xml_file->title = $request->title;
         $xml_file->description = $request->description;
         $xml_file->xml_file = $request->file->store('public/uploads');

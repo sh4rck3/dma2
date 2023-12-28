@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'birthday' => $this->birthday,
             'role_id' => $this->roles,
             'roles' => $this->roles,
+            'paymentstatus' => $this->paymentstatus,
             'created_at' => $this->created_at->toDateString(),
             
         ];

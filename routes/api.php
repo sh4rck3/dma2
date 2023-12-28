@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\FinancialapiController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MeetingapiController;
+use App\Http\Controllers\Api\PaycheckadmapiController;
 
 
 /*
@@ -24,6 +25,8 @@ use App\Http\Controllers\Api\MeetingapiController;
 //users from list employees GLPI
 Route::get('/userslanding', [UserapiController::class, 'userslanding'])->name('users.userslanding');
 Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->name('users.birthdaylanding');
+Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
+Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

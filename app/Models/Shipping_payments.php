@@ -10,6 +10,7 @@ class Shipping_payments extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'xml_file',
         'title',
         'description',
