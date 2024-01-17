@@ -5,6 +5,13 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+//import {axios} from 'axios';
+
+// const api = axios.create({
+//     baseURL: "https://fox.dunice.com.br"
+// });
+
+// export default api;
 
 //personalozados
 import VueSweetalert2 from 'vue-sweetalert2';

@@ -50,6 +50,7 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
     Route::get('/paymentsresult', [PaymentwebController::class, 'show'])->name('paymentsresult');
     Route::get('/paymentshow/{id}', [PaymentwebController::class, 'paymentshow'])->name('paymentshow');
     Route::get('/paycheckview', [PaycheckadmwebController::class, 'index'])->name('paycheckview');
+    Route::get('/paycheckviewer', [PaycheckadmwebController::class, 'index'])->name('paycheckviewer');
 
      //financial
      Route::get('/financial', [FinancialwebController::class, 'index'])->name('financial');

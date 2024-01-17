@@ -1,18 +1,24 @@
 <script setup>
 import Footer from '@/Components/Landings/Partials/Footer.vue';
 import Icon from '@/Icons/Icon.vue';
-import axios from 'axios';
 import { FwbInput, FwbButton, FwbTextarea, FwbA, FwbTable, FwbTableBody, FwbTableCell, FwbTableHead, FwbTableHeadCell, FwbTableRow, FwbTab, FwbTabs } from 'flowbite-vue';
-import { ref, reactive, inject, onMounted } from 'vue';
+import { ref, reactive, inject } from 'vue';
+//import api from '../../../app.js';
 const swal = inject('$swal');
-const activeTab = ref('first');
 
-onMounted(() => {
-    //console.log("Teste")
-    axios.get('/api/paycheckadm').then(response => {
-        console.log(response)
-    })
-})
+// export default function App() {
+//     const [user, setUser] = useState();
+
+//     useEffect(() => {
+//         api
+//             .get("/api/paycheckadm")
+//             .then((response) => setUser(response.data))
+//             .catch((err) => {
+//                 console.error("ops! ocorreu um erro" +err);
+//             });
+//     }, [])
+// }
+
 
 
 const itens = ref([

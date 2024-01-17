@@ -93,15 +93,15 @@ const pageRole = computed(() => page.props.user.roles)
 
                                             <!-- Team Settings -->
                                             <DropdownLink>
-                                                Paycheck
+                                                Contracheque
                                             </DropdownLink>
 
                                             <DropdownLink :href="route('paycheckview')">
-                                                Visualização do Paycheck
+                                                Visualização do Contracheque
                                             </DropdownLink>
 
                                             <DropdownLink :href="route('payments')" :active="route().current('payments') || route().current('paymentsimport')">
-                                                Pagamentos (menu old)
+                                                Pagamentos (menu antigo)
                                             </DropdownLink>
                                         </div>
                                     </template>
