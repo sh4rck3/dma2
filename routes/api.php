@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MeetingapiController;
 use App\Http\Controllers\Api\PaycheckadmapiController;
+use App\Http\Controllers\Api\SmsadmapiContrroller;
 
 
 /*
@@ -66,4 +67,6 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
 
     //role list
     Route::get('/role-list', [RoleController::class, 'getList'])->name('role-list');
+
+    Route::post('/sendsms', [SmsadmapiContrroller::class, 'sendsms']);
 });
