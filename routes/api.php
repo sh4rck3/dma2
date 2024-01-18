@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MeetingapiController;
 use App\Http\Controllers\Api\PaycheckadmapiController;
-use App\Http\Controllers\Api\SmsadmapiContrroller;
 
 
 /*
@@ -29,8 +28,9 @@ Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->n
 Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
 Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
 
-
-Route::post('/sendsms', [SmsadmapiContrroller::class, 'sendsms']);
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 //Route::get('/users', [UserapiController::class, 'index'])->name('users.index');
 

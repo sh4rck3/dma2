@@ -1,7 +1,6 @@
 <script setup>
 import Footer from '@/Components/Landings/Partials/Footer.vue';
 import Icon from '@/Icons/Icon.vue';
-import axios from 'axios';
 import { FwbInput, FwbButton, FwbTextarea } from 'flowbite-vue';
 import { ref, reactive, inject } from 'vue';
 const swal = inject('$swal');
@@ -23,22 +22,11 @@ const name = ref('')
 
 function submit(){
     console.log(form)
-    axios.post('/api/sendsms', {
-                 phone: form.phone,
-                 message: form.message,
-             })
-             .then(response => {
-                 console.log(response)
-                 swal("Enviado com sucesso!")
-                 form.cpf = ""
-                 form.phone = ""
-                 form.message = ""
-             })
-    //swal("Enviado com sucesso!")
+    swal("Enviado com sucesso!")
     //form.reset()
-    //form.cpf = ""
-    //form.phone = ""
-    //form.mensage = ""
+    form.cpf = ""
+    form.phone = ""
+    form.mensage = ""
     //console.log('o nome escrito e: ' + this.name)
 }
 
@@ -68,7 +56,7 @@ function submit(){
                     v-mask-cpf
                     v-model="form.cpf" 
                     label="CPF"
-                    placeholder="Insira CPF do cliente (destinatário)"
+                    placeholder="Insira seu CPF aqui"
                     />
                 <fwb-input
                     class="mt-2 mb-1"
@@ -80,7 +68,7 @@ function submit(){
                     placeholder="Insira seu número de telefone aqui"
                     />
                     <fwb-textarea
-                    v-model="form.message"
+                    v-model="form.mensage"
                     rows="4"
                     label="Sua Mensagem"
                     placeholder="Insira sua mensagem aqui"
