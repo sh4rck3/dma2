@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayoutLanding.vue';
-import Content from './Partials/Content.vue'
+import Content from './Partials/Contentsms.vue'
 
 
 </script>
