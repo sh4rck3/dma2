@@ -21,13 +21,19 @@ const formClean = reactive({
 const name = ref('')
 
 function submit(){
-    console.log(form)
-    swal("Enviado com sucesso!")
-    //form.reset()
-    form.cpf = ""
-    form.phone = ""
-    form.mensage = ""
-    //console.log('o nome escrito e: ' + this.name)
+    
+    axios.post('/api/sendsms', {
+                 phone: form.phone,
+                 message: form.message,
+                 document: form.cpf,
+             })
+             .then(response => {
+                 console.log(response)
+                 swal("Enviado com sucesso!")
+                 form.cpf = ""
+                 form.phone = ""
+                 form.message = ""
+             })
 }
 
 </script>
@@ -68,7 +74,7 @@ function submit(){
                     placeholder="Insira seu número de telefone aqui"
                     />
                     <fwb-textarea
-                    v-model="form.mensage"
+                    v-model="form.message"
                     rows="4"
                     label="Sua Mensagem"
                     placeholder="Insira sua mensagem aqui"
