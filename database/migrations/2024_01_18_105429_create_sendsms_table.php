@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meetings', function (Blueprint $table) {
+        Schema::create('sendsms', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description')->nullable();
-            $table->dateTime('dateMeeting');
-            $table->string('link');
-            $table->string('timeMeeting');
-            $table->string('userId');
-            $table->string('localeMeeting');
+            $table->string('phone');
+            $table->string('message');
+            $table->string('status')->default('0');
+            $table->string('response')->nullable();
+            $table->string('user_id');
+            $table->string('document');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meetings');
+        Schema::dropIfExists('sendsms');
     }
 };

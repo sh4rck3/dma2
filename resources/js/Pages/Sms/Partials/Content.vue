@@ -56,7 +56,7 @@ function submit(){
                     v-mask-cpf
                     v-model="form.cpf" 
                     label="CPF"
-                    placeholder="Insira seu CPF aqui"
+                    placeholder="Insira o CPF do cliente(destinarário)"
                     />
                 <fwb-input
                     class="mt-2 mb-1"
