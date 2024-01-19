@@ -63,6 +63,10 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
      Route::get('/meeting', [MeetingwebController::class, 'index'])->name('meeting');
      //sms admin
      Route::get('/smsadmin', [SmsadmwebController::class, 'index'])->name('smsadmin');
+     Route::get('/smssingle', [SmsadmwebController::class, 'smssingle'])->name('smssingle');
+
+     //extensions
+     Route::get('/information', [PageController::class, 'information'])->name('information');
 });
 
 

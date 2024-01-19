@@ -6,6 +6,17 @@ import { onMounted, ref, inject, computed, watch } from 'vue';
 import { usePage, router } from '@inertiajs/vue3'
 import useUsers from '../../../../composables/users'
 
+import {
+  FwbA,
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow,
+  FwbPagination,
+} from 'flowbite-vue';
+
 
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
@@ -20,52 +31,20 @@ function showAlert() {
     })
 }
 
-const search_id = ref('')
-const search_title = ref('')
 const search_global = ref('')
-const orderColumn = ref('created_at')
-const orderDirection = ref('desc')
 const { users, getUsers, deleteUser } = useUsers()
-
-console.log(users)
 
 onMounted(() => {
     getUsers()
 })
 
-const updateOrdering = (column) => {
-    orderColumn.value = column;
-    orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
-    getUsers(
-        1,
-        search_id.value,
-        search_title.value,
-        search_global.value,
-        orderColumn.value,
-        orderDirection.value
-    );
+function changePage(page) {
+    getUsers(page)
 }
-watch(search_id, (current, previous) => {
-    getUsers(
-        1,
-        current,
-        search_title.value,
-        search_global.value
-    )
-})
-watch(search_title, (current, previous) => {
-    getUsers(
-        1,
-        search_id.value,
-        current,
-        search_global.value
-    )
-})
+
 watch(search_global, (current, previous) => {
     getUsers(
         1,
-        search_id.value,
-        search_title.value,
         current
     )
 })
@@ -85,160 +64,52 @@ watch(search_global, (current, previous) => {
                     </h1>
             </div>
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
-                <div class="card-body shadow-sm">
-                    <div class="mb-4">
-                        <input v-model="search_global" type="text" placeholder="Buscar..."
-                               class="form-control w-25">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                           
-                            <tr>
-                                <th class="px-6 py-3 text-start">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('id')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'id' }">
-                                            ID
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'id',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'id',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('title')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'title' }">
-                                            Nome
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'title',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'title',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'title',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'title',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('email')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'email' }">
-                                            Email
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'email',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'email',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'email',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'email',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Ramal
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Setor
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Cargo
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Permissões
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Ações
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if="users.data && users.data.length > 0"
-                                    v-for="post in users.data" :key="post.id">
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.id }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.name }} 
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.email }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.extension }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.sector }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.jobtitle }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.roles[0].name }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <div class="flex">
-                                            <a :href="`/useradmedit/${post.id}`"
-                                                    
-                                                    class="badge bg-primary"><Icon name="edit" class="block h-5 w-5" />
-                                            </a>
-                                            <a href="#"  @click.prevent="deleteUser(post.id)"
-                                            class="ms-2 badge bg-danger"><Icon name="trash" class="block h-5 w-5" />
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            
-                                <tr v-else>
-                                    <td colspan="6" class="text-center py-4">
-                                        Nenhum usuário encontrado.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="mb-4">
+                    <input v-model="search_global" type="text" placeholder="Buscar..."
+                            class="form-control w-25">
                 </div>
-                <div class="card-footer">
-                    <Pagination :data="users" :limit="3"
-                                @pagination-change-page="page => getUsers(page, search_id, search_title, search_global, orderColumn, orderDirection)"
-                                class="mt-4"/>
+                <fwb-table hoverable>
+                    <fwb-table-head>
+                        <fwb-table-head-cell>ID</fwb-table-head-cell>
+                        <fwb-table-head-cell>Nome</fwb-table-head-cell>
+                        <fwb-table-head-cell>Email</fwb-table-head-cell>
+                        <fwb-table-head-cell>Grupo</fwb-table-head-cell>
+                        <fwb-table-head-cell>
+                            <span class="sr-only">Editar</span>
+                        </fwb-table-head-cell>
+                    </fwb-table-head>
+                    <fwb-table-body>
+                        <fwb-table-row
+                            v-if="users.data && users.data.length > 0"
+                            v-for="post in users.data" :key="post.id">
+                            
+                            <fwb-table-cell>{{ post.id }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.name }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.email }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.roles[0].name }}</fwb-table-cell>
+                            <fwb-table-cell>
+                                <fwb-a :href="`/users/${post.id}`">
+                                    <Icon name="edit" class="block h-5 w-5" />
+                                </fwb-a>
+                            </fwb-table-cell>
+                        </fwb-table-row>
+                        <fwb-table-row
+                            v-else
+                            >
+                            <fwb-table-cell colspan="6" class="text-center py-4">
+                                Nenhum Usuário encontrado.
+                            </fwb-table-cell>
+                        </fwb-table-row>
+                    </fwb-table-body>
+                </fwb-table>
+                <div className="flex overflow-x-auto sm:justify-center mt-4">
+                    <fwb-pagination
+                        v-if="users.data && users.data.length > 0"
+                        @click.prevent="changePage(users.meta.current_page)"  
+                        v-model="users.meta.current_page" 
+                        :total-pages="users.meta.last_page"
+                        >
+                    </fwb-pagination>
                 </div>
             </div>
             

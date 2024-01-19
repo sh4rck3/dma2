@@ -11,7 +11,7 @@ const pageRole = computed(() => page.props.user.roles)
 
 const updatingList = async () =>{
     //console.log('updating list')
-    toast.success('Atualizando lista de usuários, aguarde alguns instantes...', {position: 'top-right'})
+    // toast.success('Atualizando lista de usuários, aguarde alguns instantes...', {position: 'top-right'})
     swal({
         title: 'Atualizando contatos!',
         html: 'Aguarde alguns instantes...',

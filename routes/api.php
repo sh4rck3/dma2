@@ -29,6 +29,7 @@ Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->n
 Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
 Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
 
+
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
@@ -39,7 +40,7 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     //users from list employees GLPI
     Route::get('/users', [UserapiController::class, 'index'])->name('users.index');
    //atualization users from api
-   Route::get('/usersupdate', [UserapiController::class, 'usersupdate'])->name('users.usersupdate');
+   Route::get('/usersupdate', [UserapiController::class, 'usersupdate']);
    //inactive users from glpi
    Route::get('/inactiveusers', [UserapiController::class, 'inactiveusers'])->name('users.inactiveusers');
 

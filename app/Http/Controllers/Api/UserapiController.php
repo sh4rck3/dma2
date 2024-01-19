@@ -201,6 +201,7 @@ class UserapiController extends Controller
     //functionality to get all users from GLPI
     public function usersupdate()
     {
+        Log::info('UserapiController.usersupdate');
        
         $curl = curl_init();
 

@@ -19,6 +19,12 @@ class SmsadmwebController extends Controller
         //return ("OK");
     }
 
+    public function smssingle()
+    {
+        return Inertia::render('Admin/SmsAdm/Single');
+        //return ("OK");
+    }
+
     /**
      * Show the form for creating a new resource.
      */

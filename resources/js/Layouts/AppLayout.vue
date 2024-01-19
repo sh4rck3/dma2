@@ -59,8 +59,11 @@ const pageRole = computed(() => page.props.user.roles)
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Painel
                                 </NavLink>
+                                <NavLink :href="route('information')" :active="route().current('information')">
+                                    Geral
+                                </NavLink>
                             </div>
-                            
+                           
                             <!-- <div 
                                 v-if="pageRole.includes('rh') || pageRole.includes('admin')"
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -186,10 +189,6 @@ const pageRole = computed(() => page.props.user.roles)
                                                 Controle de SMS
                                             </div>
 
-                                            <!-- Team Settings -->
-                                            <DropdownLink>
-                                                Envio de SMS único
-                                            </DropdownLink>
 
                                             <DropdownLink>
                                                 Envio de SMS em massa
@@ -313,7 +312,7 @@ const pageRole = computed(() => page.props.user.roles)
                                     </template>
                                 </Dropdown>
                             </div>
-                            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                            <!-- <div class="hidden sm:flex sm:items-center sm:ml-6">
                                 <div class="flex justify-center p-4">
                                     <a href="/">
                                         <button  
@@ -323,7 +322,7 @@ const pageRole = computed(() => page.props.user.roles)
                                         </button> 
                                     </a>                    
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">

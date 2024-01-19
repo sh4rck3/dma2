@@ -15,23 +15,13 @@ export default function useUsers() {
 
     const getUsers = async (
         page = 1,
-        search_id = '',
-        search_title = '',
-        search_global = '',
-        order_column = 'created_at',
-        order_direction = 'desc'
+        search_global = ''
     ) => {
+        
         axios.get('/api/users?page=' + page +
-            '&search_id=' + search_id +
-            '&search_title=' + search_title +
-            '&search_global=' + search_global +
-            '&order_column=' + order_column +
-            '&order_direction=' + order_direction)
+            '&search_global=' + search_global)
             .then(response => {
                 users.value = response.data;
-                // if(users.value.data.length == 0){
-                // console.log(users.value)
-                // }
             })
     }
 
