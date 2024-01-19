@@ -26,7 +26,7 @@ use App\Http\Controllers\Api\SmsadmapiContrroller;
 //users from list employees GLPI
 Route::get('/userslanding', [UserapiController::class, 'userslanding'])->name('users.userslanding');
 Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->name('users.birthdaylanding');
-Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
+
 Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
 
 
@@ -70,4 +70,8 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     Route::get('/role-list', [RoleController::class, 'getList'])->name('role-list');
 
     Route::post('/sendsms', [SmsadmapiContrroller::class, 'sendsms']);
+    Route::get('/responsesms', [SmsadmapiContrroller::class, 'responsesms']);
+    
+    //paycheck
+    Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
 });

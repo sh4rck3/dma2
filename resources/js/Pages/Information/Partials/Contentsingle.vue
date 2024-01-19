@@ -28,12 +28,19 @@ function submit(){
                  document: form.cpf,
              })
              .then(response => {
-                 console.log(response)
-                 swal("Enviado com sucesso!")
-                 form.cpf = ""
-                 form.phone = ""
-                 form.message = ""
+                console.log(response.data)
+                if(response.data.status == true){                     
+                     swal(response.data.title, response.data.message, "success");                   
+                     form.cpf = ""
+                     form.phone = ""
+                     form.message = ""
+                 }else{
+                     swal(response.data.title, response.data.message, "error");
+                 }
              })
+             .catch(err => () => this.$swal("Erro", err.data.message, "error")
+                 //console.log(err.data)
+                 );
 }
 
 </script>

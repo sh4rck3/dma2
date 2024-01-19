@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from './Partials/Extension.vue';
 import Singlesms from './Partials/Contentsingle.vue';
+import Responsesms from './Partials/Smsresponse.vue';
 import Birthday from './Partials/Birthday.vue';
 import Address from './Partials/Address.vue';
 import { ref } from 'vue'
@@ -28,6 +29,9 @@ const activeTab = ref('Ramais')
                     </fwb-tab>
                     <fwb-tab name="SMS" title="SMS">
                     <Singlesms />
+                    </fwb-tab>
+                    <fwb-tab name="SMS Resposta" title="SMS Resposta">
+                    <Responsesms />
                     </fwb-tab>
                     <fwb-tab name="Aniversariantes" title="Aniversariantes">
                     <Birthday />

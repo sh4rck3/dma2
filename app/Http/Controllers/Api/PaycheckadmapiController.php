@@ -30,13 +30,12 @@ class PaycheckadmapiController extends Controller
         })
             ->when(request('search_global'), function ($query) {
                 $query->where(function($q) {
-                    $q->where('users.name', 'like', '%'.request('search_global').'%')
-                        ->orWhere('users.jobtitle', 'like', '%'.request('search_global').'%');
+                    $q->where('users.name', 'like', '%'.request('search_global').'%');
 
                 });
             })
             ->where('users.status', '!=', '0')
-            ->orderBy('paymentxmls.id', 'desc')
+            ->orderBy('paymentxmls.id', 'asc')
             ->paginate(10);
 
             //return response()->json($users);
