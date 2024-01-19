@@ -19,25 +19,7 @@ class PaycheckadmapiController extends Controller
     public function index()
     {
       
-        $users = User::select('users.*', 'paymentxmls.status as paymentstatus', 'paymentxmls.id as paymentid')
-        ->join('paymentxmls', function($join)
-        {
-            $join->on('paymentxmls.cpf', 'users.document');
-                //->where('paymentxmls.status', '!=', NULL);
-        })
-        ->when(request('search_id'), function ($query) {
-            $query->where('users.id', request('search_id'));
-        })
-            ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
-                    $q->where('users.name', 'like', '%'.request('search_global').'%')
-                        ->orWhere('users.jobtitle', 'like', '%'.request('search_global').'%');
-
-                });
-            })
-            ->where('users.status', '!=', '0')
-            ->orderBy('paymentxmls.id', 'desc')
-            ->paginate(10);
+        $users = User::paginate(10);
 
             //return response()->json($users);
             return UserResource::collection($users);
