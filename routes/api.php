@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MeetingapiController;
 use App\Http\Controllers\Api\PaycheckadmapiController;
 use App\Http\Controllers\Api\SmsadmapiContrroller;
+use App\Http\Controllers\Api\LegalapiController;
 
 
 /*
@@ -74,4 +75,8 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     
     //paycheck
     Route::get('/paycheckadm', [PaycheckadmapiController::class, 'index']);
+
+    //legal
+    Route::get('/legal', [LegalapiController::class, 'index'])->name('legal');
+    Route::post('/legal/store', [LegalapiController::class, 'store'])->name('legal.store');
 });

@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\UseradmwebController;
 use App\Http\Controllers\Web\MeetingwebController;
 use App\Http\Controllers\Web\SmsadmwebController;
 use App\Http\Controllers\Web\PaycheckadmwebController;
+use App\Http\Controllers\Web\LegalController;
 
 
 /*
@@ -67,6 +68,10 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
 
      //extensions
      Route::get('/information', [PageController::class, 'information'])->name('information');
+
+     //legal
+     Route::get('/legal', [LegalController::class, 'index'])->name('legal');
+     Route::get('/legalticket', [LegalController::class, 'legalticket'])->name('legalticket');  
 });
 
 
