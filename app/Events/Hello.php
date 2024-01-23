@@ -22,6 +22,11 @@ class Hello implements ShouldBroadcast
         //
     }
 
+    public function broadcastAs()
+    {
+        return 'Hello';
+    }
+
     public function broadcastWith()
     {
         return [

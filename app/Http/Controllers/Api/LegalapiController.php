@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Event;
 use App\Events\Chat\SendMessage;
+use App\Events\Hello;
 
 class LegalapiController extends Controller
 {

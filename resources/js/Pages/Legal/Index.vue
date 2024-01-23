@@ -3,7 +3,6 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import Content from './Partials/Content.vue';
 import { computed, inject, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import axios from 'axios';
 
 const toast = inject('$toast')
 const swal = inject('$swal')
@@ -13,7 +12,7 @@ const pageRole = computed(() => page.props.user.roles)
 onMounted(() => {
    
     console.log('mounted')
-    Echo.channel('public').listen('Hello', (e) => {
+    Echo.channel('public').listen('.Hello', (e) => {
         console.log('goit')
         console.log(e);
     });
