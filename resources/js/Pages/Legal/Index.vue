@@ -1,42 +1,23 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Content from './Partials/Content.vue';
-import { computed, inject } from 'vue';
+import { computed, inject, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 const toast = inject('$toast')
 const swal = inject('$swal')
 const page = usePage()
 const pageRole = computed(() => page.props.user.roles)
 
-const updatingList = async () =>{
-    //console.log('updating list')
-    // toast.success('Atualizando lista de usuários, aguarde alguns instantes...', {position: 'top-right'})
-    swal({
-        title: 'Atualizando contatos!',
-        html: 'Aguarde alguns instantes...',
-        timer: 20000,
-        timerProgressBar: true,
-        didOpen: () => {
-            swal.showLoading()
-        }
-        })
-    axios.get('/api/usersupdate')
-    .then(response => {
-        console.log(response.data),
-        swal({
-            title: response.data.title,
-            text: response.data.message,
-            icon: response.data.icon
-                })
-    })
-    .catch(error => {
-        swal({
-                    icon: 'error',
-                    title: 'Lista nao foi atualizada!'
-                })
-    })
-}
+onMounted(() => {
+   
+    console.log('mounted')
+    Echo.channel('public').listen('Hello', (e) => {
+        console.log('goit')
+        console.log(e);
+    });
+})
 </script>
 
 <template>

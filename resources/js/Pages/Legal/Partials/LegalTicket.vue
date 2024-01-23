@@ -26,7 +26,7 @@ function submit(){
     const config = { headers: { 'Content-Type': 'multipart/form-data' } };
     axios.post('/api/legal/store', form, config)
              .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 if(response.data.status == true){                     
                      swal(response.data.title, response.data.message, "success");                   
                      form.title = ""

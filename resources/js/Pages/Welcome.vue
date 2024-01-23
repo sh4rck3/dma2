@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayoutLanding.vue';
 import Welcome from '@/Components/Landings/Landing.vue';
 
+
 </script>
 
 <template>

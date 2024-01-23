@@ -8,6 +8,8 @@ use App\Models\Legal;
 use App\Http\Resources\LegalResource;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Event;
+use App\Events\Chat\SendMessage;
 
 class LegalapiController extends Controller
 {
@@ -47,6 +49,8 @@ class LegalapiController extends Controller
         $legalticket->path = $request->file->store('public/uploads');
         $legalticket->original_name = $request->file->getClientOriginalName();
         $legalticket->save();
+
+       Event::dispatch(new SendMessage($legalticket));
 
         return response()->json([
             'status' => true,

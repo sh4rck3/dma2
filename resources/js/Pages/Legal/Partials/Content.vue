@@ -18,6 +18,7 @@ import {
 } from 'flowbite-vue';
 
 
+
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
 const swal = inject('$swal')
@@ -36,6 +37,8 @@ const { legals, getLegals } = useLegal()
 
 onMounted(() => {
     getLegals()
+   
+   
 })
 
 function changePage(page) {

@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\MeetingwebController;
 use App\Http\Controllers\Web\SmsadmwebController;
 use App\Http\Controllers\Web\PaycheckadmwebController;
 use App\Http\Controllers\Web\LegalController;
+use App\Events\Hello;
 
 
 /*
@@ -34,6 +35,11 @@ Route::get('/extensions', [LandingpageController::class, 'extensions'])->name('e
 Route::get('/smssend', [LandingpageController::class, 'smssend'])->name('smssend');
 //birthday  page
 Route::get('/birthday', [LandingpageController::class, 'birthday'])->name('birthday');
+
+Route::get('/broadcast', function () {
+    Hello::dispatch();
+    return 'Hello World';
+});
 
 
 //pages requiring authentication
