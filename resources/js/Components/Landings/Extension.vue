@@ -5,7 +5,13 @@ import Footer from '@/Components/Landings/Partials/Footer.vue';
 import { onMounted, ref, inject, computed, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3'
 import useUsers from '../../composables/userslanding'
-import { FwbTab, FwbTabs } from 'flowbite-vue'
+import { FwbTab, FwbTabs, FwbA,
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow } from 'flowbite-vue'
 const activeTab = ref('Ramais')
 
 
@@ -215,7 +221,76 @@ watch(search_global, (current, previous) => {
                         </div>
                     </fwb-tab>
                     <fwb-tab name="Grupos" title="Grupos">
+                        <div class="w-screen px-4 py-5 flex justify-content align-items">
+                                <Icon name="laravel" class="h-10 w-10 mx-2" />
+                                <h1 class="ml-3 text-2xl font-medium text-gray-900 dark:text-white mx-1">
+                                FOX ->
+                                </h1>
+                                <small class="ml-3 text-2xl font-bold text-gray-900 dark:text-white mx-1">Grupo de Ramais</small>
+                        </div>
+                        <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
+                            <div class="card-body shadow-sm">
 
+                                <!-- 6090 - suporte
+                                6091 - itapeva
+                                9003 - Safra
+                                9024 - juridico
+                                9025 - ADM
+                                9023 - Bradesco
+                                9031 - Sicoob
+                                9021 - DivZero -->
+                                <fwb-table hoverable>
+                                    <fwb-table-head>
+                                    <fwb-table-head-cell>Grupo</fwb-table-head-cell>
+                                    <fwb-table-head-cell>setor</fwb-table-head-cell>
+                                    <fwb-table-head-cell><span class="">Ramal</span></fwb-table-head-cell>
+                                    
+                                    </fwb-table-head>
+                                    <fwb-table-body>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Suporte/Helpdesk</fwb-table-cell>
+                                        <fwb-table-cell>Tecnologia da informação</fwb-table-cell>
+                                        <fwb-table-cell>6090</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Itapeva</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>6091</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Safra</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9003</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Jurídico</fwb-table-cell>
+                                        <fwb-table-cell>Setor Jurídico</fwb-table-cell>
+                                        <fwb-table-cell>9024</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>ADM</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Administrativo</fwb-table-cell>
+                                        <fwb-table-cell>9025</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Bradesco</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9023</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Sicoob</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9031</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>DivZero</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9021</fwb-table-cell>
+                                    </fwb-table-row>
+                                    </fwb-table-body>
+                                </fwb-table>
+                            </div>
+                        </div>
                     </fwb-tab>
             </fwb-tabs>
             
