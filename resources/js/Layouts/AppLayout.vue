@@ -62,7 +62,9 @@ const pageRole = computed(() => page.props.user.roles)
                                 <NavLink :href="route('information')" :active="route().current('information')">
                                     Geral
                                 </NavLink>
-                                <NavLink :href="route('legal')" :active="route().current('legal')">
+                                <NavLink 
+                                    v-if="pageRole.includes('rh') || pageRole.includes('admin')"
+                                    :href="route('legal')" :active="route().current('legal')">
                                     Juridico 1
                                 </NavLink>
                             </div>

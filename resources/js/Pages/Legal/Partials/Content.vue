@@ -40,9 +40,11 @@ onMounted(() => {
    
     console.log('mounted')
     Echo.channel('newlegal').listen('.SendMessage', (e) => {
-        console.log('goit')
-        console.log(e);
         getLegals()
+        swal({
+        icon: 'info',
+        title: 'Novo pedido de iniciais'
+    })
     });
    
 })

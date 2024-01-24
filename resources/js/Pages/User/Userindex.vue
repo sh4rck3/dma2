@@ -31,6 +31,7 @@ const updatingList = async () =>{
             text: response.data.message,
             icon: response.data.icon
                 })
+        
     })
     .catch(error => {
         swal({

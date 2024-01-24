@@ -36,6 +36,7 @@ const { users, getUsers, deleteUser } = useUsers()
 
 onMounted(() => {
     getUsers()
+    console.log(pagePermission.value)
 })
 
 function changePage(page) {
@@ -88,8 +89,14 @@ watch(search_global, (current, previous) => {
                             <fwb-table-cell>{{ post.email }}</fwb-table-cell>
                             <fwb-table-cell>{{ post.roles[0].name }}</fwb-table-cell>
                             <fwb-table-cell>
-                                <fwb-a :href="`/users/${post.id}`">
+                                <fwb-a :href="`https://glpi.dunice.com.br/front/user.form.php?id=${post.id}`" target="_blank">
                                     <Icon name="edit" class="block h-5 w-5" />
+                                </fwb-a>
+                                <fwb-a href="#" 
+                                        v-if="pagePermission.includes('delete articles')" 
+                                        @click.prevent="deleteUser(post.id)"
+                                       >
+                                        <Icon name="trash" class="block h-5 w-5 text-gray-500" />
                                 </fwb-a>
                             </fwb-table-cell>
                         </fwb-table-row>

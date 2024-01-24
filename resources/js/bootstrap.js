@@ -17,7 +17,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-Pusher.logToConsole = true;
+
+Pusher.logToConsole = false;
 
 window.Pusher = Pusher;
 
@@ -28,7 +29,7 @@ window.Echo = new Echo({
     //wsHost: import.meta.env.VITE_PUSHER_HOST ? import.meta.env.VITE_PUSHER_HOST : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
     wsHost: window.location.hostname,
     //wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    //wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
     //forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
     //enabledTransports: ['ws', 'wss'],
     //enabledTransports: ['wss'],
