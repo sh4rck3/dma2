@@ -38,6 +38,12 @@ const { legals, getLegals } = useLegal()
 onMounted(() => {
     getLegals()
    
+    console.log('mounted')
+    Echo.channel('newlegal').listen('.SendMessage', (e) => {
+        console.log('goit')
+        console.log(e);
+        getLegals()
+    });
    
 })
 

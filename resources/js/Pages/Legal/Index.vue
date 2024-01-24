@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Content from './Partials/Content.vue';
-import { computed, inject, onMounted } from 'vue';
+import { computed, inject } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 const toast = inject('$toast')
@@ -9,14 +9,7 @@ const swal = inject('$swal')
 const page = usePage()
 const pageRole = computed(() => page.props.user.roles)
 
-onMounted(() => {
-   
-    console.log('mounted')
-    Echo.channel('public').listen('.Hello', (e) => {
-        console.log('goit')
-        console.log(e);
-    });
-})
+
 </script>
 
 <template>
