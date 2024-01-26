@@ -18,6 +18,7 @@ class SendsmsResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'phone' => $this->phone,
             'message' => $this->message,
             'status' => $this->status,

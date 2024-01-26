@@ -95,7 +95,7 @@ class SmsadmapiContrroller extends Controller
      */
     public function statusresult()
     {
-        $statusSms = Sendsms::where('status', '1')->get();
+        $statusSms = Sendsms::where('status', '1')->where('result', '!=', 'error')->get();
 
         foreach ($statusSms as $status) {
             $this->verifisms($status->id);
@@ -158,8 +158,9 @@ class SmsadmapiContrroller extends Controller
     public function responsesms()
     {
         
-        $responseSms = Sendsms::
-        when(request('search_global'), function ($query) {
+        $responseSms = Sendsms::select('sendsms.*', 'users.name')
+            ->join('users', 'users.id', '=', 'sendsms.user_id')
+            ->when(request('search_global'), function ($query) {
                 $query->where(function($q) {
                     $q->where('phone', 'like', '%'.request('search_global').'%')
                         ->orWhere('document', 'like', '%'.request('search_global').'%');
@@ -170,6 +171,17 @@ class SmsadmapiContrroller extends Controller
             ->paginate(10);
 
             return SendsmsResource::collection($responseSms);
+        // when(request('search_global'), function ($query) {
+        //         $query->where(function($q) {
+        //             $q->where('phone', 'like', '%'.request('search_global').'%')
+        //                 ->orWhere('document', 'like', '%'.request('search_global').'%');
+
+        //         });
+        //     })
+        //     ->orderBy('id', 'desc')
+        //     ->paginate(10);
+
+           // return SendsmsResource::collection($responseSms);
     }
 
 }

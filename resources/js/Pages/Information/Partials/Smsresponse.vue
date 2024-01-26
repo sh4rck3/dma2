@@ -30,6 +30,9 @@ onMounted(() => {
     getSmss()
 })
 
+function changePage(page) {
+    getSmss(page)
+}
 
 watch(search_global, (current, previous) => {
     getSmss(
@@ -58,7 +61,8 @@ watch(search_global, (current, previous) => {
                 <fwb-table hoverable>
                     <fwb-table-head>
                         <fwb-table-head-cell>ID</fwb-table-head-cell>
-                        <fwb-table-head-cell>Telefone</fwb-table-head-cell>
+                        <fwb-table-head-cell>Operador(Origem)</fwb-table-head-cell>
+                        <fwb-table-head-cell>Telefone(Destino)</fwb-table-head-cell>
                         <fwb-table-head-cell>Mensagem</fwb-table-head-cell>
                         <fwb-table-head-cell>Status</fwb-table-head-cell>
                         <fwb-table-head-cell>
@@ -71,20 +75,29 @@ watch(search_global, (current, previous) => {
                             v-for="post in smss.data" :key="post.id">
                             
                             <fwb-table-cell>{{ post.id }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.name }}</fwb-table-cell>
                             <fwb-table-cell>{{ post.phone }}</fwb-table-cell>
                             <fwb-table-cell>{{ post.message }}</fwb-table-cell>
                             <fwb-table-cell>
                                 <div v-if="post.status == 1">
                                     Na fila
                                 </div>
-                                <div v-else-if="post.status == 3">
+                                <div v-else="post.status == 2">
+                                    Erro ao enviar<br>
+                                    Caract. excedido
+                                </div>
+                                <div v-else="post.status == 3">
                                     Enviado
+                                </div>
+                                <div v-else="post.status == 4">
+                                    Erro ao enviar<br>
+                                    caract. especiais
                                 </div>
                             </fwb-table-cell>
                             <fwb-table-cell>
-                                <fwb-a :href="`/users/${post.id}`">
+                                
                                     Resposta
-                                </fwb-a>
+                                
                             </fwb-table-cell>
                         </fwb-table-row>
                         <fwb-table-row

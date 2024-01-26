@@ -8,7 +8,7 @@ import Address from './Partials/Address.vue';
 import { ref } from 'vue'
 import { FwbTab, FwbTabs } from 'flowbite-vue'
 
-const activeTab = ref('Ramais')
+const activeTab = ref('SMS')
 
 </script>
 
