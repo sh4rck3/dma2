@@ -4,7 +4,7 @@ import Footer from '@/Components/Landings/Partials/Footer.vue';
 
 import { onMounted, ref, inject, computed, watch } from 'vue';
 import { usePage, router } from '@inertiajs/vue3'
-import useUsers from '../../../../composables/users'
+import useUsers from '@/composables/users'
 
 import {
   FwbA,
