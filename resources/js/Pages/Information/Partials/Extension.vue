@@ -3,14 +3,25 @@ import Icon from '@/Icons/Icon.vue';
 import Footer from '@/Components/Landings/Partials/Footer.vue';
 
 import { onMounted, ref, inject, computed, watch } from 'vue';
-import { usePage } from '@inertiajs/vue3'
+import { usePage, router } from '@inertiajs/vue3'
 import useUsers from '@/composables/users'
+
+import {
+  FwbA,
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow,
+  FwbPagination,
+} from 'flowbite-vue';
 
 
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
 const swal = inject('$swal')
-const apiusers = ref([])
+const pageRole = computed(() => page.props.user.roles)
 
 
 function showAlert() {
@@ -20,53 +31,25 @@ function showAlert() {
     })
 }
 
-const search_id = ref('')
-const search_title = ref('')
 const search_global = ref('')
-const orderColumn = ref('created_at')
-const orderDirection = ref('desc')
 const { users, getUsers, deleteUser } = useUsers()
 
 onMounted(() => {
     getUsers()
+    console.log(pagePermission.value)
 })
 
-const updateOrdering = (column) => {
-    orderColumn.value = column;
-    orderDirection.value = (orderDirection.value === 'asc') ? 'desc' : 'asc';
-    getUsers(
-        1,
-        search_id.value,
-        search_title.value,
-        search_global.value,
-        orderColumn.value,
-        orderDirection.value
-    );
+function changePage(page) {
+    getUsers(page)
 }
-watch(search_id, (current, previous) => {
-    getUsers(
-        1,
-        current,
-        search_title.value,
-        search_global.value
-    )
-})
-watch(search_title, (current, previous) => {
-    getUsers(
-        1,
-        search_id.value,
-        current,
-        search_global.value
-    )
-})
+
 watch(search_global, (current, previous) => {
     getUsers(
         1,
-        search_id.value,
-        search_title.value,
         current
     )
 })
+
 </script>
 
 <template>
@@ -80,133 +63,50 @@ watch(search_global, (current, previous) => {
                     <small class="ml-3 text-2xl font-bold text-gray-900 dark:text-white mx-1">Ramais e informações atualizados</small>
             </div>
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
-                <div class="card-body shadow-sm">
-                    <div class="mb-4">
-                        <input v-model="search_global" type="text" placeholder="Buscar..."
-                               class="form-control w-25">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                           
-                            <tr>
-                                <th class="px-6 py-3 text-start">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('id')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'id' }">
-                                            ID
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'id',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'id',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'id',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('title')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'title' }">
-                                            Nome
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'title',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'title',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'title',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'title',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row"
-                                         @click="updateOrdering('email')">
-                                        <div class="font-medium text-uppercase"
-                                             :class="{ 'font-bold text-blue-600': orderColumn === 'email' }">
-                                            Email
-                                        </div>
-                                        <div class="select-none">
-                                <span :class="{
-                                  'text-blue-600': orderDirection === 'asc' && orderColumn === 'email',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'asc' && orderColumn === 'email',
-                                }">&uarr;</span>
-                                            <span :class="{
-                                  'text-blue-600': orderDirection === 'desc' && orderColumn === 'email',
-                                  'hidden': orderDirection !== '' && orderDirection !== 'desc' && orderColumn === 'email',
-                                }">&darr;</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Ramal
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Setor
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left">
-                                    <div class="flex flex-row">
-                                        <div class="font-medium text-uppercase">
-                                            Cargo
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if="users.data && users.data.length > 0"
-                                    v-for="post in users.data" :key="post.id">
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.id }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.name }} 
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.email }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.extension }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.sector }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        {{ post.jobtitle }}
-                                    </td>
-                                    
-                                </tr>
-                            
-                                <tr v-else>
-                                    <td colspan="6" class="text-center py-4">
-                                        Nenhum usuário encontrado.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="mb-4">
+                    <input v-model="search_global" type="text" placeholder="Buscar..."
+                            class="form-control w-25">
                 </div>
-                <div class="card-footer">
-                    <Pagination :data="users" :limit="3"
-                                @pagination-change-page="page => getUsers(page, search_id, search_title, search_global, orderColumn, orderDirection)"
-                                class="mt-4"/>
+                <fwb-table hoverable>
+                    <fwb-table-head>
+                        <fwb-table-head-cell>ID</fwb-table-head-cell>
+                        <fwb-table-head-cell>Nome</fwb-table-head-cell>
+                        <fwb-table-head-cell>Email</fwb-table-head-cell>
+                        <fwb-table-head-cell>Ramal</fwb-table-head-cell>
+                        <fwb-table-head-cell>Setor</fwb-table-head-cell>
+                        <fwb-table-head-cell>cargo</fwb-table-head-cell>
+                        
+                    </fwb-table-head>
+                    <fwb-table-body>
+                        <fwb-table-row
+                            v-if="users.data && users.data.length > 0"
+                            v-for="post in users.data" :key="post.id">
+                            
+                            <fwb-table-cell>{{ post.id }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.name }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.email }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.extension }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.sector }}</fwb-table-cell>
+                            <fwb-table-cell>{{ post.jobtitle }}</fwb-table-cell>
+                            
+                        </fwb-table-row>
+                        <fwb-table-row
+                            v-else
+                            >
+                            <fwb-table-cell colspan="6" class="text-center py-4">
+                                Nenhum Usuário encontrado.
+                            </fwb-table-cell>
+                        </fwb-table-row>
+                    </fwb-table-body>
+                </fwb-table>
+                <div className="flex overflow-x-auto sm:justify-center mt-4">
+                    <fwb-pagination
+                        v-if="users.data && users.data.length > 0"
+                        @click.prevent="changePage(users.meta.current_page)"  
+                        v-model="users.meta.current_page" 
+                        :total-pages="users.meta.last_page"
+                        >
+                    </fwb-pagination>
                 </div>
             </div>
         </div>
