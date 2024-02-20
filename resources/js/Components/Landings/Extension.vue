@@ -11,7 +11,8 @@ import { FwbTab, FwbTabs, FwbA,
   FwbTableCell,
   FwbTableHead,
   FwbTableHeadCell,
-  FwbTableRow } from 'flowbite-vue'
+  FwbTableRow,
+  FwbCard } from 'flowbite-vue'
 const activeTab = ref('Ramais')
 
 
@@ -231,14 +232,18 @@ watch(search_global, (current, previous) => {
                         <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                             <div class="card-body shadow-sm">
 
-                                <!-- 6090 - suporte
-                                6091 - itapeva
-                                9003 - Safra
-                                9024 - juridico
-                                9025 - ADM
-                                9023 - Bradesco
-                                9031 - Sicoob
-                                9021 - DivZero -->
+                                <!-- Helpdesk (6090)
+                                Bradesco (9023)
+                                Juridico Geral (9024)
+                                Administrativo (9025)
+                                Acordos Geral (9027)
+                                Juridico 01 (9028)
+                                Juridico 03 (9029)
+                                Sicoob (9031)
+                                Controladoria (9033)
+                                BackOffice (9034)
+                                Itapeva (9035)
+                                Safra (9036) -->
                                 <fwb-table hoverable>
                                     <fwb-table-head>
                                     <fwb-table-head-cell>Grupo</fwb-table-head-cell>
@@ -253,34 +258,49 @@ watch(search_global, (current, previous) => {
                                         <fwb-table-cell>6090</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
-                                        <fwb-table-cell>Itapeva</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
-                                        <fwb-table-cell>6091</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
-                                        <fwb-table-cell>Safra</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
-                                        <fwb-table-cell>9003</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
-                                        <fwb-table-cell>Jurídico</fwb-table-cell>
-                                        <fwb-table-cell>Setor Jurídico</fwb-table-cell>
-                                        <fwb-table-cell>9024</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
-                                        <fwb-table-cell>ADM</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Administrativo</fwb-table-cell>
-                                        <fwb-table-cell>9025</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
                                         <fwb-table-cell>Bradesco</fwb-table-cell>
                                         <fwb-table-cell>Setor de Acordos</fwb-table-cell>
                                         <fwb-table-cell>9023</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
+                                        <fwb-table-cell>Juridico Geral</fwb-table-cell>
+                                        <fwb-table-cell>Jurídico Dunice Marcon</fwb-table-cell>
+                                        <fwb-table-cell>9024</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Administrativo</fwb-table-cell>
+                                        <fwb-table-cell>Setor Administrativo</fwb-table-cell>
+                                        <fwb-table-cell>9025</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9027</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Jurídico 1</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico</fwb-table-cell>
+                                        <fwb-table-cell>9028</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Jurídico 3</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico</fwb-table-cell>
+                                        <fwb-table-cell>9029</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
                                         <fwb-table-cell>Sicoob</fwb-table-cell>
                                         <fwb-table-cell>Setor de Acordos</fwb-table-cell>
-                                        <fwb-table-cell>9031</fwb-table-cell>
+                                        <fwb-table-cell>9021</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Controladoria</fwb-table-cell>
+                                        <fwb-table-cell>Setor Controladoria</fwb-table-cell>
+                                        <fwb-table-cell>9021</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Back Office</fwb-table-cell>
+                                        <fwb-table-cell>Setor Back Office</fwb-table-cell>
+                                        <fwb-table-cell>9021</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
                                         <fwb-table-cell>DivZero</fwb-table-cell>
@@ -290,8 +310,27 @@ watch(search_global, (current, previous) => {
                                     </fwb-table-body>
                                 </fwb-table>
                             </div>
+                            <div class="mt-10">
+                                <fwb-card href="#">
+                                <div class="p-5">
+                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    Codigo de funcionalidades do telefone
+                                    </h5>
+                                    <p class="font-normal text-gray-700 dark:text-gray-400">
+                                    **+ramal - puxa ligação<br>
+                                    </p>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    Obs: Caso  não consiga puxar uma ligação  como citado acima, abrir um chamado para que a TI possa fazer a alteração no telefone,<br>
+                                    pois existem alguns telefone da marca GRANDSTREAM que não possuem o serviço ativo. Obrigado!
+                                </div>
+                                </fwb-card>
+                            </div>
                         </div>
+                        
                     </fwb-tab>
+                    
             </fwb-tabs>
             
         </div>

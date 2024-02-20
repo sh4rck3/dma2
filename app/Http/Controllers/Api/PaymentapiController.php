@@ -92,7 +92,7 @@ class PaymentapiController extends Controller
                 foreach ($phaseOne
                             ->FormattedArea
                                 ->FormattedSections
-                                    ->FormattedSection[2]
+                                    ->FormattedSection[1]
                                         ->FormattedReportObjects
                                             ->FormattedReportObject as $key => $dataOfCompany) 
                 {
@@ -123,7 +123,7 @@ class PaymentapiController extends Controller
                 foreach ($phaseOne
                             ->FormattedArea
                                 ->FormattedSections
-                                    ->FormattedSection[3]
+                                    ->FormattedSection[2]
                                         ->FormattedReportObjects
                                             ->FormattedReportObject as $key => $dataOfEmployee){
                     

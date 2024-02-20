@@ -227,7 +227,8 @@ class UserapiController extends Controller
         $response = json_decode($response, true);
 
         if($response == null){
-             
+            
+            //$token = '9g1a53j3c4pt2htvqari8pgefs'; 
             return response()->json([
                 'status' => true,
                 'title' => 'API GLPI',
