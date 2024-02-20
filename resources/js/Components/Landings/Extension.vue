@@ -221,7 +221,7 @@ watch(search_global, (current, previous) => {
                             </div>
                         </div>
                     </fwb-tab>
-                    <fwb-tab name="Grupos" title="Grupos">
+                    <fwb-tab name="Grupos de Ramais" title="Grupos de Ramais">
                         <div class="w-screen px-4 py-5 flex justify-content align-items">
                                 <Icon name="laravel" class="h-10 w-10 mx-2" />
                                 <h1 class="ml-3 text-2xl font-medium text-gray-900 dark:text-white mx-1">
@@ -243,7 +243,8 @@ watch(search_global, (current, previous) => {
                                 Controladoria (9033)
                                 BackOffice (9034)
                                 Itapeva (9035)
-                                Safra (9036) -->
+                                Safra (9036) 
+                                 -->
                                 <fwb-table hoverable>
                                     <fwb-table-head>
                                     <fwb-table-head-cell>Grupo</fwb-table-head-cell>
@@ -263,28 +264,18 @@ watch(search_global, (current, previous) => {
                                         <fwb-table-cell>9023</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
-                                        <fwb-table-cell>Juridico Geral</fwb-table-cell>
-                                        <fwb-table-cell>Jurídico Dunice Marcon</fwb-table-cell>
-                                        <fwb-table-cell>9024</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
                                         <fwb-table-cell>Administrativo</fwb-table-cell>
                                         <fwb-table-cell>Setor Administrativo</fwb-table-cell>
                                         <fwb-table-cell>9025</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
-                                        <fwb-table-cell>Acordos</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
-                                        <fwb-table-cell>9027</fwb-table-cell>
-                                    </fwb-table-row>
-                                    <fwb-table-row>
-                                        <fwb-table-cell>Jurídico 1</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Juridico</fwb-table-cell>
+                                        <fwb-table-cell>Supervisão 1</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Execuções Bradesco)</fwb-table-cell>
                                         <fwb-table-cell>9028</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
-                                        <fwb-table-cell>Jurídico 3</fwb-table-cell>
-                                        <fwb-table-cell>Setor de Juridico</fwb-table-cell>
+                                        <fwb-table-cell>Supervisão 2</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Contrárias, Minutas, Consolidações e Execuções demais Bancos)</fwb-table-cell>
                                         <fwb-table-cell>9029</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
@@ -295,12 +286,27 @@ watch(search_global, (current, previous) => {
                                     <fwb-table-row>
                                         <fwb-table-cell>Controladoria</fwb-table-cell>
                                         <fwb-table-cell>Setor Controladoria</fwb-table-cell>
-                                        <fwb-table-cell>9021</fwb-table-cell>
+                                        <fwb-table-cell>9033</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
                                         <fwb-table-cell>Back Office</fwb-table-cell>
-                                        <fwb-table-cell>Setor Back Office</fwb-table-cell>
-                                        <fwb-table-cell>9021</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9034</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Itapeva</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9035</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Safra</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Acordos</fwb-table-cell>
+                                        <fwb-table-cell>9036</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Retomadas</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Retomadas</fwb-table-cell>
+                                        <fwb-table-cell>9037</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
                                         <fwb-table-cell>DivZero</fwb-table-cell>
@@ -327,6 +333,51 @@ watch(search_global, (current, previous) => {
                                 </div>
                                 </fwb-card>
                             </div>
+                        </div>
+                        
+                    </fwb-tab>
+                    <fwb-tab name="Grupos de Emails" title="Grupos de Emails">
+                        <div class="w-screen px-4 py-5 flex justify-content align-items">
+                                <Icon name="laravel" class="h-10 w-10 mx-2" />
+                                <h1 class="ml-3 text-2xl font-medium text-gray-900 dark:text-white mx-1">
+                                FOX ->
+                                </h1>
+                                <small class="ml-3 text-2xl font-bold text-gray-900 dark:text-white mx-1">Grupo de Emails</small>
+                        </div>
+                        <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
+                            <div class="card-body shadow-sm">
+
+                                <!-- 
+                                Helpdesk (6090)
+                                Bradesco (9023)
+                                Juridico Geral (9024)
+                                Administrativo (9025)
+                                Acordos Geral (9027)
+                                Juridico 01 (9028)
+                                Juridico 03 (9029)
+                                Sicoob (9031)
+                                Controladoria (9033)
+                                BackOffice (9034)
+                                Itapeva (9035)
+                                Safra (9036) 
+                                 -->
+                                <fwb-table hoverable>
+                                    <fwb-table-head>
+                                    <fwb-table-head-cell>Grupo</fwb-table-head-cell>
+                                    <fwb-table-head-cell>setor</fwb-table-head-cell>
+                                    <fwb-table-head-cell><span class="">Chave de email</span></fwb-table-head-cell>
+                                    
+                                    </fwb-table-head>
+                                    <fwb-table-body>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Suporte/Helpdesk</fwb-table-cell>
+                                        <fwb-table-cell>Suporte</fwb-table-cell>
+                                        <fwb-table-cell>suporte@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    </fwb-table-body>
+                                </fwb-table>
+                            </div>
+                            
                         </div>
                         
                     </fwb-tab>
