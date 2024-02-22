@@ -348,18 +348,34 @@ watch(search_global, (current, previous) => {
                             <div class="card-body shadow-sm">
 
                                 <!-- 
-                                Helpdesk (6090)
-                                Bradesco (9023)
-                                Juridico Geral (9024)
-                                Administrativo (9025)
-                                Acordos Geral (9027)
-                                Juridico 01 (9028)
-                                Juridico 03 (9029)
-                                Sicoob (9031)
-                                Controladoria (9033)
-                                BackOffice (9034)
-                                Itapeva (9035)
-                                Safra (9036) 
+                                //acordos.divzero@dunice.adv.br
+                                //acordos.itapeva@dunice.adv.br
+                               // acordos.safra@dunice.adv.br
+                               // acordos.sicoob@dunice.adv.br
+                               // acordos@dunice.adv.br (bradesco)
+                                //backoffice.juridico@dunice.adv.br
+                                //controladoria@dunice.adv.br
+                                //suporte@dunice.adv.br
+                                //administrativo@dunice.adv.br (Útil)
+                                //direcionamentos@dunice.adv.br 
+                                //dp@dunice.adv.br 
+                                //financeiro@dunice.adv.br 
+                                iniciais@dunice.adv.br 
+                                juridico@dunice.adv.br (Todos os setores Jurídicos)
+                                planejamento@dunice.adv.br 
+                                qualidade@dunice.adv.br 
+                                retomadas@dunice.adv.br 
+                                rh@dunice.adv.br 
+
+                                supervisao1@dunice.adv.br
+                                juridico2@dunice.adv.br
+                                juridico4@dunice.adv.br
+                                juridico5@dunice.adv.br
+
+                                supervisao2@dunice.adv.br
+                                juridico6@dunice.adv.br
+                                contrarias@dunice.adv.br
+                                minutas@dunice.adv.br
                                  -->
                                 <fwb-table hoverable>
                                     <fwb-table-head>
@@ -373,6 +389,71 @@ watch(search_global, (current, previous) => {
                                         <fwb-table-cell>Suporte/Helpdesk</fwb-table-cell>
                                         <fwb-table-cell>Suporte</fwb-table-cell>
                                         <fwb-table-cell>suporte@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acordos Divzero</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos.divzero@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acordos Itapeva</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos.itapeva@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acordos Safra</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos.safra@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acorodos Sicoob</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos.sicoob@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acorodos Bradesco</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Back Office Juridico</fwb-table-cell>
+                                        <fwb-table-cell>Setor Back Office</fwb-table-cell>
+                                        <fwb-table-cell>backoffice.juridico@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Controladoria</fwb-table-cell>
+                                        <fwb-table-cell>Setor Controladoria</fwb-table-cell>
+                                        <fwb-table-cell>controladoria@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Administrativo</fwb-table-cell>
+                                        <fwb-table-cell>Administrativo</fwb-table-cell>
+                                        <fwb-table-cell>administrativo@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Direcionamentos</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Direcionamentos</fwb-table-cell>
+                                        <fwb-table-cell>direcionamentos@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>DP</fwb-table-cell>
+                                        <fwb-table-cell>Setor de DP</fwb-table-cell>
+                                        <fwb-table-cell>dp@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Financeiro</fwb-table-cell>
+                                        <fwb-table-cell>Setor Financeiro</fwb-table-cell>
+                                        <fwb-table-cell>financeiro@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Iniciais</fwb-table-cell>
+                                        <fwb-table-cell>Setor Iniciais</fwb-table-cell>
+                                        <fwb-table-cell>iniciais@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Juridico</fwb-table-cell>
+                                        <fwb-table-cell>Setor Juridico</fwb-table-cell>
+                                        <fwb-table-cell>juridico@dunice.adv.br</fwb-table-cell>
                                     </fwb-table-row>
                                     </fwb-table-body>
                                 </fwb-table>
