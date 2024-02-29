@@ -360,20 +360,20 @@ watch(search_global, (current, previous) => {
                                 //direcionamentos@dunice.adv.br 
                                 //dp@dunice.adv.br 
                                 //financeiro@dunice.adv.br 
-                                iniciais@dunice.adv.br 
-                                juridico@dunice.adv.br (Todos os setores Jurídicos)
-                                planejamento@dunice.adv.br 
-                                qualidade@dunice.adv.br 
-                                retomadas@dunice.adv.br 
-                                rh@dunice.adv.br 
+                                //iniciais@dunice.adv.br 
+                                //juridico@dunice.adv.br (Todos os setores Jurídicos)
+                                //planejamento@dunice.adv.br 
+                                //qualidade@dunice.adv.br 
+                                //retomadas@dunice.adv.br 
+                                //rh@dunice.adv.br 
 
-                                supervisao1@dunice.adv.br
-                                juridico2@dunice.adv.br
-                                juridico4@dunice.adv.br
-                                juridico5@dunice.adv.br
+                                //supervisao1@dunice.adv.br
+                                //juridico2@dunice.adv.br
+                                //juridico4@dunice.adv.br
+                                //juridico5@dunice.adv.br
 
-                                supervisao2@dunice.adv.br
-                                juridico6@dunice.adv.br
+                                //supervisao2@dunice.adv.br
+                                //juridico6@dunice.adv.br
                                 contrarias@dunice.adv.br
                                 minutas@dunice.adv.br
                                  -->
@@ -385,6 +385,21 @@ watch(search_global, (current, previous) => {
                                     
                                     </fwb-table-head>
                                     <fwb-table-body>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>PADS</fwb-table-cell>
+                                        <fwb-table-cell>Programa de automação e desenvolvimento de setores</fwb-table-cell>
+                                        <fwb-table-cell>pads.dm@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Diretoria</fwb-table-cell>
+                                        <fwb-table-cell>Diretores Dunice & Marcon</fwb-table-cell>
+                                        <fwb-table-cell>diretoria@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Líderis de setor</fwb-table-cell>
+                                        <fwb-table-cell>Setores</fwb-table-cell>
+                                        <fwb-table-cell>liderancadm@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>    
                                     <fwb-table-row>
                                         <fwb-table-cell>Suporte/Helpdesk</fwb-table-cell>
                                         <fwb-table-cell>Suporte</fwb-table-cell>
@@ -409,6 +424,11 @@ watch(search_global, (current, previous) => {
                                         <fwb-table-cell>Acorodos Sicoob</fwb-table-cell>
                                         <fwb-table-cell>Acordos</fwb-table-cell>
                                         <fwb-table-cell>acordos.sicoob@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Acorodos Sicoob Unic</fwb-table-cell>
+                                        <fwb-table-cell>Acordos</fwb-table-cell>
+                                        <fwb-table-cell>acordos.sicoobunic@dunice.adv.br</fwb-table-cell>
                                     </fwb-table-row>
                                     <fwb-table-row>
                                         <fwb-table-cell>Acorodos Bradesco</fwb-table-cell>
@@ -454,6 +474,61 @@ watch(search_global, (current, previous) => {
                                         <fwb-table-cell>Juridico</fwb-table-cell>
                                         <fwb-table-cell>Setor Juridico</fwb-table-cell>
                                         <fwb-table-cell>juridico@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Planejamento</fwb-table-cell>
+                                        <fwb-table-cell>Setor Planejamento</fwb-table-cell>
+                                        <fwb-table-cell>planejamento@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Qualidade</fwb-table-cell>
+                                        <fwb-table-cell>Setor Qualidade</fwb-table-cell>
+                                        <fwb-table-cell>qualidade@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Retomadas</fwb-table-cell>
+                                        <fwb-table-cell>Setor Retomadas</fwb-table-cell>
+                                        <fwb-table-cell>retomadas@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>RH</fwb-table-cell>
+                                        <fwb-table-cell>Setor RH</fwb-table-cell>
+                                        <fwb-table-cell>rh@duice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Supervisão 1</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Execuções Bradesco)</fwb-table-cell>
+                                        <fwb-table-cell>supervisao1@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Juridico 2</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Anápolis, Rio Verde e Goiânia (varejo) )</fwb-table-cell>
+                                        <fwb-table-cell>juridico2@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Juridico 4</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Cuiabá, Sinop, Palmas, Porto Velho, Private e Empresa)</fwb-table-cell>
+                                        <fwb-table-cell>juridico4@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Juridico 5</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Goiânia (prime))</fwb-table-cell>
+                                        <fwb-table-cell>juridico5@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Supervisão 2</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Contrárias, Minutas, Consolidações e Execuções demais Bancos)</fwb-table-cell>
+                                        <fwb-table-cell>supervisao2@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Juridico 6</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Execução regional Brasilia Bradesco e Execuções demais Bancos)</fwb-table-cell>
+                                        <fwb-table-cell>contrarias@dunice.adv.br</fwb-table-cell>
+                                    </fwb-table-row>
+                                    <fwb-table-row>
+                                        <fwb-table-cell>Minutas</fwb-table-cell>
+                                        <fwb-table-cell>Setor de Juridico (Contrárias, Minutas, Consolidações e Execuções demais Bancos)</fwb-table-cell>
+                                        <fwb-table-cell>minutas@dunice.adv.br</fwb-table-cell>
                                     </fwb-table-row>
                                     </fwb-table-body>
                                 </fwb-table>

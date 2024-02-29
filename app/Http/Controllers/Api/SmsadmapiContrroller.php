@@ -20,7 +20,7 @@ class SmsadmapiContrroller extends Controller
         
         Log::info('SmsadmapiContrroller.sendsms: ' . $numerber);
 
-        $strUrl= 'http://172.23.4.222/API/SendSMS';
+        $strUrl= 'http://10.9.0.142/API/SendSMS';
         $strPost = '{
             "event":"txsms",
             "userid":"0",
@@ -110,7 +110,7 @@ class SmsadmapiContrroller extends Controller
         $taskid = explode(':', $return->content);
         Log::info('Sendsmsapi::sendsms::return: taskID'.$taskid[1]);
 
-        $strUrl= 'http://172.23.4.222/API/QueryTxSMS';
+        $strUrl= 'http://10.9.0.142/API/QueryTxSMS';
         $strPost = '{
             "event":"querytxsms",
             "taskid":"'.$taskid[1].'"

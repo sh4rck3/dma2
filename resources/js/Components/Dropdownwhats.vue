@@ -49,6 +49,12 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                 <DropdownLink as="blank" :href="'https://juridico3.dunice.com.br/'" >
                     juridico3
                 </DropdownLink>
+                <DropdownLink as="blank" :href="'https://retpeva.dunice.net.br'" >
+                    Ret. Itapeva
+                </DropdownLink>
+                <DropdownLink as="blank" :href="'https://retdiv.dunice.net.br'" >
+                    Ret. Divzero
+                </DropdownLink>
             </template>
         </Dropdown>
     </div>
