@@ -8,6 +8,8 @@ use Database\Seeders\RolesSeeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\NewrolesSeeder;
 use Database\Seeders\NewrolefinanSeeder;
+use Database\Seeders\CodedddstateSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,7 +29,8 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             UserSeeder::class, 
             NewrolesSeeder::class,
-            NewrolefinanSeeder::class
+            NewrolefinanSeeder::class,
+            CodedddstateSeeder::class
         ]);
     }
 }

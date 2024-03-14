@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Log;
+
 class Ticket extends Model
 {
     use HasFactory;
@@ -24,11 +26,29 @@ class Ticket extends Model
 
     public static function verifyTicket($idContact)
     {
-        $exists = Ticket::where('status', 'open')->where('contact_id', $idContact)->exists();
-        if($exists){
-            return true;
-        }else{
-            return false;
-        }
+        
+        return Ticket::where('status', 'open')
+                       ->where('contact_id', $idContact)
+                       ->first() !== null;
     }
+
+    public static function getIdTicket($idContact)
+    {
+        return Ticket::firstWhere('status', 'open')->where('contact_id', $idContact)->id;
+    }
+
+    public static function addTicket($request, $contactId)
+    {
+        $ticket = new Ticket();
+        $ticket->status = 'open';
+        $ticket->contact_id = $contactId;
+        $ticket->user_id = null;
+        $ticket->whatsapp_id = $request->container;
+        $ticket->unread_messages = 1;
+        $ticket->queue_id = 1;
+        $ticket->save();
+
+        return $ticket;
+    }
+
 }

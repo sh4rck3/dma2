@@ -20,12 +20,16 @@ return new class extends Migration
             $table->unsignedBigInteger('ticket_id')->nullable();
             $table->string('from_me')->nullable();
             $table->string('is_deleted')->nullable();
-            $table->string('contact_id')->nullable();
+            $table->unsignedBigInteger('contact_id')->nullable();
             $table->timestamps();
 
             $table->foreign('ticket_id')
                 ->references('id')
                 ->on('tickets');
+
+            $table->foreign('contact_id')
+                ->references('id')
+                ->on('contacts');
         });
     }
 
