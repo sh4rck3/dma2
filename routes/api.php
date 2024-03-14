@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\MeetingapiController;
 use App\Http\Controllers\Api\PaycheckadmapiController;
 use App\Http\Controllers\Api\SmsadmapiContrroller;
 use App\Http\Controllers\Api\LegalapiController;
-
+use App\Http\Controllers\Api\ApiwhatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +29,14 @@ Route::get('/userslanding', [UserapiController::class, 'userslanding'])->name('u
 Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->name('users.birthdaylanding');
 
 Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
+
+Route::post('/whatsapp/statusconect', [ApiwhatsController::class, 'statusconect']);
+Route::post('/whatsapp/qrcode', [ApiwhatsController::class, 'qrcode']);
+Route::post('/whatsapp/status', [ApiwhatsController::class, 'status']);
+Route::post('/whatsapp/mensagem', [ApiwhatsController::class, 'mensagem']);
+Route::post('/whatsapp/call', [ApiwhatsController::class, 'call']);
+Route::post('/whatsapp/delete', [ApiwhatsController::class, 'delete']);
+Route::post('/whatsapp/presenca', [ApiwhatsController::class, 'presenca']);
 
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -41,6 +41,7 @@ onMounted( async () => {
             console.log(error);
         }),
     getRoleList()
+    console.log(roleList);
 });
 
 function submitForm() {
@@ -94,7 +95,8 @@ function submitForm() {
                                 <option :value="selected" selected>{{ selected }}</option>
                                 <option
                                     v-for="role in roleList" :key="role.id"
-                                    :value="role.name"> {{ role.name }}</option>
+                                    :value="role.name"> {{ role.name }}
+                                </option>
                             </select>
                         </div>
                         <p>Regrea selecionada: {{ role }}</p>
