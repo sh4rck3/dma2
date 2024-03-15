@@ -12,6 +12,7 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Event;
 use App\Events\Chat\NewTicket;
 use App\Models\Codedddstate;
+use Illuminate\Support\Facades\Auth;
 
 
 class ApiwhatsController extends Controller
@@ -37,10 +38,37 @@ class ApiwhatsController extends Controller
         //Log::info('status: ' . print_r($request->all(), true));
         if($request->status == 'MOBILE')
         {
-            Log::info('status: ' . print_r($request->all(), true));
-            Log::info('Enviado pelo celular');
+            $userSendCell = 1;
+            //Log::info('status: ' . print_r($request->all(), true));
+            //Log::info('Enviado pelo celular');
             if($request->type == 'text')
             {
+                //Log::info('status: ' . print_r($request->all(), true));
+                Log::info('Enviado pelo celular');
+                $toContact = Contact::where('number', $request->to)->first();
+                if($toContact)
+                {
+                    Log::info('contato encontrado');
+                    if(Ticket::verifyTicket($toContact->id))
+                    {
+                        Log::info('ticket foi encontrado');
+                        $ticketId = Ticket::getIdTicket($toContact->id);
+                        if($ticketId->user_id == null)
+                        {
+                            Log::info('ticket sem atendente');
+                            Ticket::where('id', $ticketId->id)->update(['user_id' => $userSendCell]);
+                            Log::info('ticket com atendente: 1');
+                            Message::sendMessage($request, $ticketId->id, $toContact->id, $userSendCell);
+                            Log::info('mensagem enviada');
+                        }else{
+                            Log::info('ticket com atendente');
+                            Message::sendMessage($request, $ticketId->id, $toContact->id, $userSendCell);
+                            Log::info('mensagem enviada');
+                        }
+                        
+                        
+                    }   
+                }
              
                 
 
@@ -64,29 +92,7 @@ class ApiwhatsController extends Controller
             if(Contact::verifyGroup($request->from))
             {
                 Log::info('grupo encontrado');
-                // $contact = Contact::where('number', $request->from)->first();
-                // if(Ticket::verifyTicket($contact->id))
-                // {
-                //     Log::info('ticket foi encontrado');
-                //     $ticketId = Ticket::where('status', 'open')->where('contact_id', $contact->id)->first();
-                //     $i = 0;
-                //     if($ticketId->unread_messages >= 0)
-                //     {
-                //         $i = $ticketId->unread_messages + 1;
-                //         Ticket::where('id', $ticketId->id)->update(['unread_messages' => $i]);
-                //         Message::addMessage($request, $ticketId->id, $contact->id);
-                //         Log::info('mensagem inserida na tabela');
-                //     }
-                // }else{
-                //     Log::info('criando ticket');
-                //     $ticket = Ticket::addTicket($request, $contact->id);
-                //     if(isset($ticket->id))
-                //     {
-                //         Log::info('criando mensagem');
-                //         Message::addMessage($request, $ticket->id, $contact->id);
-                //         //Event::dispatch(new NewTicket($ticket->id));
-                //     }
-                // }
+                
             }
             
             return;

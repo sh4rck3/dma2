@@ -34,7 +34,10 @@ class Ticket extends Model
 
     public static function getIdTicket($idContact)
     {
-        return Ticket::firstWhere('status', 'open')->where('contact_id', $idContact)->id;
+        $ticketId = Ticket::where('status', 'open')
+                    ->where('contact_id', $idContact)
+                    ->first();
+        return $ticketId;
     }
 
     public static function addTicket($request, $contactId)

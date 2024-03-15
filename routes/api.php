@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PaycheckadmapiController;
 use App\Http\Controllers\Api\SmsadmapiContrroller;
 use App\Http\Controllers\Api\LegalapiController;
 use App\Http\Controllers\Api\ApiwhatsController;
+use App\Http\Controllers\Api\ChatapiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::get('/userslanding', [UserapiController::class, 'userslanding'])->name('u
 Route::get('/birthdaylanding', [UserapiController::class, 'birthdaylanding'])->name('users.birthdaylanding');
 
 Route::get('/paymentmesref', [PaycheckadmapiController::class, 'paymentmesref']);
+
 
 Route::post('/whatsapp/statusconect', [ApiwhatsController::class, 'statusconect']);
 Route::post('/whatsapp/qrcode', [ApiwhatsController::class, 'qrcode']);
@@ -87,4 +89,8 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
     //legal
     Route::get('/legal', [LegalapiController::class, 'index'])->name('legal');
     Route::post('/legal/store', [LegalapiController::class, 'store'])->name('legal.store');
+
+    //chat
+    Route::get('/contacts', [ChatapiController::class, 'index'])->name('chat.contacts');
+    Route::get('/messages/{ticket}', [ChatapiController::class, 'messages'])->name('chat.messages');
 });

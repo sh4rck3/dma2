@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\MeetingwebController;
 use App\Http\Controllers\Web\SmsadmwebController;
 use App\Http\Controllers\Web\PaycheckadmwebController;
 use App\Http\Controllers\Web\LegalController;
+use App\Http\Controllers\Web\ChatewebController;
 use App\Events\Hello;
 
 
@@ -78,6 +79,9 @@ Route::group(['midleware' => ['auth:sanctum', 'verified']], function() {
      //legal
      Route::get('/legal', [LegalController::class, 'index'])->name('legal');
      Route::get('/legalticket', [LegalController::class, 'legalticket'])->name('legalticket');  
+
+     //webchat
+    Route::get('/webchat', [ChatewebController::class, 'index'])->name('webchat');
 });
 
 

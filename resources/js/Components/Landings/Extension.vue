@@ -311,7 +311,7 @@ watch(search_global, (current, previous) => {
                                     <fwb-table-row>
                                         <fwb-table-cell>DivZero</fwb-table-cell>
                                         <fwb-table-cell>Setor de Acordos</fwb-table-cell>
-                                        <fwb-table-cell>9021</fwb-table-cell>
+                                        <fwb-table-cell>9032</fwb-table-cell>
                                     </fwb-table-row>
                                     </fwb-table-body>
                                 </fwb-table>

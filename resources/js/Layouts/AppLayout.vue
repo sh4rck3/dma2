@@ -65,7 +65,7 @@ const pageRole = computed(() => page.props.user.roles)
                                 <NavLink 
                                     v-if="pageRole.includes('rh') || pageRole.includes('admin')"
                                     :href="route('legal')" :active="route().current('legal')">
-                                    Juridico 1
+                                    Juridico1
                                 </NavLink>
                             </div>
                            
@@ -121,6 +121,13 @@ const pageRole = computed(() => page.props.user.roles)
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('financial')" :active="route().current('financial') || route().current('financialimport')">
                                     Remessas
+                                </NavLink>
+                            </div>
+                            <div 
+                                v-if="pageRole.includes('admin')"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('webchat')" :active="route().current('webchat')">
+                                    WebChat
                                 </NavLink>
                             </div>
                             <div 
