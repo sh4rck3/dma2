@@ -34,6 +34,7 @@
         "flowbite-vue": "^0.1.0",
         "laravel-vue-pagination": "^4.1.1",
         "lodash": "^4.17.21",
+        "moment": "^2.30.1",
         "vue-moment": "^4.1.0",
         "vue-sweetalert2": "^5.0.5",
         "vue-toast-notification": "^3.1.2",

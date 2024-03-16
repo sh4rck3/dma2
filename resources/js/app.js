@@ -15,6 +15,7 @@ import { TailwindPagination } from 'laravel-vue-pagination';
 import VueMask from '@devindex/vue-mask';
 
 
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({

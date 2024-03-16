@@ -1,16 +1,21 @@
 <script setup>
 import Icon from '@/Icons/Icon.vue';
 import Footer from '@/Components/Landings/Partials/Footer.vue';
-import { onMounted, ref, inject, computed, watch } from 'vue';
+import { onMounted, ref, inject, computed, watch, reactive } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import useContacts from '@/composables/chat';
+import { FwbTab, FwbTabs } from 'flowbite-vue';
+import moment from 'moment';
 
-const { contacts, messages, getContacts, loadMessages } = useContacts()
+
+const { contacts, messages, userActive, getContacts, loadMessages, sendMessage, message } = useContacts()
+const activeTab = ref('Inbox')
 
 const page = usePage()
 const pagePermission = computed(() => page.props.user.permissions)
 const swal = inject('$swal')
-const apiusers = ref([])
+
+
 
 
 function showAlert() {
@@ -52,47 +57,72 @@ onMounted(() => {
             <div class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
                 <div class="card-body shadow-sm">
                   <div class="bg-gray-50 overflow-hidden shadow-xl sm:rounded-lg flex" style="min-height: 400px; max-height: 600px;">
-                        <!-- list users -->
+                        <!-- tab list users -->
                         <div class="w-5/12 bg-gray-200 bg-opacity-25 border-r border-gray-200 overflow-y-scroll">
-                                <ul>
-                                    <li v-if="contacts.data && contacts.data.length > 0"
-                                        @click="() => {loadMessages(post.id)}"
-                                        v-for="post in contacts.data" :key="post.id"
-                                        class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:g-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                        <p class="flex items-center">
-                                            {{ post.id }}
-                                            -
-                                            {{ post.name }}
-                                            <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                        </p>
-                                    </li>
-                                    <li v-else
+                            <fwb-tabs v-model="activeTab" class="p-5">
+                                <fwb-tab name="Inbox" title="Inbox">
+                                    <!-- list users -->
+                                    <ul>
+                                        <li v-if="contacts.data && contacts.data.length > 0"
+                                            @click="() => {loadMessages(post.id)}"
+                                            v-for="post in contacts.data" :key="post.id"
+                                            :class="(userActive && userActive.id == post.id) ? 'bg-opacity-50 bg-gray-200' : ''"
+                                            class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:g-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
+                                            <p class="flex items-center">
+                                                {{ post.id }}
+                                                -
+                                                {{ post.name }}
+                                                <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
+                                            </p>
+                                        </li>
+                                        <li v-else
+                                            class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:g-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
+                                            <p class="flex items-center">
+                                                Sem Tickets selecionado
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <!--end  list users -->
+                                </fwb-tab>
+                                <fwb-tab name="Aguardando" title="Aguardando">
+                                    <li
                                         class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:g-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                                         <p class="flex items-center">
                                             Sem Tickets selecionado
                                         </p>
                                     </li>
-                                </ul>
+                                </fwb-tab>
+                            </fwb-tabs>
                         </div>
                         <!-- box message -->
                         <div class="w-7/12 flex flex-col justify-between">
                             <!-- message -->
                             <div class="w-full p-6 flex flex-col overflow-y-scroll">
-                                <div class="w-full mb-3 text-right">
-                                    <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                        Olá
-                                        <span class="block mt-1">15/03/2024 09:52</span>
+                                <div
+                                    v-if="messages.data && messages.data.length > 0" 
+                                    v-for="post in messages.data" :key="post.id"
+                                    :class="(post.from_me == 1) ? 'text-right' : ''"
+                                    class="w-full mb-3">
+                                    <p 
+                                        :class="(post.from_me == 1) ? 'messageFromMe' : 'messageToMe'"
+                                        class="inline-block p-2 rounded-md" style="max-width: 75%;">
+                                        {{ post.body }} 
+                                        <span class="block mt-1">{{ moment(post.created_at).format('DD/MM/YYYY HH:mm') }}</span>
                                     </p>
                                 </div>
-                                <div class="w-full mb-3">
+                                <div
+                                    v-else 
+                                    class="w-full mb-3">
                                     <p class="inline-block p-2 rounded-md messageToMe" style="max-width: 75%;">
-                                        oi
-                                        <span class="block mt-1">15/03/2024 09:53</span>
+                                        Selecione um ticket!
+                                        <span class="block mt-1">Date</span>
                                     </p>
                                 </div>
                             </div>
                             <!-- form -->
-                            <div class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
+                            <div 
+                                v-if="userActive"
+                                class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
                                 <form v-on:submit.prevent="sendMessage">
                                     <div class="flex rounded-md overflow-hidden border border-gray-300">
                                         <input v-model="message" type="text" class="flex-1 px-4 py-2 text-sm focus:outline-none">

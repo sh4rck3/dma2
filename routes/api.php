@@ -92,5 +92,6 @@ Route::group(['middleware' => ['auth:sanctum', 'throttle:10000,1']], function ()
 
     //chat
     Route::get('/contacts', [ChatapiController::class, 'index'])->name('chat.contacts');
+    Route::get('/contacts/{ticket}', [ChatapiController::class, 'show'])->name('chat.show');
     Route::get('/messages/{ticket}', [ChatapiController::class, 'messages'])->name('chat.messages');
 });
