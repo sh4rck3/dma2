@@ -49,6 +49,9 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                 <DropdownLink as="blank" :href="'https://veiculos.fipe.org.br/'" >
                     Tabela FIPE
                 </DropdownLink>
+                <DropdownLink as="blank" :href="'https://dunicemarcon.oloschannel.com.br/olosvoip/'" >
+                    OlosVoip
+                </DropdownLink>
             </template>
         </Dropdown>
     </div>
