@@ -8,6 +8,8 @@ const page = usePage()
 const swal = inject('$swal')
 const toast = inject('$toast')
 
+
+
 const pagePermission = computed(() => page.props.user.permissions)
 const pageRole = computed(() => page.props.user.roles)
 
