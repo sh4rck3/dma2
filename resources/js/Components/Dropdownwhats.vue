@@ -37,7 +37,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                 <DropdownLink as="blank" :href="'https://bradesco.dunice.com.br/'" >
                     Bradesco
                 </DropdownLink>
-                <DropdownLink as="blank" :href="'https://retomadas.dunice.com.br/'" >
+                <DropdownLink as="blank" :href="'https://retomadas.dunicemarcon.com.br/'" >
                     Retomadas
                 </DropdownLink>
                 <DropdownLink as="blank" :href="'https://posretomadas.dunice.com.br/'" >
