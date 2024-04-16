@@ -19,6 +19,9 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                     Links WhatsApp DMA
                 </div>
 
+                <DropdownLink as="blank" :href="'https://juridico3.dunice.com.br/'" >
+                    Novo WhatsApp
+                </DropdownLink>
                 <DropdownLink as="blank" :href="'https://sicoob.dunice.com.br/'" >
                     SICOOB
                 </DropdownLink>
